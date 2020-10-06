@@ -49,6 +49,7 @@ xcuserdata
 .settings
 
 # VSCode
+.vscode
 .history/
 
 # Android
