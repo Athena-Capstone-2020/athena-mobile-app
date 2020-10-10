@@ -1,18 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { HouseholdService, HouseholdServiceProvider } from './src/services'
+import { Provider } from './Provider';
+
 
 export default function App() {
-  const householdService = new HouseholdService()
-
   return (
-    <HouseholdServiceProvider householdService={householdService}>
-      <View style={styles.container}>
-        <Text>Athena App!</Text>
-        <StatusBar style="auto" />
-      </View>
-    </HouseholdServiceProvider>
+      <Provider>
+        <View style={styles.container}>
+          <Text>Athena App!</Text>
+          <StatusBar style="auto" />
+        </View>
+      </Provider>
   );
 }
 

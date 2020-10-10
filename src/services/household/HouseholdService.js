@@ -3,9 +3,9 @@ import { BaseService } from "../base";
 export class HouseholdService extends BaseService {
     /**
      * @param {string} householdId
-     * @param {string} person 
+     * @param {string} personId
      */
-    addPerson(householdId, person) {
+    addPerson(householdId, personId) {
         throw new Error('Not Implemented')
     }
 
