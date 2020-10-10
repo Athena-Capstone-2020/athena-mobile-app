@@ -33,4 +33,8 @@ export class BaseService {
     __DeleteEntityById(id) {
         return new Error('Not implemented')
     }
+
+    __HealthCheck() {
+        console.log(`Service connected: ${this}`)
+    }
 }
