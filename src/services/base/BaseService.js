@@ -25,11 +25,11 @@ export class BaseService {
 
     /**
      * @protected
-     * @param {string} id 
-     * @param {object} object to save
+     * @param {string} id
      */
-    async __CreateEntity(id, object) { 
-        await this.db.doc(id).set(object)
+    async __CreateEntity(object) { 
+        const newDoc = await this.db.add(object)
+        return newDoc.id
     }
 
     /**
@@ -50,5 +50,13 @@ export class BaseService {
 
     __UseCollection(collectionName) {
         this.db = firebase.firestore().collection(collectionName)
+    }
+
+    async __WARNING_CLEAR_COLLECTION() {
+        if (!this.db) return
+        const results = await this.db.get()
+        for (const result of results.docs) {
+            await result.ref.delete()
+        }
     }
 }

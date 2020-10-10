@@ -1,13 +1,13 @@
 import { Document } from './Document'
 
 export class Household extends Document {
-    constructor() {
-        super('some id')
+    constructor(name) {
+        this.name = name
+        this.members = []
     }
 
     toDocument() {
         return {
-            id: this.id,
             name: this.name,
             members: this.members
         }
