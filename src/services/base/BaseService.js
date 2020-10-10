@@ -1,8 +1,8 @@
 import firebase from 'firebase'
 
 export class BaseService {
-    constructor(collectionName) {
-        this.db = firebase.firestore().collection(collectionName)
+    constructor() {
+        this.db = null
     }
 
     /**
@@ -46,5 +46,9 @@ export class BaseService {
      */
     __HealthCheck(message) {
         console.log(`Service connected: ${message}`)
+    }
+
+    __UseCollection(collectionName) {
+        this.db = firebase.firestore().collection(collectionName)
     }
 }
