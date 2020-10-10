@@ -131,4 +131,4 @@ docs/pages/versions/*/react-native/*.diff
 /home/dist
 
 # Firebase
-src/components/firebase.js
+src/firebase/config.js

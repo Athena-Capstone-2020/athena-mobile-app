@@ -40,7 +40,11 @@ export class BaseService {
         await this.db.doc(id).delete()
     }
 
-    __HealthCheck() {
-        console.log(`Service connected: ${this}`)
+    /**
+     * Allows you to check if everything is connected properly
+     * @param {string} message 
+     */
+    __HealthCheck(message) {
+        console.log(`Service connected: ${message}`)
     }
 }
