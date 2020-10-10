@@ -1,7 +1,8 @@
 import { Text, View } from 'react-native'
+import React from "react";
 import { withHouseholdService } from '../services'
 
-function TestButton(props) {
+export function TestButton(props) {
     const { householdService } = withHouseholdService()
 
     householdService.__HealthCheck()
