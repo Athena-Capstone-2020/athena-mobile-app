@@ -1,6 +1,6 @@
 import React from 'react'
 import { HouseholdServiceProvider, HouseholdService } from "./src/services";
-import { init } from './src/firebase/config'
+import { initFirebase } from './src/firebase/config'
 
 
 export function Provider(props) {
