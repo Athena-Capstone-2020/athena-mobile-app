@@ -4,7 +4,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Provider } from './Provider';
 import { TestButton } from './src/components/TestButton'
 
-
 export default function App() {
   return (
       <Provider>
