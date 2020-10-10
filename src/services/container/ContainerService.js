@@ -2,27 +2,53 @@ import { BaseService } from "../base";
 
 export class ContainerService extends BaseService{
 
-    createContainer(){
+    /**
+     * Creates a new container
+     * @param {string} name 
+     * @param {string} ownerId 
+     */
+    createContainer(name, ownerId){
         throw new Error('Not Implemented')
     }
 
-    deleteContainer(){
+    /**
+     * Deletes a container by its id
+     * @param {string} id
+     */
+    deleteContainerById(id){
         throw new Error('Not Implemented')
     }
     
-    updateName(){
+    /**
+     * Updates the name of the container to the new given name
+     * @param {string} name 
+     */
+    updateName(name){
         throw new Error('Not Implemented')
     }
 
-    addContent(){
+    /**
+     * Adds a food item to the container
+     * @param {FoodItem} item
+     */
+    addItem(item){
         throw new Error('Not Implemented')
     }
 
-    removeContent(){
+    /**
+     * Removes a food item from the container
+     * @param {item} item 
+     */
+    removeItem(item){
         throw new Error('Not Implemented')
     }
 
-    itemExist(){
+    /**
+     * Check if an item exist in the container
+     * @param {FoodItem} item 
+     * @returns boolean stating if the item is in the container
+     */
+    itemExist(item){
         throw new Error('Not Implemented')
     }
 
