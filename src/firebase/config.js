@@ -13,8 +13,10 @@ import "@firebase/firestore";
    measurementId: "G-H0NXPDW88R",
  };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+function initFirebase() {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
 }
 
-export { firebase };
+export { firebase, initFirebase };
