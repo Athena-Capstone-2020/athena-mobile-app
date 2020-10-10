@@ -1,19 +1,36 @@
 export class BaseService {
     constructor() {}
 
-    GetById(id) {
+    /**
+     * @protected
+     * @param {string} id 
+     */
+    __GetById(id) {
         return new Error('Not implemented')
     }
 
-    UpdateById(id, changes) {
+    /**
+     * @protected
+     * @param {string} id 
+     * @param {object} changes 
+     */
+    __UpdateById(id, changes) {
         return new Error('Not implemented')
     }
 
-    CreateEntity(id) { 
+    /**
+     * @protected
+     * @param {string} id 
+     */
+    __CreateEntity(id) { 
         return new Error('Not implemented')
     }
 
-    DeleteEntityById(id) {
+    /**
+     * @protected
+     * @param {string} id 
+     */
+    __DeleteEntityById(id) {
         return new Error('Not implemented')
     }
 }
