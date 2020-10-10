@@ -1,11 +1,20 @@
 import { BaseService } from "../base";
 
 export class HouseholdService extends BaseService {
-    addPerson(person) {
+    /**
+     * @param {string} householdId
+     * @param {string} person 
+     */
+    addPerson(householdId, person) {
         throw new Error('Not Implemented')
     }
 
-    removePerson(personId) {
+    /**
+     * Removes a person from the household
+     * @param {string} householdId
+     * @param {string} personId 
+     */
+    removePerson(householdId, personId) {
         throw new Error('Not Implemented')
     }
 
@@ -28,6 +37,11 @@ export class HouseholdService extends BaseService {
         throw new Error('Not Implemented')
     }
 
+    /**
+     * List the people in the household
+     * @param {string} householdId 
+     * @returns {Array<Person>} people that are a part of the household
+     */
     listHousehold(householdId) {
         throw new Error('Not Implemented')
     }
