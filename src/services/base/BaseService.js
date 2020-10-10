@@ -1,12 +1,17 @@
+import firebase from 'firebase'
+
 export class BaseService {
-    constructor() {}
+    constructor() {
+        this.db = null
+    }
 
     /**
      * @protected
      * @param {string} id 
      */
-    __GetById(id) {
-        return new Error('Not implemented')
+    async __GetById(id) {
+        const results = await this.db.doc(id).get()
+        return results.data()
     }
 
     /**
@@ -14,27 +19,36 @@ export class BaseService {
      * @param {string} id 
      * @param {object} changes 
      */
-    __UpdateById(id, changes) {
-        return new Error('Not implemented')
+    async __UpdateById(id, changes) {
+        await this.db.doc(id).update(changes)
+    }
+
+    /**
+     * @protected
+     * @param {string} id 
+     * @param {object} object to save
+     */
+    async __CreateEntity(id, object) { 
+        await this.db.doc(id).set(object)
     }
 
     /**
      * @protected
      * @param {string} id 
      */
-    __CreateEntity(id) { 
-        return new Error('Not implemented')
+    async __DeleteEntityById(id) {
+        await this.db.doc(id).delete()
     }
 
     /**
-     * @protected
-     * @param {string} id 
+     * Allows you to check if everything is connected properly
+     * @param {string} message 
      */
-    __DeleteEntityById(id) {
-        return new Error('Not implemented')
+    __HealthCheck(message) {
+        console.log(`Service connected: ${message}`)
     }
 
-    __HealthCheck() {
-        console.log(`Service connected: ${this}`)
+    __UseCollection(collectionName) {
+        this.db = firebase.firestore().collection(collectionName)
     }
 }
