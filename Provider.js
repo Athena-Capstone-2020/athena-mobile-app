@@ -1,16 +1,19 @@
 import React from 'react'
-import { HouseholdServiceProvider, HouseholdService } from "./src/services";
+import { HouseholdServiceProvider, HouseholdService, PersonService, PersonServiceProvider } from "./src/services";
 import { initFirebase } from './src/firebase/config'
 
 
 export function Provider(props) {
     initFirebase()
 
-    const householdService = new HouseholdService()
+    const personService = new PersonService()
+    const householdService = new HouseholdService(personService)
 
     return (
-        <HouseholdServiceProvider householdService={householdService}>
-            {props.children}
-        </HouseholdServiceProvider>
+        <PersonServiceProvider personService={personService}>
+            <HouseholdServiceProvider householdService={householdService}>
+                {props.children}
+            </HouseholdServiceProvider>
+        </PersonServiceProvider>
     )
 }

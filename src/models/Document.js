@@ -1,10 +1,6 @@
 export class Document {
-    /**
-     * Makes sure that the id is declared
-     * @param {string} id 
-     */
-    constructor(id) {
-        this.id = id
+    constructor() {
+        this.id = null
     }
 
     /**
