@@ -51,6 +51,7 @@ export class HouseholdService extends BaseService {
         for (const result of results.docs) {
             const id = result.data().householdId
             const household = await this.__GetById(id)
+
             listOfHouseholds.push({id, data: household})
         }
 
@@ -61,21 +62,20 @@ export class HouseholdService extends BaseService {
      * Creates a household and returns the id of that household
      * 
      * @param {string} nameOfHousehold
-     * @returns {string} id of the household
+     * @returns {Promise<string>} id of the household
      */
     async createHousehold(nameOfHousehold) {
         this.__UseCollection(this.HOUSEHOLD_CONTAINER)
 
         const household = new Household(nameOfHousehold)
 
-        const newDocument = await this.__CreateEntity(household.toDocument())
-        return newDocument.id
+        return await this.__CreateEntity(household.toDocument())
     }
 
     /**
      * List the people in the household
      * @param {string} householdId 
-     * @returns {Array<Person>} people that are a part of the household
+     * @returns {Promise<Array<Person>>} people that are a part of the household
      */
     async listHousehold(householdId) {
         this.__UseCollection(this.HOUSEHOLD_MEMBER_CONTAINER)
