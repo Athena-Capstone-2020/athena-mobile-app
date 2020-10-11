@@ -10,6 +10,16 @@ test('should pass health check without errors', async () => {
     teardown(services)
 })
 
+test('should create container without errors', async() => {
+    const services = setup()
+    const [containerService] = services
+
+    const newContainerId = containerService.createContainer('someContainerName', 'someHouseholdId')
+    expect(id).toBeDefined()
+
+    teardown(services)
+})
+
 function setup(){
     initFirebase()
     const containerService = new ContainerService();

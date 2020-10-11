@@ -9,11 +9,11 @@ export class ContainerService extends BaseService{
     /**
      * Creates a new container and returns the id
      * @param {string} name 
-     * @param {string} ownerId
+     * @param {string} householdId
      * @returns id of the container created
      */
-    createContainer(name, ownerId){
-       const container = new Container(name, ownerId);
+    createContainer(name, householdId){
+       const container = new Container(name, householdId);
 
         this.__UseCollection(CONTAINER_TABLE)
         const docRef = await this.__CreateEntity(container.toDocument())

@@ -3,11 +3,10 @@ import {Document} from './Document'
 export class Container extends Document{
 
     /**
-     * @param {string} name 
-     * @param {Set<FoodItem>} contents 
+     * @param {string} name  
      * @param {string} householdId 
      */
-    constructor(name, contents, householdId){
+    constructor(name, householdId){
         this.name = name
         this.contents = new Set();
         this.householdId = householdId
