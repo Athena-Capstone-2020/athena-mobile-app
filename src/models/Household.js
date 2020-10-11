@@ -2,6 +2,7 @@ import { Document } from './Document'
 
 export class Household extends Document {
     constructor(name) {
+        super()
         this.name = name
         this.members = []
     }
