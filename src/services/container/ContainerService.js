@@ -1,14 +1,25 @@
 import { BaseService } from "../base";
+import { Container } from "../../models/Container";
 
 export class ContainerService extends BaseService{
 
+    static CONTAINER_TABLE = 'CONTAINER_TABLE'
+    static CONTAINER_FOOD_ITEM_TABLE = 'CONTAINER_FOOD_ITEM_TABLE'
+
     /**
-     * Creates a new container
+     * Creates a new container and returns the id
      * @param {string} name 
-     * @param {string} ownerId 
+     * @param {string} ownerId
+     * @returns id of the container created
      */
     createContainer(name, ownerId){
-        throw new Error('Not Implemented')
+       const container = new Container(name, ownerId);
+
+        this.__UseCollection(CONTAINER_TABLE)
+        const docRef = await this.__CreateEntity(container.toDocument())
+        const id = docRef.id
+
+        return id
     }
 
     /**

@@ -1,5 +1,4 @@
 import {Document} from './Document'
-import { FoodItem } from './FoodItem'
 
 export class Container extends Document{
 
@@ -10,7 +9,7 @@ export class Container extends Document{
      */
     constructor(name, contents, householdId){
         this.name = name
-        this.contents = contents
+        this.contents = new Set();
         this.householdId = householdId
     }
 
