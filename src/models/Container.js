@@ -6,19 +6,19 @@ export class Container extends Document{
     /**
      * @param {string} name 
      * @param {Set<FoodItem>} contents 
-     * @param {string} ownerId 
+     * @param {string} householdId 
      */
-    constructor(name, contents, ownerId){
+    constructor(name, contents, householdId){
         this.name = name
         this.contents = contents
-        this.ownerId = ownerId
+        this.householdId = householdId
     }
 
     toDocument(){
         return{
             name: this.name,
             contents: this.contents,
-            ownerId: this.ownerId
+            householdId: this.householdId
         }
     }
 
