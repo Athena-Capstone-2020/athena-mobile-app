@@ -6,10 +6,11 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest"
+    "test": "jest --env=node"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
+    "@react-navigation/bottom-tabs": "^5.9.2",
     "@react-navigation/native": "^5.7.6",
     "@react-navigation/stack": "^5.9.3",
     "expo": "~39.0.2",
@@ -22,7 +23,9 @@
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
-    "react-native-web": "~0.13.12"
+    "react-native-vector-icons": "^7.1.0",
+    "react-native-web": "~0.13.12",
+    "uuid": "8.3.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

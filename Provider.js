@@ -9,14 +9,17 @@ export function Provider(props) {
     const householdService = new HouseholdService()
     const groceryListService = new GroceryListService()
     const containerService = new ContainerService()
+    const personService = new PersonService()
 
     return (
-        <ContainerServiceProvider containerService={containerService}>    
-            <GroceryListServiceProvider groceryListService={groceryListService}>
-                <HouseholdServiceProvider householdService={householdService}>
-                    {props.children}
-                </HouseholdServiceProvider>
-            </GroceryListServiceProvider>
-        </ContainerServiceProvider>
+        <PersonServiceProvider personService={personService}>
+            <ContainerServiceProvider containerService={containerService}>    
+                <GroceryListServiceProvider groceryListService={groceryListService}>
+                    <HouseholdServiceProvider householdService={householdService}>
+                        {props.children}
+                    </HouseholdServiceProvider>
+                </GroceryListServiceProvider>
+            </ContainerServiceProvider>
+        </PersonServiceProvider>
     )
 }

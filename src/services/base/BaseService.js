@@ -25,7 +25,7 @@ export class BaseService {
 
     /**
      * @protected
-     * @param {string} id
+     * @param {object} object
      */
     async __CreateEntity(object) { 
         const newDoc = await this.db.add(object)
