@@ -3,30 +3,49 @@ import { Container } from "../../models/Container";
 
 export class ContainerService extends BaseService{
 
-    static CONTAINER_TABLE = 'CONTAINER_TABLE'
-    static CONTAINER_FOOD_ITEM_TABLE = 'CONTAINER_FOOD_ITEM_TABLE'
+    CONTAINER_TABLE = 'CONTAINER_TABLE'
+    CONTAINER_FOOD_ITEM_TABLE = 'CONTAINER_FOOD_ITEM_TABLE'
+
+    constructor(){
+        super()
+    }
 
     /**
      * Creates a new container and returns the id
-     * @param {string} name 
-     * @param {string} householdId
+     * @param {string} name name of the new container
+     * @param {string} householdId id of the household where the container is held
      * @returns id of the container created
      */
-    createContainer(name, householdId){
-       const container = new Container(name, householdId);
+    async createContainer(name, householdId){
+    
+        this.__UseCollection(this.CONTAINER_TABLE)
+        const container = new Container(name, householdId)
 
-        this.__UseCollection(CONTAINER_TABLE)
-        const docRef = await this.__CreateEntity(container.toDocument())
-        const id = docRef.id
+        const newDocId = await this.__CreateEntity( container.toDocument() )
+        return newDocId
 
-        return id
+    }
+
+    /**
+     * Gets a container that has been created. If the container does not exist, a null will be returned
+     * @param {string} id id of the container trying to be retrieved
+     * @returns a container object or null
+     */
+    async getContainer(id){
+        this.__UseCollection(this.CONTAINER_TABLE)
+        const container = await this.__GetById(id)
+
+        if(container == undefined)
+            return null
+
+        return container
     }
 
     /**
      * Deletes a container by its id
      * @param {string} id
      */
-    deleteContainerById(id){
+    deleteContainer(id){
         throw new Error('Not Implemented')
     }
     
