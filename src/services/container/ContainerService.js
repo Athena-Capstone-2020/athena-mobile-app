@@ -42,11 +42,12 @@ export class ContainerService extends BaseService{
     }
 
     /**
-     * Deletes a container by its id
-     * @param {string} id
+     * Attempts to delete a container
+     * @param {string} id id of the container trying to be deleted
      */
-    deleteContainer(id){
-        throw new Error('Not Implemented')
+    async deleteContainer(id){
+        this.__UseCollection(this.CONTAINER_TABLE)
+        await this.__DeleteEntityById(id)
     }
     
     /**
