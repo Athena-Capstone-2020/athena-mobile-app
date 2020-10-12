@@ -33,12 +33,12 @@ export class ContainerService extends BaseService{
      */
     async getContainer(id){
         this.__UseCollection(this.CONTAINER_TABLE)
-        const container = await this.__GetById(id)
+        const containerDoc = await this.__GetById(id)
 
-        if(container == undefined)
+        if(containerDoc == undefined)
             return null
 
-        return container
+        return new Container(containerDoc.name, containerDoc.householdId)
     }
 
     /**
@@ -52,10 +52,16 @@ export class ContainerService extends BaseService{
     
     /**
      * Updates the name of the container to the new given name
-     * @param {string} name 
+     * @param {string} id id of the container to be updated
+     * @param {string} name new name of the container
      */
-    updateName(name){
-        throw new Error('Not Implemented')
+    async updateName(id, name){
+        const containerReceived = await this.getContainer(id)
+
+        if(containerReceived != null){
+            containerReceived.name = name
+            await this.__UpdateById(id, containerReceived.toDocument())
+        }
     }
 
     /**
