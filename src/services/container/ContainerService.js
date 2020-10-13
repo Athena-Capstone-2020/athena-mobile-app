@@ -170,11 +170,28 @@ export class ContainerService extends BaseService{
 
     /**
      * Check if an item exist in the container
+     * @param {Container} container
      * @param {FoodItem} item 
-     * @returns boolean stating if the item is in the container
+     * @returns true if the item is in the container, otherwise false if the item is not in the container, 
+     *   the food item is invalid, or the container does not exist
      */
-    itemExist(item){
-        throw new Error('Not Implemented')
+    async doesFoodItemExistInContainer(container, item){
+        this.__UseCollection(this.CONTAINER_TABLE)
+
+        if( !(item instanceof FoodItem) )
+            return false
+        
+        const containerToCheck = await this.getContainerById(container.id)
+        if(containerToCheck == null)
+            return false
+
+        for(const aryObj of containerToCheck.foodItems){
+            if(item.name == aryObj.name && item.photoURI == aryObj.photoURI &&  item.quantity == aryObj.quantity)
+                return true
+        }
+
+        return false
+
     }
 
 }

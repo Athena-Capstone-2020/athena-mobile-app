@@ -285,6 +285,32 @@ test('attempt to delete from a container that doesn\'t exist', async () => {
     
 })
 
+//doesFoodItemExistInContainer
+test('should create a container, add a food item to it, check to see if its there', async () => {
+    const [containerService] = setup()
+
+    const newContainer = await containerService.createContainer('doesFoodItemExist', 'someHouseholdId')
+    const containerCreated = await containerService.getContainerById(newContainer.id)
+    expect(containerCreated).toMatchObject(newContainer)
+
+    const foodItemOne = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity')
+    const foodItemTwo = new FoodItem('secondFood', 'somePhotoURI', 'someQuantity')
+    const foodItemThree = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity')
+
+    await containerService.addFoodItemToContainer(containerCreated, foodItemOne)
+    await containerService.addFoodItemToContainer(containerCreated, foodItemTwo)
+    await containerService.addFoodItemToContainer(containerCreated, foodItemThree)
+    const updatedContainer = await containerService.getContainerById(containerCreated.id)
+    expect(updatedContainer).toMatchObject(containerCreated)
+
+    const doesExist = await containerService.doesFoodItemExistInContainer(updatedContainer, foodItemThree)
+    expect(doesExist).toBe(true)
+
+    const foodItemNonExistant = new FoodItem('fourthFood', 'somePhotoURI', 'someQuantity')
+    const doesExistTwo = await containerService.doesFoodItemExistInContainer(updatedContainer, foodItemNonExistant)
+    expect(doesExistTwo).toBe(false)
+})
+
 //helper function
 function setup(){
     initFirebase()
