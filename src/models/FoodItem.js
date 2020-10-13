@@ -8,6 +8,7 @@ export class FoodItem extends Document{
      * @param {string} quantity 
      */
     constructor(name, photoURI, quantity){
+        super()
         this.name = name
         this.photoURI = photoURI
         this.quantity = quantity
