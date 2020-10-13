@@ -16,23 +16,10 @@ export class ContainerService extends BaseService{
      * @param {string} householdId id of the household where the container is held
      * @returns the container object that was created 
      */
-    async createContainerByParams(name, householdId){
+    async createContainer(name, householdId){
         this.__UseCollection(this.CONTAINER_TABLE)
-        const container = new Container(name, householdId)
+        const container = new Container(name, householdId, [])
 
-        const newDocId = await this.__CreateEntity( container.toDocument() )
-        container.id = newDocId
-        return container
-    }
-
-    /**
-     * Creates a container object in the database and gives it an id
-     * @param {Container} container container object without an id value
-     * @returns the container object with an id
-     */
-    async createContainerByObject(container){
-        this.__UseCollection(this.CONTAINER_TABLE)
-        
         const newDocId = await this.__CreateEntity( container.toDocument() )
         container.id = newDocId
         return container
@@ -50,7 +37,7 @@ export class ContainerService extends BaseService{
         if(containerDoc == undefined)
             return null
             
-        const container = new Container(containerDoc.name, containerDoc.householdId)
+        const container = new Container(containerDoc.name, containerDoc.householdId, containerDoc.foodItems)
         container.id = id
 
         return container

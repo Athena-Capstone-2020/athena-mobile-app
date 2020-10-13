@@ -15,22 +15,13 @@ test('should create container by params without errors', async () => {
     const services = setup()
     const [containerService] = services
 
-    const createdContainer = await containerService.createContainerByParams('createByParams', 'someHouseholdId')
+    const createdContainer = await containerService.createContainer('createByParams', 'someHouseholdId')
     expect(createdContainer.id).toBeDefined()
     expect(createdContainer.toDocument()).toMatchObject({
         name: 'createByParams',
-        householdId: 'someHouseholdId'
+        householdId: 'someHouseholdId',
+        foodItems: []
     })
-})
-
-test('should create container by a container object without errors', async () => {
-    const services = setup()
-    const [containerService] = services
-
-    const containerToBeCreated = new Container('createdByObject', 'someHouseholdId')
-    const containerCreated = await containerService.createContainerByObject(containerToBeCreated)
-    expect(containerCreated.id).toBeDefined()
-    expect(containerCreated.toDocument()).toMatchObject(containerToBeCreated.toDocument())
 })
 
 //GetContainer
@@ -38,7 +29,7 @@ test('should get a container that has been created already without errors', asyn
     const services = setup()
     const [containerService] = services
 
-    const containerCreated = await containerService.createContainerByParams('getContainerTest1', 'someHouseholdId')
+    const containerCreated = await containerService.createContainer('getContainerTest1', 'someHouseholdId')
     const retrievedContainer = await containerService.getContainerById(containerCreated.id);
 
     expect(retrievedContainer).toMatchObject(containerCreated)
@@ -61,7 +52,7 @@ test('should create and delete a container by id without error', async () => {
     const services = setup()
     const [containerService] = services
 
-    const newContainer = await containerService.createContainerByParams('toBeDeleted', 'toBeDeleted')
+    const newContainer = await containerService.createContainer('toBeDeleted', 'toBeDeleted')
     const containerCreated = await containerService.getContainerById(newContainer.id)
     expect(containerCreated).toMatchObject(newContainer)
 
@@ -86,7 +77,7 @@ test('should create and delete a container by object without error', async () =>
     const services = setup()
     const [containerService] = services
 
-    const newContainer = await containerService.createContainerByParams('toBeDeleted', 'toBeDeleted')
+    const newContainer = await containerService.createContainer('toBeDeleted', 'toBeDeleted')
     const containerCreated = await containerService.getContainerById(newContainer.id)
     expect(containerCreated).toMatchObject(newContainer)
 
@@ -112,7 +103,7 @@ test('should create and update a container without error', async () => {
     const services = setup()
     const [containerService] = services
 
-    const newContainer = await containerService.createContainerByParams('nameToBeUpdated', 'someHouseholdId')
+    const newContainer = await containerService.createContainer('nameToBeUpdated', 'someHouseholdId')
     const containerCreated = await containerService.getContainerById(newContainer.id)
     expect(containerCreated).toMatchObject(newContainer)
 
