@@ -206,7 +206,7 @@ test('attempt to update an item at an index that is out of bounds', async () => 
 
     const foodItemOne = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity')
     const foodItemTwo = new FoodItem('secondFood', 'somePhotoURI', 'someQuantity')
-    const foodItemThree = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity')
+    const foodItemThree = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity')
 
     await containerService.addFoodItemToContainer(containerCreated, foodItemOne)
     await containerService.addFoodItemToContainer(containerCreated, foodItemTwo)
