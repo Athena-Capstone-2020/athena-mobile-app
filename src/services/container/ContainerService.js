@@ -1,5 +1,5 @@
-import { BaseService } from "../base";
-import { Container } from "../../models/Container";
+import { BaseService } from "../base"
+import { Container, FoodItem } from "../../models"
 
 export class ContainerService extends BaseService{
 
@@ -85,6 +85,8 @@ export class ContainerService extends BaseService{
      * @returns updated container if successful, or null if the id doesn't exist or is null
      */
     async updateContainer(updatedContainer){
+        this.__UseCollection(this.CONTAINER_TABLE)
+
         const containerId = updatedContainer.id
         if(containerId == null)
             return null
@@ -104,7 +106,8 @@ export class ContainerService extends BaseService{
      * @returns updated container if successful, otherwise returns null
      */
     async addFoodItemToContainer(container, item){
-        
+        this.__UseCollection(this.CONTAINER_TABLE)
+
         if( !(item instanceof FoodItem) )
             return null
 
@@ -117,12 +120,27 @@ export class ContainerService extends BaseService{
     }
 
     /**
-     * Get the food item from the container at the specified index
+     * Update the food item in the container at the specified index
      * @param {Container} container the container the item is being retrieved from
      * @param {Number} index the location where the food item is located
+     * @param {FoodItem} updatedItem
+     * @returns updated container if successful, otherwise returns null
      */
-    addItem(item){
-        throw new Error('Not Implemented')
+    async updateFoodItemInContainer(container, index, updatedItem){
+        this.__UseCollection(this.CONTAINER_TABLE)
+
+        if( !(updatedItem instanceof FoodItem) )
+            return null
+        
+        const containerToAddTo = await this.getContainerById(container.id)
+        if(containerToAddTo == null)
+            return null
+
+        if(index < 0 || container.foodItems.length <= index)
+            return null
+
+        container.foodItems[index] = updatedItem.toDocument()
+        return await this.updateContainer(container)
     }
 
     /**

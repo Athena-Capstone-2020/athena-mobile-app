@@ -175,6 +175,15 @@ test('attempt to send container that doesn\'t exist without error', async () => 
     expect(updatedContainer).toBe(null)
 })
 
+//updateFoodItemInContainer
+test('create container, add some food items, and update one without error', async () => {})
+
+test('attempt to update an item in a container that doesn\'t exist without error', async () => {})
+
+test('attempt to update an item at an index that is out of bounds', async () => {})
+
+test('attempt to update an item that is not a FoodItem type', async () => {})
+
 //helper function
 function setup(){
     initFirebase()
