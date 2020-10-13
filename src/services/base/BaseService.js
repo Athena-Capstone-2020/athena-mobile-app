@@ -51,12 +51,4 @@ export class BaseService {
     __UseCollection(collectionName) {
         this.db = firebase.firestore().collection(collectionName)
     }
-
-    async __WARNING_CLEAR_COLLECTION() {
-        if (!this.db) return
-        const results = await this.db.get()
-        for (const result of results.docs) {
-            await result.ref.delete()
-        }
-    }
 }
