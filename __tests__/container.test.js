@@ -1,4 +1,5 @@
 const { ContainerService } = require('../src/services')
+const { Container } = require('../src/models/Container')
 const { initFirebase } = require('../src/firebase/config')
 
 //test to ensure the service can be created and used
@@ -10,12 +11,26 @@ test('should pass health check without errors', async () => {
 })
 
 //CreateContainer
-test('should create container without errors', async () => {
+test('should create container by params without errors', async () => {
     const services = setup()
     const [containerService] = services
 
-    const newContainerId = await containerService.createContainer('createContainerTest', 'someHouseholdId')
-    expect(newContainerId).toBeDefined()
+    const createdContainer = await containerService.createContainerByParams('createByParams', 'someHouseholdId')
+    expect(createdContainer.id).toBeDefined()
+    expect(createdContainer.toDocument()).toMatchObject({
+        name: 'createByParams',
+        householdId: 'someHouseholdId'
+    })
+})
+
+test('should create container by a container object without errors', async () => {
+    const services = setup()
+    const [containerService] = services
+
+    const containerToBeCreated = new Container('createdByObject', 'someHouseholdId')
+    const containerCreated = await containerService.createContainerByObject(containerToBeCreated)
+    expect(containerCreated.id).toBeDefined()
+    expect(containerCreated.toDocument()).toMatchObject(containerToBeCreated.toDocument())
 })
 
 //GetContainer
@@ -23,13 +38,10 @@ test('should get a container that has been created already without errors', asyn
     const services = setup()
     const [containerService] = services
 
-    const containerId = await containerService.createContainer('getContainerTest1', 'someHouseholdId')
-    const retrievedContainer = await containerService.getContainer(containerId);
+    const containerCreated = await containerService.createContainerByParams('getContainerTest1', 'someHouseholdId')
+    const retrievedContainer = await containerService.getContainerById(containerCreated.id);
 
-    expect(retrievedContainer).toMatchObject({
-        name: 'getContainerTest1',
-        householdId: 'someHouseholdId'
-    })
+    expect(retrievedContainer).toMatchObject(containerCreated)
     
 })
 
@@ -38,66 +50,101 @@ test('should try to get a container that doesn\'t exist and return null without 
     const [containerService] = services
 
     const containerId = 'I_Do_Not_Exist'
-    const retrievedContainer = await containerService.getContainer(containerId);
+    const retrievedContainer = await containerService.getContainerById(containerId);
 
     expect(retrievedContainer).toBe(null)
 
 })
 
 //DeleteContainer
-test('should create and delete a container without error', async () => {
+test('should create and delete a container by id without error', async () => {
     const services = setup()
     const [containerService] = services
 
-    const newContainerId = await containerService.createContainer('toBeDeleted', 'toBeDeleted')
-    const containerCreated = await containerService.getContainer(newContainerId)
-    expect(containerCreated).toMatchObject({
-        name: 'toBeDeleted',
-        householdId: 'toBeDeleted'
-    })
+    const newContainer = await containerService.createContainerByParams('toBeDeleted', 'toBeDeleted')
+    const containerCreated = await containerService.getContainerById(newContainer.id)
+    expect(containerCreated).toMatchObject(newContainer)
 
-    await containerService.deleteContainer(newContainerId)
-    const containerAfterDeletion = await containerService.getContainer(newContainerId)
+    const deletedContainer = await containerService.deleteContainerById(newContainer.id)
+    expect(deletedContainer).toMatchObject(newContainer)
+
+    const containerAfterDeletion = await containerService.getContainerById(newContainer.id)
     expect(containerAfterDeletion).toBe(null)
 })
 
-test('attempt to delete container that doesn\'t exist and nothing happens', async () => {
+test('should try to delete container by id that doesn\'t exist', async () => {
     const services = setup()
     const [containerService] = services
 
     const containerId = 'I_Do_Not_Exist'
-    await containerService.deleteContainer(containerId)
+    const deletedContainer = await containerService.deleteContainerById(containerId)
+    expect(deletedContainer).toBe(null)
+
 })
 
-//updateName
-//TODO: try to figure out why this test keeps failing even though container's name is updated in DB
-// test('should create a container and then change its name without errors', async () => {
-//     const services = setup()
-//     const [containerService] = services
-
-//     const newContainerId = await containerService.createContainer('originalContainerName', 'someHouseholdId')
-//     const containerCreated = await containerService.getContainer(newContainerId)
-//     expect(containerCreated).toMatchObject({
-//         name: 'originalContainerName',
-//         householdId: 'someHouseholdId'
-//     })
-
-//     await containerService.updateName(newContainerId, 'updateNameTest')
-//     const containerAfterNameChange = await containerService.getContainer(newContainerId)
-//     expect(containerCreated).toMatchObject({
-//         name: 'updateNameTest',
-//         householdId: 'someHouseholdId'
-//     })
-// })
-
-test('should try to update a nonexistant conatiner\'s name and nothing happens', async () => {
+test('should create and delete a container by object without error', async () => {
     const services = setup()
     const [containerService] = services
 
-    const containerId = 'I_Do_Not_Exist'
-    await containerService.updateName(containerId, 'newName')
+    const newContainer = await containerService.createContainerByParams('toBeDeleted', 'toBeDeleted')
+    const containerCreated = await containerService.getContainerById(newContainer.id)
+    expect(containerCreated).toMatchObject(newContainer)
+
+    const deletedContainer = await containerService.deleteContainerByObject(newContainer)
+    expect(deletedContainer).toMatchObject(newContainer)
+
+    const containerAfterDeletion = await containerService.getContainerById(newContainer.id)
+    expect(containerAfterDeletion).toBe(null)
+
 })
 
+test('should try to delete a container by object that has a null id', async () => {
+    const services = setup()
+    const [containerService] = services
+
+    const container = new Container('toBeDeleted', 'toBeDeleted')
+    const deletedContainer = await containerService.deleteContainerByObject(container)
+    expect(deletedContainer).toBe(null)
+})
+
+//updateContainer
+test('should create and update a container without error', async () => {
+    const services = setup()
+    const [containerService] = services
+
+    const newContainer = await containerService.createContainerByParams('nameToBeUpdated', 'someHouseholdId')
+    const containerCreated = await containerService.getContainerById(newContainer.id)
+    expect(containerCreated).toMatchObject(newContainer)
+
+    containerCreated.name = 'updateContainer'
+    const updatedContainer = await containerService.updateContainer(containerCreated)
+    expect(updatedContainer).toMatchObject(containerCreated)
+
+    const containerAfterUpdate = await containerService.getContainerById(newContainer.id)
+    expect(containerAfterUpdate).toMatchObject(updatedContainer)
+
+})
+
+test('should try to update a container that has a null id and nothing happens', async () => {
+    const services = setup()
+    const [containerService] = services
+
+    const container = new Container('toBeDeleted', 'toBeDeleted')
+    const updatedContainer = await containerService.updateContainer(container)
+    expect(updatedContainer).toBe(null)
+})
+
+test('should try to update a container with an id that doesn\'t exist and nothing happens', async () => {
+    const services = setup()
+    const [containerService] = services
+
+    const container = new Container('toBeDeleted', 'toBeDeleted')
+    container.id = 'I_Do_Not_Exist'
+    const updatedContainer = await containerService.updateContainer(container)
+    expect(updatedContainer).toBe(null)
+})
+
+//helper function
 function setup(){
     initFirebase()
     const containerService = new ContainerService();

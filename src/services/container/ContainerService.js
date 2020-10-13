@@ -11,19 +11,31 @@ export class ContainerService extends BaseService{
     }
 
     /**
-     * Creates a new container and returns the id
+     * Creates a new container and returns the container object with an id
      * @param {string} name name of the new container
      * @param {string} householdId id of the household where the container is held
-     * @returns id of the container created
+     * @returns the container object that was created 
      */
-    async createContainer(name, householdId){
-    
+    async createContainerByParams(name, householdId){
         this.__UseCollection(this.CONTAINER_TABLE)
         const container = new Container(name, householdId)
 
         const newDocId = await this.__CreateEntity( container.toDocument() )
-        return newDocId
+        container.id = newDocId
+        return container
+    }
 
+    /**
+     * Creates a container object in the database and gives it an id
+     * @param {Container} container container object without an id value
+     * @returns the container object with an id
+     */
+    async createContainerByObject(container){
+        this.__UseCollection(this.CONTAINER_TABLE)
+        
+        const newDocId = await this.__CreateEntity( container.toDocument() )
+        container.id = newDocId
+        return container
     }
 
     /**
@@ -31,37 +43,71 @@ export class ContainerService extends BaseService{
      * @param {string} id id of the container trying to be retrieved
      * @returns a container object or null
      */
-    async getContainer(id){
+    async getContainerById(id){
         this.__UseCollection(this.CONTAINER_TABLE)
         const containerDoc = await this.__GetById(id)
 
         if(containerDoc == undefined)
             return null
+            
+        const container = new Container(containerDoc.name, containerDoc.householdId)
+        container.id = id
 
-        return new Container(containerDoc.name, containerDoc.householdId)
+        return container
     }
 
     /**
-     * Attempts to delete a container
-     * @param {string} id id of the container trying to be deleted
+     * Attempts to delete a container by using its object id
+     * @param {Container} container the container to be deleted.
+     * @returns the container obj that was deleted, or null if container was not found or its id was null
      */
-    async deleteContainer(id){
+    async deleteContainerByObject(container){
         this.__UseCollection(this.CONTAINER_TABLE)
+
+        const containerId = container.id
+        if( containerId == null )
+            return null
+
+        const containerToDelete = await this.getContainerById(containerId)
+        if( containerToDelete == null )
+            return null
+
+        await this.__DeleteEntityById(containerId)
+        return containerToDelete
+    }
+
+    /**
+     * Attempts to delete a container by just its id
+     * @param {Container} container the container to be deleted. MUST HAVE ID
+     * @returns the container obj that was deleted or null if container was not found
+     */
+    async deleteContainerById(id){
+        this.__UseCollection(this.CONTAINER_TABLE)
+        
+        const containerToDelete = await this.getContainerById(id)
+        if( containerToDelete == null)
+            return null
+
         await this.__DeleteEntityById(id)
+        return containerToDelete
     }
     
     /**
-     * Updates the name of the container to the new given name
-     * @param {string} id id of the container to be updated
-     * @param {string} name new name of the container
+     * Updates a container object in the DB. If container Object has no id then returns null
+     * @param {Container} updatedContainer updated container object
+     * @returns updated container if successful, or null if the id doesn't exist or is null
      */
-    async updateName(id, name){
-        const containerReceived = await this.getContainer(id)
+    async updateContainer(updatedContainer){
+        const containerId = updatedContainer.id
+        if(containerId == null)
+            return null
+        
+        const oldContainer = await this.getContainerById(containerId)
+        if(oldContainer == null)
+            return null
 
-        if(containerReceived != null){
-            containerReceived.name = name
-            await this.__UpdateById(id, containerReceived.toDocument())
-        }
+        await this.__UpdateById(containerId, updatedContainer.toDocument())
+        return updatedContainer
     }
 
     /**
