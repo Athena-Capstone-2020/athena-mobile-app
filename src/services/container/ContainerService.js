@@ -4,7 +4,6 @@ import { Container, FoodItem } from "../../models"
 export class ContainerService extends BaseService{
 
     CONTAINER_TABLE = 'CONTAINER_TABLE'
-    CONTAINER_FOOD_ITEM_TABLE = 'CONTAINER_FOOD_ITEM_TABLE'
 
     constructor(){
         super()
@@ -14,7 +13,7 @@ export class ContainerService extends BaseService{
      * Creates a new container and returns the container object with an id
      * @param {string} name name of the new container
      * @param {string} householdId id of the household where the container is held
-     * @returns the container object that was created 
+     * @returns the container object that was created
      */
     async createContainer(name, householdId){
         this.__UseCollection(this.CONTAINER_TABLE)
@@ -145,16 +144,28 @@ export class ContainerService extends BaseService{
         if(index == container.foodItems.length)
             return await this.addFoodItemToContainer(container, updatedItem)
 
-        container.foodItems[index] = updatedItem.toDocument()
+        container.foodItems.splice(index, 1, updatedItem.toDocument())
         return await this.updateContainer(container)
     }
 
     /**
-     * Removes a food item from the container
-     * @param {item} item 
+     * Removes the food item at the index in the specified container
+     * @param {Container} container the container a food item is being removed from 
+     * @param {Number} index the index at which the food item is located
+     * @returns updated container if successful, otherwise returns null 
      */
-    removeItem(item){
-        throw new Error('Not Implemented')
+    async removeFoodItemFromContainer(container, index){
+        this.__UseCollection(this.CONTAINER_TABLE)
+
+        const containerToRemoveFrom = await this.getContainerById(container.id)
+        if(containerToRemoveFrom == null)
+            return null
+
+        if( index < 0 || containerToRemoveFrom.foodItems.length <= index )
+            return null
+
+        containerToRemoveFrom.foodItems.splice(index, 1)
+        return await this.updateContainer(containerToRemoveFrom)
     }
 
     /**
