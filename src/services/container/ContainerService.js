@@ -32,6 +32,9 @@ export class ContainerService extends BaseService{
      */
     async getContainerById(id){
         this.__UseCollection(this.CONTAINER_TABLE)
+        if(id == null)
+            return null
+
         const containerDoc = await this.__GetById(id)
 
         if(containerDoc == undefined)
@@ -136,8 +139,11 @@ export class ContainerService extends BaseService{
         if(containerToAddTo == null)
             return null
 
-        if(index < 0 || container.foodItems.length <= index)
+        if(index < 0 || container.foodItems.length < index)
             return null
+
+        if(index == container.foodItems.length)
+            return await this.addFoodItemToContainer(container, updatedItem)
 
         container.foodItems[index] = updatedItem.toDocument()
         return await this.updateContainer(container)
