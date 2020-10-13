@@ -4,16 +4,14 @@ const { initFirebase } = require('../src/firebase/config')
 
 //test to ensure the service can be created and used
 test('should pass health check without errors', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     containerService.__HealthCheck('Message')
 })
 
 //CreateContainer
 test('should create container by params without errors', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     const createdContainer = await containerService.createContainer('createByParams', 'someHouseholdId')
     expect(createdContainer.id).toBeDefined()
@@ -26,8 +24,7 @@ test('should create container by params without errors', async () => {
 
 //GetContainer
 test('should get a container that has been created already without errors', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     const containerCreated = await containerService.createContainer('getContainerTest1', 'someHouseholdId')
     const retrievedContainer = await containerService.getContainerById(containerCreated.id);
@@ -37,8 +34,7 @@ test('should get a container that has been created already without errors', asyn
 })
 
 test('should try to get a container that doesn\'t exist and return null without error', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     const containerId = 'I_Do_Not_Exist'
     const retrievedContainer = await containerService.getContainerById(containerId);
@@ -49,8 +45,7 @@ test('should try to get a container that doesn\'t exist and return null without 
 
 //DeleteContainer
 test('should create and delete a container by id without error', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     const newContainer = await containerService.createContainer('toBeDeleted', 'toBeDeleted')
     const containerCreated = await containerService.getContainerById(newContainer.id)
@@ -64,8 +59,7 @@ test('should create and delete a container by id without error', async () => {
 })
 
 test('should try to delete container by id that doesn\'t exist', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     const containerId = 'I_Do_Not_Exist'
     const deletedContainer = await containerService.deleteContainerById(containerId)
@@ -74,8 +68,7 @@ test('should try to delete container by id that doesn\'t exist', async () => {
 })
 
 test('should create and delete a container by object without error', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     const newContainer = await containerService.createContainer('toBeDeleted', 'toBeDeleted')
     const containerCreated = await containerService.getContainerById(newContainer.id)
@@ -90,8 +83,7 @@ test('should create and delete a container by object without error', async () =>
 })
 
 test('should try to delete a container by object that has a null id', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     const container = new Container('toBeDeleted', 'toBeDeleted')
     const deletedContainer = await containerService.deleteContainerByObject(container)
@@ -100,8 +92,7 @@ test('should try to delete a container by object that has a null id', async () =
 
 //updateContainer
 test('should create and update a container without error', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     const newContainer = await containerService.createContainer('nameToBeUpdated', 'someHouseholdId')
     const containerCreated = await containerService.getContainerById(newContainer.id)
@@ -117,8 +108,7 @@ test('should create and update a container without error', async () => {
 })
 
 test('should try to update a container that has a null id and nothing happens', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     const container = new Container('toBeDeleted', 'toBeDeleted')
     const updatedContainer = await containerService.updateContainer(container)
@@ -126,8 +116,7 @@ test('should try to update a container that has a null id and nothing happens', 
 })
 
 test('should try to update a container with an id that doesn\'t exist and nothing happens', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     const container = new Container('toBeDeleted', 'toBeDeleted')
     container.id = 'I_Do_Not_Exist'
@@ -137,8 +126,7 @@ test('should try to update a container with an id that doesn\'t exist and nothin
 
 //addFoodItemToContainer
 test('should add a food item to a container without errors', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     const newContainer = await containerService.createContainer('addItemToContainer1', 'someHouseholdId')
     const containerCreated = await containerService.getContainerById(newContainer.id)
@@ -151,8 +139,7 @@ test('should add a food item to a container without errors', async () => {
 })
 
 test('attempt to send something other than food item without errors', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     const newContainer = await containerService.createContainer('addItemToContainer2', 'someHouseholdId')
     const containerCreated = await containerService.getContainerById(newContainer.id)
@@ -164,8 +151,7 @@ test('attempt to send something other than food item without errors', async () =
 })
 
 test('attempt to send container that doesn\'t exist without error', async () => {
-    const services = setup()
-    const [containerService] = services
+    const [containerService] = setup()
 
     const container = new Container(null, null, null)
     container.id = 'I_Do_Not_Exist'
