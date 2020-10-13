@@ -6,7 +6,7 @@ export class Container extends Document{
     /**
      * @param {string} name  
      * @param {string} householdId 
-     * @param { FoodItem[] } foodItems
+     * @param { Array<Object> } foodItems
      */
     constructor(name, householdId, foodItems){
         super()
@@ -16,16 +16,10 @@ export class Container extends Document{
     }
 
     toDocument(){
-        const foodItemObjArray = []
-
-        for(const foodItem in this.foodItems){
-            foodItemObjArray.push( foodItem.toDocument() )
-        }
-
         return{
             name: this.name,
             householdId: this.householdId,
-            foodItems: foodItemObjArray
+            foodItems: this.foodItems
         }
     }
 

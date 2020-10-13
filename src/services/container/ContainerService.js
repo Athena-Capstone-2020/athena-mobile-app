@@ -98,8 +98,28 @@ export class ContainerService extends BaseService{
     }
 
     /**
-     * Adds a food item to the container
-     * @param {FoodItem} item
+     * Adds a food item to the specified container and updates the DB
+     * @param {Container} container the container the item is being added to
+     * @param {FoodItem} item the food item being added to the container
+     * @returns updated container if successful, otherwise returns null
+     */
+    async addFoodItemToContainer(container, item){
+        
+        if( !(item instanceof FoodItem) )
+            return null
+
+        const containerToAddTo = await this.getContainerById(container.id)
+        if(containerToAddTo == null)
+            return null
+
+        container.foodItems.push(item.toDocument())
+        return await this.updateContainer(container)
+    }
+
+    /**
+     * Get the food item from the container at the specified index
+     * @param {Container} container the container the item is being retrieved from
+     * @param {Number} index the location where the food item is located
      */
     addItem(item){
         throw new Error('Not Implemented')

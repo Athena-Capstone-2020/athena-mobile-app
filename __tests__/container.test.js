@@ -1,5 +1,5 @@
 const { ContainerService } = require('../src/services')
-const { Container } = require('../src/models/Container')
+const { Container, FoodItem } = require('../src/models')
 const { initFirebase } = require('../src/firebase/config')
 
 //test to ensure the service can be created and used
@@ -132,6 +132,46 @@ test('should try to update a container with an id that doesn\'t exist and nothin
     const container = new Container('toBeDeleted', 'toBeDeleted')
     container.id = 'I_Do_Not_Exist'
     const updatedContainer = await containerService.updateContainer(container)
+    expect(updatedContainer).toBe(null)
+})
+
+//addFoodItemToContainer
+test('should add a food item to a container without errors', async () => {
+    const services = setup()
+    const [containerService] = services
+
+    const newContainer = await containerService.createContainer('addItemToContainer1', 'someHouseholdId')
+    const containerCreated = await containerService.getContainerById(newContainer.id)
+    expect(containerCreated).toMatchObject(newContainer)
+
+    const foodItemToAdd = new FoodItem('someFoodItemName', 'somePhotoURI', 'someQuantity')
+    const updatedContainer = await containerService.addFoodItemToContainer(containerCreated, foodItemToAdd)
+    const containerAfterUpdate = await containerService.getContainerById(newContainer.id)
+    expect(containerAfterUpdate).toMatchObject(updatedContainer)
+})
+
+test('attempt to send something other than food item without errors', async () => {
+    const services = setup()
+    const [containerService] = services
+
+    const newContainer = await containerService.createContainer('addItemToContainer2', 'someHouseholdId')
+    const containerCreated = await containerService.getContainerById(newContainer.id)
+    expect(containerCreated).toMatchObject(newContainer)
+
+    const foodItemToAdd = new Object()
+    const updatedContainer = await containerService.addFoodItemToContainer(containerCreated, foodItemToAdd)
+    expect(updatedContainer).toBe(null)
+})
+
+test('attempt to send container that doesn\'t exist without error', async () => {
+    const services = setup()
+    const [containerService] = services
+
+    const container = new Container(null, null, null)
+    container.id = 'I_Do_Not_Exist'
+    const foodItem = new FoodItem('name', 'photoURI', 'quantity')
+
+    const updatedContainer = await containerService.addFoodItemToContainer(container, foodItem)
     expect(updatedContainer).toBe(null)
 })
 
