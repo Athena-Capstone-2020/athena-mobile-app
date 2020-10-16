@@ -1,19 +1,25 @@
 import React from 'react'
-import { HouseholdServiceProvider, HouseholdService, PersonService, PersonServiceProvider } from "./src/services";
+import { HouseholdServiceProvider, HouseholdService, GroceryListServiceProvider, GroceryListService, 
+         ContainerServiceProvider, ContainerService, PersonService, PersonServiceProvider } from "./src/services";
 import { initFirebase } from './src/firebase/config'
-
 
 export function Provider(props) {
     initFirebase()
 
+    const householdService = new HouseholdService()
+    const groceryListService = new GroceryListService()
+    const containerService = new ContainerService()
     const personService = new PersonService()
-    const householdService = new HouseholdService(personService)
 
     return (
         <PersonServiceProvider personService={personService}>
-            <HouseholdServiceProvider householdService={householdService}>
-                {props.children}
-            </HouseholdServiceProvider>
+            <ContainerServiceProvider containerService={containerService}>    
+                <GroceryListServiceProvider groceryListService={groceryListService}>
+                    <HouseholdServiceProvider householdService={householdService}>
+                        {props.children}
+                    </HouseholdServiceProvider>
+                </GroceryListServiceProvider>
+            </ContainerServiceProvider>
         </PersonServiceProvider>
     )
 }

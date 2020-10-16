@@ -51,7 +51,6 @@ export class HouseholdService extends BaseService {
         for (const result of results.docs) {
             const id = result.data().householdId
             const household = await this.__GetById(id)
-
             listOfHouseholds.push({id, data: household})
         }
 
