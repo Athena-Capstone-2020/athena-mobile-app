@@ -1,12 +1,15 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Provider } from "./Provider";
-import Navbar from './src/screens/Navbar';
+import { ThemeProvider } from './src/components/Theme'
+import Navbar from "./src/screens/navbar/Navbar";
 
 export default function App() {
   return (
     <Provider>
-      <Navbar />
+      <ThemeProvider>
+        <Navbar />
+      </ThemeProvider>
     </Provider>
   );
 }
