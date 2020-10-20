@@ -16,7 +16,9 @@ const Navbar = () => {
     const { primary, grey } = theme.colors;
 
     return (
-        <NavigationContainer>
+        <NavigationContainer 
+            independent={true}
+        >
             <Tab.Navigator
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused }) => {
