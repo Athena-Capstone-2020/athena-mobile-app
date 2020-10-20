@@ -1,20 +1,18 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native';
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-});
+import { Button, Text, Box } from '../../components/index'
+import Container from './Container'
 
 const ContainerList = () => {
     return (
-        <View style={styles.container}>
-            <Text>ContainerList Screen</Text>
-        </View>
+        <Box marginTop="xl" alignItems="center">
+            <Text variant="header" style={{marginBottom: 12}}>Containers</Text>
+            <Container/>
+            <Button
+                onPress={() => {}}
+                label="Add Container"
+                variant="button"
+            />
+        </Box>
     )
 }
 
