@@ -1,5 +1,5 @@
 const { Person } = require("../src/models/Person")
-const { PersonService, HouseholdService } = require("../src/services")
+const { PersonService, HouseholdService, ContainerService } = require("../src/services")
 const { initFirebase } = require('../src/firebase/config')
 const uuid = require('uuid')
 
@@ -75,10 +75,27 @@ test('should be able to add and remove people from a household', async () => {
     expect(members[0].id).toBe(person2Id)
 })
 
+test('should be able to add a container to a household', async () => {
+    const [_, householdService, containerService] = setup()
+
+    const householdId = await householdService.createHousehold('Household 1')
+    const { id: containerId } = await containerService.createContainer('Fridge', 'Household 1')
+
+    await householdService.addContainerToHousehold(containerId, householdId)
+
+    const containersForHousehold = await householdService.getContainersForHousehold(householdId)
+
+    expect(containersForHousehold.length).toBe(1)
+})
+
+/**
+ * @returns {[PersonService, HouseholdService, ContainerService]}
+ */
 function setup() {
     initFirebase()
     const personService = new PersonService()
-    const householdService = new HouseholdService(personService)
+    const containerService = new ContainerService()
+    const householdService = new HouseholdService(personService, containerService)
 
-    return [personService, householdService]
+    return [personService, householdService, containerService]
 }

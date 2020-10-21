@@ -311,7 +311,10 @@ test('should create a container, add a food item to it, check to see if its ther
     expect(doesExistTwo).toBe(false)
 })
 
-//helper function
+/**
+ * helper function
+ * @returns {[ContainerService]}
+ */
 function setup(){
     initFirebase()
     const containerService = new ContainerService();

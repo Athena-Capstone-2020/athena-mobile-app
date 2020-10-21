@@ -41,6 +41,23 @@ export class BaseService {
     }
 
     /**
+     * Searches for entities matching the object passed
+     * @param {Object} query match query
+     */
+    async __SearchForEntity(query) {
+        const formattedQuery = Object.entries(query)
+
+        let databaseQuery = this.db
+
+        for (const queryEntry of formattedQuery) {
+            databaseQuery = databaseQuery.where(queryEntry[0], '==', queryEntry[1])
+        }
+
+        const results = await databaseQuery.get()
+        return results.docs
+    }
+
+    /**
      * Allows you to check if everything is connected properly
      * @param {string} message 
      */
