@@ -6,10 +6,10 @@ import { initFirebase } from './src/firebase/config'
 export function Provider(props) {
     initFirebase()
 
-    const householdService = new HouseholdService()
     const groceryListService = new GroceryListService()
     const containerService = new ContainerService()
     const personService = new PersonService()
+    const householdService = new HouseholdService(personService, containerService)
 
     return (
         <PersonServiceProvider personService={personService}>
