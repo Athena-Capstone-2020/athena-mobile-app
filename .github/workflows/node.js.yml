@@ -26,5 +26,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm i -g yarn
     - run: yarn
-    - run: echo ${{ secrets.FIREBASE_CONFIG }} > ./src/firebase/config.js
-    - run: yarn test
+    - name: Creating config file for Firebase
+      env:
+        FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+      run: echo "$FIREBASE_CONFIG" > ./src/firebase/config.js
+    - name: Test Services
+      run: yarn test
