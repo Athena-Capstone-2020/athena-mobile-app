@@ -133,3 +133,6 @@ docs/pages/versions/*/react-native/*.diff
 
 # Firebase
 src/firebase/config.js
+
+# Sentry
+src/sentry/config.js
