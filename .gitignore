@@ -131,8 +131,5 @@ docs/pages/versions/*/react-native/*.diff
 # Home
 /home/dist
 
-# Firebase
-src/firebase/config.js
-
-# Sentry
-src/sentry/config.js
+# Enviornment Variable/API Keys
+.env
