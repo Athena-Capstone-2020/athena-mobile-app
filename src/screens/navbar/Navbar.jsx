@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { useTheme } from '../../components/Theme';
-import AddItem from '../AddItem';
+import AddItem from '../additem/AddItem';
 import ContainerList from '../container/ContainerList';
 import GroceryList from '../GroceryList';
 import Home from '../Home';
