@@ -3,7 +3,7 @@ import { Container, FoodItem } from "../../models"
 
 export class ContainerService extends BaseService{
 
-    CONTAINER_TABLE = 'CONTAINER_TABLE'
+    CONTAINER_COLLECTION = 'CONTAINER_COLLECTION'
 
     constructor(){
         super()
@@ -16,9 +16,34 @@ export class ContainerService extends BaseService{
      * @returns the container object that was created
      */
     async createContainer(name, householdId){
-        this.__UseCollection(this.CONTAINER_TABLE)
-        const container = new Container(name, householdId, [])
+        this.__UseCollection(this.CONTAINER_COLLECTION)
+        
+        const defaultIcon = {
+            name: "DefaultName",
+            color: "DefaultColor",
+            type: "DefaultType"
+        }
+        const container = new Container(name, householdId, [], defaultIcon)
 
+        const newDocId = await this.__CreateEntity( container.toDocument() )
+        container.id = newDocId
+        return container
+    }
+
+    /**
+     * Creates a new container and returns the container object with an id
+     * @param {string} name name of the new container
+     * @param {string} householdId id of the household where the container is held
+     * @param {Object} icon object with attributes name, color, type as strings
+     * @returns the container object that was created, or null if the icon was invalid
+     */
+    async createContainerWithIcon(name, householdId, icon){
+        this.__UseCollection(this.CONTAINER_COLLECTION)
+
+        if(icon.name == undefined || icon.color == undefined || icon.type == undefined )
+            return null
+
+        const container = new Container(name, householdId, [], icon)
         const newDocId = await this.__CreateEntity( container.toDocument() )
         container.id = newDocId
         return container
@@ -30,7 +55,7 @@ export class ContainerService extends BaseService{
      * @returns a container object or null
      */
     async getContainerById(id){
-        this.__UseCollection(this.CONTAINER_TABLE)
+        this.__UseCollection(this.CONTAINER_COLLECTION)
         if(id == null)
             return null
 
@@ -39,7 +64,7 @@ export class ContainerService extends BaseService{
         if(containerDoc == undefined)
             return null
             
-        const container = new Container(containerDoc.name, containerDoc.householdId, containerDoc.foodItems)
+        const container = new Container(containerDoc.name, containerDoc.householdId, containerDoc.foodItems, containerDoc.icon)
         container.id = id
 
         return container
@@ -51,7 +76,7 @@ export class ContainerService extends BaseService{
      * @returns the container obj that was deleted, or null if container was not found or its id was null
      */
     async deleteContainerByObject(container){
-        this.__UseCollection(this.CONTAINER_TABLE)
+        this.__UseCollection(this.CONTAINER_COLLECTION)
 
         const containerId = container.id
         if( containerId == null )
@@ -71,7 +96,7 @@ export class ContainerService extends BaseService{
      * @returns the container obj that was deleted or null if container was not found
      */
     async deleteContainerById(id){
-        this.__UseCollection(this.CONTAINER_TABLE)
+        this.__UseCollection(this.CONTAINER_COLLECTION)
         
         const containerToDelete = await this.getContainerById(id)
         if( containerToDelete == null)
@@ -87,7 +112,7 @@ export class ContainerService extends BaseService{
      * @returns updated container if successful, or null if the id doesn't exist or is null
      */
     async updateContainer(updatedContainer){
-        this.__UseCollection(this.CONTAINER_TABLE)
+        this.__UseCollection(this.CONTAINER_COLLECTION)
 
         const containerId = updatedContainer.id
         if(containerId == null)
@@ -108,7 +133,7 @@ export class ContainerService extends BaseService{
      * @returns updated container if successful, otherwise returns null
      */
     async addFoodItemToContainer(container, item){
-        this.__UseCollection(this.CONTAINER_TABLE)
+        this.__UseCollection(this.CONTAINER_COLLECTION)
 
         if( !(item instanceof FoodItem) )
             return null
@@ -129,7 +154,7 @@ export class ContainerService extends BaseService{
      * @returns updated container if successful, otherwise returns null
      */
     async updateFoodItemInContainer(container, index, updatedItem){
-        this.__UseCollection(this.CONTAINER_TABLE)
+        this.__UseCollection(this.CONTAINER_COLLECTION)
 
         if( !(updatedItem instanceof FoodItem) )
             return null
@@ -155,7 +180,7 @@ export class ContainerService extends BaseService{
      * @returns updated container if successful, otherwise returns null 
      */
     async removeFoodItemFromContainer(container, index){
-        this.__UseCollection(this.CONTAINER_TABLE)
+        this.__UseCollection(this.CONTAINER_COLLECTION)
 
         const containerToRemoveFrom = await this.getContainerById(container.id)
         if(containerToRemoveFrom == null)
@@ -176,7 +201,7 @@ export class ContainerService extends BaseService{
      *   the food item is invalid, or the container does not exist
      */
     async doesFoodItemExistInContainer(container, item){
-        this.__UseCollection(this.CONTAINER_TABLE)
+        this.__UseCollection(this.CONTAINER_COLLECTION)
 
         if( !(item instanceof FoodItem) )
             return false
