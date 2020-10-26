@@ -10,14 +10,21 @@ import React from "react";
 const palette = {
   orange: "#FE724C",
   grey: "#D0CED5",
+  greyBlue: "#9DA4BB",
+  monochrome1: "#F3F3F3",
+  monochrome2: "#E7E7E7",
   white: "#FFFFFF",
-  black: "#000000"
+  black: "#000000",
+  overlay: "#F8F8F8",
 };
 
 const theme = createTheme({
   colors: {
     primary: palette.orange,
     grey: palette.grey,
+    greyBlue: palette.greyBlue,
+    monochrome1: palette.monochrome1,
+    monochrome2: palette.monochrome2,
     white: palette.white,
     black: palette.black
   },
@@ -50,7 +57,21 @@ const theme = createTheme({
       fontSize: 25,
       fontFamily: "SFProDisplay-Semibold",
       color: "black",
-      // textAlign: "center",
+    },
+    search: {
+      fontSize: 14,
+      fontFamily: "SFProDisplay-Regular",
+      text: "greyBlue",
+      background: "monochrome1",
+      border: "monochrome2"
+    },
+    recentSearchesTitle: {
+      fontSize: 18,
+      fontFamily: "SFProDisplay-Semibold",
+    },
+    recentSearches: {
+      fontSize: 15.4,
+      fontFamily: "SFProDisplay-Regular",
     }
   },
   breakpoints: {
