@@ -64,6 +64,14 @@ const theme = createTheme({
       text: "greyBlue",
       background: "monochrome1",
       border: "monochrome2"
+    },
+    recentSearchesTitle: {
+      fontSize: 18,
+      fontFamily: "SFProDisplay-Semibold",
+    },
+    recentSearches: {
+      fontSize: 15.4,
+      fontFamily: "SFProDisplay-Regular",
     }
   },
   breakpoints: {

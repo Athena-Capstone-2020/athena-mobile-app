@@ -4,19 +4,16 @@ import { TextInput, StyleSheet } from "react-native";
 import Svg, { G, Path, Circle } from "react-native-svg"
 
 const styles = StyleSheet.create({
-    container: {
-        marginTop: 43,
-        position: "absolute",
-    },
     searchBox: {
-        width: 256,
+        width: 290,
         height: 51,
         borderWidth: 1,
         borderRadius: 10,
-        marginRight: 60
     },
     input: {
-        marginTop: 16,
+        height: 40,
+        marginRight: 5,
+        marginTop: 5,
         marginLeft: 48.1,
     },
     searchIcon: {
@@ -57,7 +54,7 @@ const SearchIcon = () => {
     )
 }
 
-const Search = ({ placeholder }) => {
+const Search = ({ placeholder, style }) => {
 
     const theme = useTheme()
     const variant = "search"
@@ -74,10 +71,8 @@ const Search = ({ placeholder }) => {
     const fontFamily = theme.textVariants[variant].fontFamily;
     const fontSize = theme.textVariants[variant].fontSize;
 
-    console.log(color)
-
     return (
-        <Box style={styles.container}>
+        <Box style={style ? style : ""}>
             <Box style={[styles.searchBox, { backgroundColor, borderColor }]}>
                 <TextInput
                     variant="search"

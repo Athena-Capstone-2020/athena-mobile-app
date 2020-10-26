@@ -5,6 +5,20 @@ import { RectButton } from "react-native-gesture-handler";
 import Svg, { Path } from "react-native-svg"
 
 const styles = StyleSheet.create({
+    shadow: {
+        width: 40,
+        height: 40,
+        borderRadius: 14,
+        shadowColor: "#6F6F6F",
+        shadowOffset: {
+            width: 18.2,
+            height: 18.2,
+        },
+        shadowOpacity: .56,
+        shadowRadius: 17,
+        marginBottom: 21.4,
+        flexDirection: "row"
+    },
     container: {
         backgroundColor: "white",
         width: 43,
@@ -38,14 +52,14 @@ const BarcodeIcon = () => {
 const IconButton = ({ style, onPress }) => {
 
     return (
-        <RectButton
-            // style={[styles.container, style ? style : ""]}
-            style={styles.container}
-        // {...{ onPress }}
-        >
-            <BarcodeIcon />
-        </RectButton>
-        // <Box style={styles.container}></Box>
+        <Box style={[styles.shadow, style ? style : ""]}>
+            <RectButton
+                style={styles.container}
+                onPress={onPress}
+            >
+                <BarcodeIcon />
+            </RectButton>
+        </Box>
     )
 }
 
