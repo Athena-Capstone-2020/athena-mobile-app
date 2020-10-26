@@ -27,17 +27,24 @@ const styles = StyleSheet.create({
         marginLeft: 270,
         marginTop: 13.5
     },
-    icon: {
+    barcode: {
         width: 27.934,
         height: 22.856,
         marginTop: 10.5,
         marginLeft: 8
+    },
+    backArrow: {
+        width: 6.81,
+        height: 11.621,
+        // backgroundColor: "red",
+        marginTop: 15.5,
+        marginLeft: 17
     }
 })
 
 const BarcodeIcon = () => {
     return (
-        <Box style={styles.icon}>
+        <Box style={styles.barcode}>
             <Svg width={27.934} height={22.856} viewBox="0 0 27.934 22.856">
                 <Path
                     data-name="Scan"
@@ -49,7 +56,26 @@ const BarcodeIcon = () => {
     );
 }
 
-const IconButton = ({ style, onPress }) => {
+const BackArrowIcon = () => {
+    return (
+        <Box style={styles.backArrow}>
+            <Svg width={7.031} height={12.041} viewBox="0 0 7.031 12.041">
+                <Path
+                    data-name="Path 3391"
+                    d="M5.971 1.06L.75 5.951l5.029 5.03"
+                    fill="none"
+                    stroke="#111719"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    strokeDasharray="0 0"
+                />
+            </Svg>
+        </Box>
+    )
+}
+
+const IconButton = ({ style, onPress, variant }) => {
 
     return (
         <Box style={[styles.shadow, style ? style : ""]}>
@@ -57,7 +83,8 @@ const IconButton = ({ style, onPress }) => {
                 style={styles.container}
                 onPress={onPress}
             >
-                <BarcodeIcon />
+                {variant === 'barcode' && <BarcodeIcon />}
+                {variant === 'backButton' && <BackArrowIcon />}
             </RectButton>
         </Box>
     )

@@ -3,7 +3,11 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { Box, Text, Search } from '../../components/index'
 import { IconButton } from '../../components/index'
 import Svg, { Path } from "react-native-svg"
+import BarcodeScanner from './BarcodeScanner'
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
+const RootStack = createStackNavigator();
 const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
@@ -21,7 +25,7 @@ const styles = StyleSheet.create({
     },
     barcode: {
         marginTop: -60.5,
-        marginLeft: 35 
+        marginLeft: 35
     },
     recentSearchesTitle: {
         alignSelf: "flex-start",
@@ -52,7 +56,7 @@ const ClockIcon = () => {
     )
 }
 
-const AddItem = () => {
+const AddItemSearch = ({navigation}) => {
     return (
         <Box style={styles.container} marginTop="xl" alignItems="center">
             <Text variant="header" style={styles.screenName}>Add Item</Text>
@@ -63,7 +67,8 @@ const AddItem = () => {
                 />
                 <IconButton
                     style={styles.barcode}
-                    onPress={() => { }}
+                    variant="barcode"
+                    onPress={() => navigation.navigate('BarcodeScanner')}
                 />
             </Box>
             <Text variant="recentSearchesTitle" style={styles.recentSearchesTitle}>Recent Searches</Text>
@@ -78,6 +83,15 @@ const AddItem = () => {
             </Box>
         </Box>
 
+    )
+}
+
+const AddItem = () => {
+    return (
+        <RootStack.Navigator mode="modal">
+            <RootStack.Screen name="AddItemSearch" component={AddItemSearch} options={{ headerShown: false }}/>
+            <RootStack.Screen name="BarcodeScanner" component={BarcodeScanner} options={{ headerShown: false }}/>
+        </RootStack.Navigator>
     )
 }
 
