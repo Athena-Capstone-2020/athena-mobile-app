@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const Button = ({ label, onPress, style, variant }) => {
+const ButtonAlt = ({ label, onPress, style, variant }) => {
 
     const theme = useTheme();
 
@@ -25,7 +25,7 @@ const Button = ({ label, onPress, style, variant }) => {
 
     return (
         <RectButton
-            style={[styles.container, style ? style : "", { backgroundColor }]}
+            style={[styles.container, style ? style : "", { backgroundColor, borderWidth: 1, borderColor: color }]}
             {...{ onPress }}
         >
             <Text variant={variant} style={{ color }}>
@@ -35,7 +35,7 @@ const Button = ({ label, onPress, style, variant }) => {
     );
 };
 
-Button.defaultProps = { variant: "button" }
+ButtonAlt.defaultProps = { variant: "buttonAlt" }
 
 
-export default Button
+export default ButtonAlt
