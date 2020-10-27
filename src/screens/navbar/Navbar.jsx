@@ -2,12 +2,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { useTheme } from '../../components/Theme';
+import { Icon } from '../../components/index'
 import AddItem from '../additem/AddItem';
 import ContainerList from '../container/ContainerList';
 import GroceryList from '../GroceryList';
 import Home from '../Home';
 import User from '../User';
-import NavIcons from './NavIcons';
 
 const Navbar = () => {
 
@@ -22,27 +22,7 @@ const Navbar = () => {
             <Tab.Navigator
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused }) => {
-                        let iconName;
-                        let iconColor;
-
-                        if (route.name === 'Home') {
-                            iconName = "Home";
-                            iconColor = focused ? primary : grey;
-                        }
-                        else if (route.name === 'ContainerList') {
-                            iconName = 'ContainerList';
-                            iconColor = focused ? primary : grey;
-                        } else if (route.name === 'AddItem') {
-                            iconName = 'AddItem';
-                            iconColor = focused ? primary : grey;
-                        } else if (route.name === 'GroceryList') {
-                            iconName = 'GroceryList';
-                            iconColor = focused ? primary : grey;
-                        } else if (route.name === 'User') {
-                            iconName = 'User';
-                            iconColor = focused ? primary : grey;
-                        }
-                        return <NavIcons name={iconName} color={iconColor} />;
+                        return <Icon name={route.name} color={focused ? primary : grey} />;
                     },
                 })}
                 tabBarOptions={{
