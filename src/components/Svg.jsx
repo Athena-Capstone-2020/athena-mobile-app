@@ -1,7 +1,7 @@
 import React from 'react'
 import Svg, { Path } from "react-native-svg";
 
-export const HomeIcon = ({ color }) => {
+export const Home = ({ color }) => {
     return (
         <Svg width={27.91} height={27.735} viewBox="0 0 27.91 27.735">
             <Path
@@ -12,7 +12,7 @@ export const HomeIcon = ({ color }) => {
     );
 }
 
-export const ContainerIcon = ({ color }) => {
+export const ContainerList = ({ color }) => {
     return (
         <Svg width={28} height={27} viewBox="0 0 28 27">
             <Path
@@ -24,7 +24,7 @@ export const ContainerIcon = ({ color }) => {
     );
 }
 
-export const AddItemIcon = ({ color }) => {
+export const AddItem = ({ color }) => {
     return (
         <Svg width={28} height={27} viewBox="0 0 28 27">
             <Path
@@ -36,7 +36,7 @@ export const AddItemIcon = ({ color }) => {
     );
 }
 
-export const GroceryListIcon = ({ color }) => {
+export const GroceryList = ({ color }) => {
     return (
         <Svg width={28} height={27} viewBox="0 0 28 27">
             <Path
@@ -48,7 +48,7 @@ export const GroceryListIcon = ({ color }) => {
     );
 }
 
-export const UserIcon = ({ color }) => {
+export const User = ({ color }) => {
     return (
         <Svg width={20.467} height={25.583} viewBox="0 0 20.467 25.583">
             <Path
@@ -60,36 +60,53 @@ export const UserIcon = ({ color }) => {
     );
 }
 
-export const Fridge = () => {
+export const Fridge = ({ color }) => {
     return (
         <Svg width={39.622} height={67.49} viewBox="0 0 39.622 67.49">
             <Path
                 data-name="Path 34"
                 d="M35.073 0H4.535A4.534 4.534 0 000 4.52v58.45a4.516 4.516 0 004.535 4.52h30.538a4.547 4.547 0 004.549-4.52V4.52A4.537 4.537 0 0035.073 0zm1.614 62.985a1.594 1.594 0 01-1.614 1.585H4.535a1.591 1.591 0 01-1.6-1.585v-35.1h33.752v35.1zm0-38.037H2.935V4.52a1.591 1.591 0 011.6-1.585h30.538a1.613 1.613 0 011.614 1.585z"
-                fill="#000000"
+                fill={color}
             />
             <Path
                 data-name="Path 35"
                 d="M33.399 15.438a1.148 1.148 0 00-1.145 1.145v4.58a1.145 1.145 0 102.29 0v-4.58a1.148 1.148 0 00-1.145-1.145z"
-                fill="#000000"
+                fill={color}
             />
             <Path
                 data-name="Path 36"
                 d="M33.401 37.772a1.15 1.15 0 001.147-1.147v-5.734a1.147 1.147 0 10-2.293 0v5.734a1.15 1.15 0 001.146 1.147z"
-                fill="#000000"
+                fill={color}
             />
         </Svg>
     );
 }
 
-export const Arrow = () => {
+export const ArrowLeft = ({ color }) => {
+    return(
+        <Svg width={6.81} height={11.621} viewBox="0 0 6.81 11.621">
+            <Path
+                data-name="Path 3391"
+                d="M5.75 1.06l-5 4.684 4.816 4.816"
+                fill="none"
+                stroke={color || "#111719"}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                strokeDasharray="0 0"
+            />
+        </Svg>
+    )
+}
+
+export const ArrowRight = ({ color }) => {
     return (
         <Svg width={6.81} height={11.621} viewBox="0 0 6.81 11.621">
             <Path
                 data-name="Path 3391"
                 d="M1.06 10.561l5-4.684-4.816-4.816"
                 fill="none"
-                stroke="#111719"
+                stroke={color || "#111719"}
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={1.5}
@@ -98,3 +115,19 @@ export const Arrow = () => {
         </Svg>
     );
 }
+
+const Icon = ({ name, color }) => {
+    switch(name) {
+        case 'Home':            return <Home color={color} />
+        case 'ContainerList':   return <ContainerList color={color} />
+        case 'AddItem':         return <AddItem color={color} />
+        case 'GroceryList':     return <GroceryList color={color} />
+        case 'User':            return <User color={color} />
+        case 'Fridge':          return <Fridge color={color} />
+        case 'ArrowLeft':       return <ArrowLeft color={color} />
+        case 'ArrowRight':      return <ArrowRight color={color} />
+        default:                return null
+    }
+}
+
+export default Icon;
