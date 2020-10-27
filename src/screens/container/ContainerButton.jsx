@@ -1,9 +1,8 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
-import { Text, useTheme } from "./index";
-import {Arrow, Fridge } from './index'
-import { Box } from "./Theme";
+import { Text, useTheme, Icon, ArrowRight } from "../../components/index";
+import { Box } from "../../components/Theme";
 
 const styles = StyleSheet.create({
     button: {
@@ -34,7 +33,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between"
     },
-    fridge: {
+    icon: {
         width: 39.622,
         height: 69.49,
         marginLeft: 17,
@@ -52,7 +51,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const ContainerButton = ({ label, onPress, style }) => {
+const ContainerButton = ({ container, distributing, style }) => {
 
     const theme = useTheme();
 
@@ -66,21 +65,32 @@ const ContainerButton = ({ label, onPress, style }) => {
         <Box style={styles.shadow}>
             <RectButton
                 style={[styles.button, style ? style : "", { backgroundColor }]}
-                {...{ onPress }}
+                onPress={distributing ? () => {} : () => {
+                    // navigate to <Container container={container} />
+                }}
             >
-                <Box style={styles.content}>
-                    <Box style={styles.fridge}>
-                        <Fridge />
-                    </Box>
-                    <Box style={styles.text}>
-                        <Text variant="container" style={{ color }}>
-                            {label}'s {"\n"}Food
-                    </Text>
-                    </Box>
-                    <Box style={styles.arrow}>
-                        <Arrow style={styles.arrow} />
-                    </Box>
-                </Box>
+                {
+                    distributing ?
+                        <Box style={styles.content}>
+                            <Box style={styles.icon}>
+                                <Icon name={container.icon} color={container.color} />
+                            </Box>
+                        </Box>
+                    :
+                        <Box style={styles.content}>
+                            <Box style={styles.icon}>
+                                <Icon name={container.icon} color={container.color} />
+                            </Box>
+                            <Box style={styles.text}>
+                                <Text variant="container" style={{ color }}>
+                                    {container.label}
+                                </Text>
+                            </Box>
+                            <Box style={styles.arrow}>
+                                <ArrowRight style={styles.arrow} />
+                            </Box>
+                        </Box>
+                }
             </RectButton>
         </Box>
     )
