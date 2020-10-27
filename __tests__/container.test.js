@@ -10,7 +10,7 @@ test('should pass health check without errors', async () => {
 })
 
 //CreateContainer
-test('should create container by params without errors', async () => {
+test('should create container without errors', async () => {
     const [containerService] = setup()
 
     const createdContainer = await containerService.createContainer('createByParams', 'someHouseholdId')
@@ -18,8 +18,46 @@ test('should create container by params without errors', async () => {
     expect(createdContainer.toDocument()).toMatchObject({
         name: 'createByParams',
         householdId: 'someHouseholdId',
-        foodItems: []
+        foodItems: [],
+        icon: {
+            name: "DefaultName",
+            color: "DefaultColor",
+            type: "DefaultType"
+        }
     })
+})
+
+//CreateContainerWithIcon
+test('should create container with custom icon without errors', async () => {
+    const [containerService] = setup()
+
+    const customIcon = {
+        name: "CustomName",
+        color: "CustomColor",
+        type: "CustomType"
+    }
+    const createdContainer = await containerService.createContainerWithIcon('createByParams', 'someHouseholdId', customIcon)
+    expect(createdContainer.id).toBeDefined()
+    expect(createdContainer.toDocument()).toMatchObject({
+        name: 'createByParams',
+        householdId: 'someHouseholdId',
+        foodItems: [],
+        icon: {
+            name: "CustomName",
+            color: "CustomColor",
+            type: "CustomType"
+        }
+    })
+})
+
+test('attempt to create container with an invalid icon', async () => {
+    const [containerService] = setup()
+
+    const customIcon = {
+        attr: "Not name, color, or type"
+    }
+    const createdContainer = await containerService.createContainerWithIcon('createByParams', 'someHouseholdId', customIcon)
+    expect(createdContainer).toBe(null)
 })
 
 //GetContainer
@@ -85,7 +123,12 @@ test('should create and delete a container by object without error', async () =>
 test('should try to delete a container by object that has a null id', async () => {
     const [containerService] = setup()
 
-    const container = new Container('toBeDeleted', 'toBeDeleted')
+    const defaultIcon = {
+        name: "DefaultName",
+        color: "DefaultColor",
+        type: "DefaultType"
+    }
+    const container = new Container('toBeDeleted', 'toBeDeleted', [], defaultIcon)
     const deletedContainer = await containerService.deleteContainerByObject(container)
     expect(deletedContainer).toBe(null)
 })
@@ -110,7 +153,12 @@ test('should create and update a container without error', async () => {
 test('should try to update a container that has a null id and nothing happens', async () => {
     const [containerService] = setup()
 
-    const container = new Container('toBeDeleted', 'toBeDeleted')
+    const defaultIcon = {
+        name: "DefaultName",
+        color: "DefaultColor",
+        type: "DefaultType"
+    }
+    const container = new Container('toBeDeleted', 'toBeDeleted', [], defaultIcon)
     const updatedContainer = await containerService.updateContainer(container)
     expect(updatedContainer).toBe(null)
 })
@@ -118,7 +166,12 @@ test('should try to update a container that has a null id and nothing happens', 
 test('should try to update a container with an id that doesn\'t exist and nothing happens', async () => {
     const [containerService] = setup()
 
-    const container = new Container('toBeDeleted', 'toBeDeleted')
+    const defaultIcon = {
+        name: "DefaultName",
+        color: "DefaultColor",
+        type: "DefaultType"
+    }
+    const container = new Container('toBeDeleted', 'toBeDeleted',[], defaultIcon)
     container.id = 'I_Do_Not_Exist'
     const updatedContainer = await containerService.updateContainer(container)
     expect(updatedContainer).toBe(null)
@@ -153,7 +206,12 @@ test('attempt to send something other than food item without errors', async () =
 test('attempt to send container that doesn\'t exist without error', async () => {
     const [containerService] = setup()
 
-    const container = new Container(null, null, null)
+    const defaultIcon = {
+        name: "DefaultName",
+        color: "DefaultColor",
+        type: "DefaultType"
+    }
+    const container = new Container('toBeDeleted', 'toBeDeleted',[], defaultIcon)
     container.id = 'I_Do_Not_Exist'
     const foodItem = new FoodItem('name', 'photoURI', 'quantity')
 
@@ -189,7 +247,12 @@ test('create container, add some food items, and update one without error', asyn
 test('attempt to update an item in a container that doesn\'t exist without error', async () => {
     const [containerService] = setup()
 
-    const container = new Container('doesNotExist','doesNotExist','doesNotExist')
+    const defaultIcon = {
+        name: "DefaultName",
+        color: "DefaultColor",
+        type: "DefaultType"
+    }
+    const container = new Container('toBeDeleted', 'toBeDeleted',[], defaultIcon)
     const foodItem = new FoodItem('dummy', 'dummy', 'dummy')
 
     const updatedContainer = await containerService.updateFoodItemInContainer(container, 0, foodItem)
@@ -222,7 +285,12 @@ test('attempt to update an item at an index that is out of bounds', async () => 
 test('attempt to update an item that is not a FoodItem type', async () => {
     const [containerService] = setup()
 
-    const container = new Container('doesNotExist','doesNotExist','doesNotExist')
+    const defaultIcon = {
+        name: "DefaultName",
+        color: "DefaultColor",
+        type: "DefaultType"
+    }
+    const container = new Container('toBeDeleted', 'toBeDeleted',[], defaultIcon)
     const foodItem = new Object()
     const updatedContainer = await containerService.updateFoodItemInContainer(container, 0, foodItem)
     expect(updatedContainer).toBe(null)
@@ -278,7 +346,12 @@ test('attempt to delete a food item from an index that doesn\'t exist', async ()
 test('attempt to delete from a container that doesn\'t exist', async () => {
     const [containerService] = setup()
 
-    const container = new Container('doesNotExist','doesNotExist','doesNotExist')
+    const defaultIcon = {
+        name: "DefaultName",
+        color: "DefaultColor",
+        type: "DefaultType"
+    }
+    const container = new Container('toBeDeleted', 'toBeDeleted',[], defaultIcon)
 
     const updatedContainer = await containerService.removeFoodItemFromContainer(container, 0)
     expect(updatedContainer).toBe(null)
@@ -311,7 +384,10 @@ test('should create a container, add a food item to it, check to see if its ther
     expect(doesExistTwo).toBe(false)
 })
 
-//helper function
+/**
+ * helper function
+ * @returns {[ContainerService]}
+ */
 function setup(){
     initFirebase()
     const containerService = new ContainerService();

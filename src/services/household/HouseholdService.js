@@ -1,14 +1,30 @@
 import { BaseService } from "../base";
 import { Household } from '../../models/Household'
+import { ContainerService, PersonService } from '../'
 
 export class HouseholdService extends BaseService {
-    HOUSEHOLD_CONTAINER = 'HOUSEHOLD_CONTAINER'
-    HOUSEHOLD_MEMBER_CONTAINER = 'HOUSEHOLD_MEMBER_CONTAINER'
+    HOUSEHOLD_COLLECTION = 'HOUSEHOLD_COLLECTION'
+    HOUSEHOLD_MEMBER_COLLECTION = 'HOUSEHOLD_MEMBER_COLLECTION'
+    HOUSEHOLD_CONTAINER_COLLECTION = 'HOUSEHOLD_CONTAINER_COLLECTION'
 
+    /**
+     * @type PersonService
+     */
     personService = null
-    constructor(personService) {
+
+    /**
+     * @type ContainerService
+     */
+    containerService = null
+
+    /**
+     * @param {PersonService} personService 
+     * @param {ContainerService} containerService 
+     */
+    constructor(personService, containerService) {
         super()
         this.personService = personService
+        this.containerService = containerService
     }
 
     /**
@@ -16,7 +32,7 @@ export class HouseholdService extends BaseService {
      * @param {string} personId
      */
     async addPerson(householdId, personId) {
-        this.__UseCollection(this.HOUSEHOLD_MEMBER_CONTAINER)
+        this.__UseCollection(this.HOUSEHOLD_MEMBER_COLLECTION)
 
         return await this.__CreateEntity({ householdId, personId })
     }
@@ -27,7 +43,7 @@ export class HouseholdService extends BaseService {
      * @param {string} personId 
      */
     async removePerson(householdId, personId) {
-        this.__UseCollection(this.HOUSEHOLD_MEMBER_CONTAINER)
+        this.__UseCollection(this.HOUSEHOLD_MEMBER_COLLECTION)
 
         const results = await this.db.where('householdId', '==', householdId).where('personId', '==', personId).get()
         for (const result of results.docs) {
@@ -41,12 +57,12 @@ export class HouseholdService extends BaseService {
      * @returns array of Household objects
      */
     async findHouseholdForPerson(personId) {
-        this.__UseCollection(this.HOUSEHOLD_MEMBER_CONTAINER)
+        this.__UseCollection(this.HOUSEHOLD_MEMBER_COLLECTION)
         const listOfHouseholds = []
 
         const results = await this.db.where('personId', '==', personId).get()
 
-        this.__UseCollection(this.HOUSEHOLD_CONTAINER)
+        this.__UseCollection(this.HOUSEHOLD_COLLECTION)
 
         for (const result of results.docs) {
             const id = result.data().householdId
@@ -64,7 +80,7 @@ export class HouseholdService extends BaseService {
      * @returns {Promise<string>} id of the household
      */
     async createHousehold(nameOfHousehold) {
-        this.__UseCollection(this.HOUSEHOLD_CONTAINER)
+        this.__UseCollection(this.HOUSEHOLD_COLLECTION)
 
         const household = new Household(nameOfHousehold)
 
@@ -77,7 +93,7 @@ export class HouseholdService extends BaseService {
      * @returns {Promise<Array<Person>>} people that are a part of the household
      */
     async listHousehold(householdId) {
-        this.__UseCollection(this.HOUSEHOLD_MEMBER_CONTAINER)
+        this.__UseCollection(this.HOUSEHOLD_MEMBER_COLLECTION)
 
         const listOfPeopleInHousehold = []
 
@@ -89,5 +105,25 @@ export class HouseholdService extends BaseService {
         }
 
         return listOfPeopleInHousehold
+    }
+
+    async getHouseholdById(householdId) {
+        this.__UseCollection(this.HOUSEHOLD_COLLECTION)
+
+        this.__GetById(householdId)
+    }
+
+    async addContainerToHousehold(containerId, householdId) {
+        // Let's make sure that the container and household actually exists
+        if (!(await this.containerService.getContainerById(containerId) || !(await this.getHouseholdById(householdId))))
+            throw new Error(`Cannot create association between container: ${containerId} and household: ${householdId}`)
+
+        this.__UseCollection(this.HOUSEHOLD_CONTAINER_COLLECTION)
+        this.__CreateEntity({ containerId, householdId })
+    }
+
+    async getContainersForHousehold(householdId) {
+        this.__UseCollection(this.HOUSEHOLD_CONTAINER_COLLECTION)
+        return await this.__SearchForEntity({ householdId })
     }
 }
