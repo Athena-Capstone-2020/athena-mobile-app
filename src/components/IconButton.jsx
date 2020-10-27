@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
         width: 6.81,
         height: 11.621,
         // backgroundColor: "red",
-        marginTop: 15.5,
-        marginLeft: 17
+        marginTop: 18,
+        marginLeft: 15
     }
 })
 
@@ -56,13 +56,13 @@ const BarcodeIcon = () => {
     );
 }
 
-const BackArrowIcon = () => {
+const DownArrowIcon = () => {
     return (
         <Box style={styles.backArrow}>
-            <Svg width={7.031} height={12.041} viewBox="0 0 7.031 12.041">
+            <Svg width={12.041} height={7.031} viewBox="0 0 12.041 7.031">
                 <Path
                     data-name="Path 3391"
-                    d="M5.971 1.06L.75 5.951l5.029 5.03"
+                    d="M1.06 1.06l4.891 5.221 5.03-5.029"
                     fill="none"
                     stroke="#111719"
                     strokeLinecap="round"
@@ -84,7 +84,7 @@ const IconButton = ({ style, onPress, variant }) => {
                 onPress={onPress}
             >
                 {variant === 'barcode' && <BarcodeIcon />}
-                {variant === 'backButton' && <BackArrowIcon />}
+                {variant === 'downButton' && <DownArrowIcon />}
             </RectButton>
         </Box>
     )

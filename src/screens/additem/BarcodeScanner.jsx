@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Dimensions } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Box, Text, ButtonAlt } from '../../components/index'
@@ -38,21 +38,36 @@ const styles = StyleSheet.create({
     barcodeAreaContainer: {
         width: 326,
         height: 201,
-        // borderRadius: 14,
-        // backgroundColor: "pink",
+        borderRadius: 14,
+        backgroundColor: "pink",
         alignSelf: "center",
         marginLeft: 135,
         marginTop: 100,
-        
+
+    },
+    icon: {
+        position: "absolute",
+        zIndex: 1,
+        alignSelf: "center",
+        marginTop: 15
+    },
+    camera: {
+        width: 326,
+        height: 201,
+        borderRadius: 14,
     },
     manualButton: {
-        
+        alignContent: "center",
+        marginLeft: 54,
+        marginTop: 260
     }
 })
 
 const BarcodeAreaIcon = () => {
     return (
-        <Svg width={326} height={201} viewBox="0 0 326 201">
+        // 326
+        // 201
+        <Svg width={273.22} height={167.81} viewBox="0 0 326 201">
             <G
                 fill="none"
                 stroke="#2aff17"
@@ -92,31 +107,32 @@ const BarcodeScanner = ({ navigation }) => {
     }
 
     if (hasPermission === false) {
-        return <Text>No access to camera</Text>;
+        return <Text>No access to camera</Text>
     }
 
     return (
         <Box style={styles.container}>
-            <IconButton style={styles.backButton} variant="backButton" onPress={() => navigation.goBack()} />
+            <IconButton style={styles.backButton} variant="downButton" onPress={() => navigation.goBack()} />
             <Text variant="header" style={styles.screenName}>Scan Food</Text>
             <Box style={styles.infoContainer}>
                 <Text variant="barcodeInstructions" style={styles.info1}>Please hold the bar code inside the frame</Text>
                 <Text variant="barcodeInstructions" style={styles.info2}>to start scanning</Text>
             </Box>
             <Box style={styles.barcodeAreaContainer}>
-                {/* <BarcodeAreaIcon> */}
-                    <BarCodeScanner
-                        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                        style={{
-                            width: 326,
-                            height: 201,
-                            borderRadius: 5
-                            // position: "absolute"
-                        }}
-                    />
-                {/* </BarcodeAreaIcon> */}
+                <Box style={styles.icon}>
+                    <BarcodeAreaIcon />
+                </Box>
+                <BarCodeScanner
+                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                    style={{
+                        width: 326,
+                        height: 201,
+                    }}
+                />
             </Box>
-            {/* <ButtonAlt style={styles.manualButton} variant="buttonAlt" label="Enter Barcode Manually"/> */}
+            <Box style={styles.manualButton}>
+            <ButtonAlt variant="buttonAlt" label="Enter Barcode Manually" />
+            </Box>
         </Box>
     )
 }

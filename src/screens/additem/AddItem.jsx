@@ -7,7 +7,6 @@ import BarcodeScanner from './BarcodeScanner'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-const RootStack = createStackNavigator();
 const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
@@ -56,7 +55,10 @@ const ClockIcon = () => {
     )
 }
 
-const AddItemSearch = ({navigation}) => {
+const RootStack = createStackNavigator();
+
+const AddItemSearch = ({ navigation }) => {
+    
     return (
         <Box style={styles.container} marginTop="xl" alignItems="center">
             <Text variant="header" style={styles.screenName}>Add Item</Text>
@@ -73,11 +75,11 @@ const AddItemSearch = ({navigation}) => {
             </Box>
             <Text variant="recentSearchesTitle" style={styles.recentSearchesTitle}>Recent Searches</Text>
             <Box style={styles.recentSearches}>
-                {recents.map(item => {
+                {recents.map((item, key) => {
                     return (
                         <Box flexDirection="row">
                             <ClockIcon />
-                            <Text variant="recentSearches" style={styles.item}>{item}</Text>
+                            <Text variant="recentSearches" style={styles.item} key={key}>{item}</Text>
                         </Box>)
                 })}
             </Box>
@@ -88,9 +90,9 @@ const AddItemSearch = ({navigation}) => {
 
 const AddItem = () => {
     return (
-        <RootStack.Navigator mode="modal">
-            <RootStack.Screen name="AddItemSearch" component={AddItemSearch} options={{ headerShown: false }}/>
-            <RootStack.Screen name="BarcodeScanner" component={BarcodeScanner} options={{ headerShown: false }}/>
+        <RootStack.Navigator mode="modal" screenOptions={{tabBarVisible: false}}>
+            <RootStack.Screen name="AddItemSearch" component={AddItemSearch} options={{ headerShown: false }} />
+            <RootStack.Screen name="BarcodeScanner" component={BarcodeScanner} options={{ headerShown: false }} />
         </RootStack.Navigator>
     )
 }
