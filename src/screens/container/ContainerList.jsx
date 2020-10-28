@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react'
+import { createStackNavigator } from '@react-navigation/stack'
+
 import { Button, Text, Box } from '../../components/index'
 import ContainerButton from './ContainerButton'
+import Container from './Container'
 
-const ContainerList = () => {
+const ContainerStack = createStackNavigator()
+
+const ContainerListView = () => {
 
     const [containers, setContainers] = useState([
         { id: 0, label: 'Fridge', icon: 'Fridge', color: '#00AAAA' },
@@ -11,11 +16,16 @@ const ContainerList = () => {
         { id: 3, label: 'Pantry', icon: 'ArrowRight', color: '#330000' }
     ])
     const [distributing, setDistributing] = useState(false)
+    const [adding, setAdding] = useState(false)
 
     useEffect(() => {
         // get containers from household
         // set containers
     })
+
+    useEffect(() => {
+
+    }, [adding])
 
     return (
         <Box marginTop="xl" alignItems="center">
@@ -29,11 +39,20 @@ const ContainerList = () => {
                 )
             }
             <Button
-                onPress={() => {}}
+                onPress={() => setAdding(true)}
                 label="Add Container"
                 variant="button"
             />
         </Box>
+    )
+}
+
+const ContainerList = () => {
+    return (
+        <ContainerStack.Navigator>
+            <ContainerStack.Screen name="ContainerListView" component={ContainerListView} />
+            <ContainerStack.Screen name="Container" component={Container} options={{ headerShown: false }}/>
+        </ContainerStack.Navigator>
     )
 }
 
