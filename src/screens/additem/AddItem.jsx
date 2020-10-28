@@ -77,9 +77,9 @@ const AddItemSearch = ({ navigation }) => {
             <Box style={styles.recentSearches}>
                 {recents.map((item, key) => {
                     return (
-                        <Box flexDirection="row">
+                        <Box flexDirection="row" key={key}>
                             <ClockIcon />
-                            <Text variant="recentSearches" style={styles.item} key={key}>{item}</Text>
+                            <Text variant="recentSearches" style={styles.item}>{item}</Text>
                         </Box>)
                 })}
             </Box>
