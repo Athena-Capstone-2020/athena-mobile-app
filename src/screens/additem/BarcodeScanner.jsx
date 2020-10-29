@@ -101,7 +101,6 @@ const BarcodeScanner = ({ navigation }) => {
 
     const handleBarCodeScanned = async ({ data }) => {
         setScanned(true);
-        // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
         const response = await barcodeService.getDataFromBarcode(data)
         console.log(response)
     };

@@ -3,6 +3,7 @@ import { HouseholdServiceProvider, HouseholdService, GroceryListServiceProvider,
          ContainerServiceProvider, ContainerService, PersonService, PersonServiceProvider, BarcodeServiceProvider, BarcodeService } from "./src/services";
 import { initFirebase } from './src/firebase/config'
 import { initSentry } from './src/logger/sentry/config'
+import Constants from 'expo-constants'
 
 export function Provider(props) {
     initFirebase()
@@ -12,7 +13,7 @@ export function Provider(props) {
     const containerService = new ContainerService()
     const personService = new PersonService()
     const householdService = new HouseholdService(personService, containerService)
-    const barcodeService = new BarcodeService(process.env.BARCODE_LOOKUP_API_KEY)
+    const barcodeService = new BarcodeService(Constants.manifest.extra.BARCODE_LOOKUP_API_KEY)
 
     return (
         <PersonServiceProvider personService={personService}>
