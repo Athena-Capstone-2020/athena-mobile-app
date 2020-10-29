@@ -219,4 +219,26 @@ export class ContainerService extends BaseService{
 
     }
 
+    /**
+     * Gets all the food items from a container
+     * @param {string} id id of the container to get the food items from
+     * @returns {FoodItem[]} an array of FoodItems that are currently in the container
+     */
+    async getFoodItemArrayFromContainedWithId(id){
+        this.__UseCollection(this.CONTAINER_COLLECTION)
+
+        const container = await this.getContainerById(id)
+        if(container == null)
+            return null
+
+        const foodItemAry = [];
+        
+        container.foodItems.forEach(obj => {
+            const item = new FoodItem(obj.name, obj.photoURI, obj.quantity)
+            foodItemAry.push(item)
+        })
+
+        return foodItemAry
+    }
+
 }
