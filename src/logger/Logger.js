@@ -5,6 +5,7 @@ import * as Sentry from '@sentry/react-native'
  * @param {Error} err error that is being logged 
  */
 function logError(err){
+    console.error(err)
     Sentry.captureException(err)
 }
 
@@ -13,6 +14,7 @@ function logError(err){
  * @param {string} message the message to log
  */
 function log(message){
+    console.log(message)
     Sentry.captureMessage(message)
 }
 
