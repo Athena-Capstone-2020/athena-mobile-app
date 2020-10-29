@@ -19,11 +19,23 @@ export class BarcodeService {
         const requestUrl = this.__createRequestURL(barcode)
         try {
             const results = await axios.get(requestUrl, { validateStatus: false })
-            
-    
+
+            let error = null
+            switch(results.status) {
+                case (404):
+                    error = new Error('Bad Barcode')
+                    break
+                case(403):
+                    error = new Error('Bad API Key')
+                    break
+                default:
+                    error = new Error(`Unhandled Error Code: ${results.status}`)
+                    break
+            }
             // TODO: handle Too Many Requests
-            if (results.status === 404) {
-                const error = new Error('Bad Barcode')
+            
+            if (error !== null) {
+                logError(error)
                 throw error
             }
     
