@@ -16,11 +16,12 @@ export class BarcodeService {
      */
     async getDataFromBarcode(barcode) {
         const requestUrl = this.__createRequestURL(barcode)
-        const results = await axios.get(requestUrl)
+        const results = await axios.get(requestUrl, { validateStatus: false })
         
 
         // TODO: handle Too Many Requests
-        if (results.status === 403) {
+        console.log(results.status)
+        if (results.status === 404) {
             const errorMessage = `Could not find item with barcode: ${barcode}`
             console.error(errorMessage)
             throw new Error('Bad Barcode')
