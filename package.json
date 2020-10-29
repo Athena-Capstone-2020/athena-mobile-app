@@ -6,7 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --env=node"
+    "test": "jest --env=node --forceExit --detectOpenHandles --maxWorkers=10"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
