@@ -35,5 +35,5 @@ jobs:
       run: echo "$FIREBASE_CONFIG" > ./src/firebase/config.js
     - name: Test Services
       env:
-        BARCODE_LOOKUP_API_KEY: $BARCODE_LOOKUP_API_KEY
+        BARCODE_LOOKUP_API_KEY: ${{ secrets.BARCODE_LOOKUP_API_KEY }}
       run: yarn test
