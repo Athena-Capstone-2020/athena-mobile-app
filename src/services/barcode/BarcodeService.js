@@ -3,8 +3,6 @@ import { FoodItem } from '../../models'
 
 export class BarcodeService {
     constructor(barcodeApiKey){
-        super()
-
         this.BARCODE_API_KEY = barcodeApiKey
     }
 
@@ -25,7 +23,7 @@ export class BarcodeService {
         if (results.status === 403) {
             const errorMessage = `Could not find item with barcode: ${barcode}`
             console.error(errorMessage)
-            throw new Error(errorMessage)
+            throw new Error('Bad Barcode')
         }
 
         const { product_name : productName } = results.data.products[0]
