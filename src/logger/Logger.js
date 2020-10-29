@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react-native'
+import Sentry from '@sentry/react-native'
 /**
  * Logs the error to be thrown in Sentry
  * NOTE: DOES NOT THROW THE ERROR

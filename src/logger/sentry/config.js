@@ -1,4 +1,4 @@
-import * as Sentry from 'sentry-expo';
+import Sentry from 'sentry-expo';
 import {SENTRY_DSN} from '@env'
 
 var sentryConfig = {
