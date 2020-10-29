@@ -1,5 +1,6 @@
 import { default as axios } from 'axios'
 import { FoodItem } from '../../models'
+import { logError } from '../../logger/Logger'
 
 export class BarcodeService {
     constructor(barcodeApiKey){
@@ -20,11 +21,10 @@ export class BarcodeService {
         
 
         // TODO: handle Too Many Requests
-        console.log(results.status)
         if (results.status === 404) {
-            const errorMessage = `Could not find item with barcode: ${barcode}`
-            console.error(errorMessage)
-            throw new Error('Bad Barcode')
+            const error = new Error('Bad Barcode')
+            logError(error)
+            throw error
         }
 
         const { product_name : productName } = results.data.products[0]
