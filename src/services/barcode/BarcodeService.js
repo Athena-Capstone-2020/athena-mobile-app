@@ -17,21 +17,25 @@ export class BarcodeService {
      */
     async getDataFromBarcode(barcode) {
         const requestUrl = this.__createRequestURL(barcode)
-        const results = await axios.get(requestUrl, { validateStatus: false })
-        
-
-        // TODO: handle Too Many Requests
-        if (results.status === 404) {
-            const error = new Error('Bad Barcode')
-            logError(error)
-            throw error
+        try {
+            const results = await axios.get(requestUrl, { validateStatus: false })
+            
+    
+            // TODO: handle Too Many Requests
+            if (results.status === 404) {
+                const error = new Error('Bad Barcode')
+                throw error
+            }
+    
+            const { product_name : productName } = results.data.products[0]
+            const photoUri = results.data.products[0].images[0]
+    
+            const foodItem = new FoodItem(productName, photoUri, '0')
+            return foodItem
+        } catch (err) {
+            logError(err)
+            throw err
         }
-
-        const { product_name : productName } = results.data.products[0]
-        const photoUri = results.data.products[0].images[0]
-
-        const foodItem = new FoodItem(productName, photoUri, '0')
-        return foodItem
     }
 
     __createRequestURL(barcode) {
