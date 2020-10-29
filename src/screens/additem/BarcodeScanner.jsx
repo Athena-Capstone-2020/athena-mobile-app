@@ -4,6 +4,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Box, Text, ButtonAlt } from '../../components/index'
 import { IconButton } from '../../components/index'
 import Svg, { G, Path } from "react-native-svg"
+import { withBarcodeService } from '../../services';
 
 const styles = StyleSheet.create({
     container: {
@@ -89,6 +90,7 @@ const BarcodeScanner = ({ navigation }) => {
 
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
+    const { barcodeService } = withBarcodeService()
 
     useEffect(() => {
         (async () => {
@@ -97,9 +99,10 @@ const BarcodeScanner = ({ navigation }) => {
         })();
     }, []);
 
-    const handleBarCodeScanned = ({ type, data }) => {
+    const handleBarCodeScanned = async ({ data }) => {
         setScanned(true);
-        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+        const response = await barcodeService.getDataFromBarcode(data)
+        console.log(response)
     };
 
     if (hasPermission === null) {
