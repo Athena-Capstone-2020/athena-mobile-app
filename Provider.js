@@ -2,9 +2,11 @@ import React from 'react'
 import { HouseholdServiceProvider, HouseholdService, GroceryListServiceProvider, GroceryListService, 
          ContainerServiceProvider, ContainerService, PersonService, PersonServiceProvider } from "./src/services";
 import { initFirebase } from './src/firebase/config'
+import { initSentry } from './src/logger/sentry/config'
 
 export function Provider(props) {
     initFirebase()
+    initSentry()
 
     const groceryListService = new GroceryListService()
     const containerService = new ContainerService()
