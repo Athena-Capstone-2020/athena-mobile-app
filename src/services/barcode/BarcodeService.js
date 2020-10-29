@@ -28,6 +28,8 @@ export class BarcodeService {
                 case(403):
                     error = new Error('Bad API Key')
                     break
+                case(200):
+                    break
                 default:
                     error = new Error(`Unhandled Error Code: ${results.status}`)
                     break
