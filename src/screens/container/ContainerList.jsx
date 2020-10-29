@@ -1,12 +1,33 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Text, Box } from '../../components/index'
-import Container from './Container'
+import ContainerButton from './ContainerButton'
 
 const ContainerList = () => {
+
+    const [containers, setContainers] = useState([
+        { id: 0, label: 'Fridge', icon: 'Fridge', color: '#00AAAA' },
+        { id: 1, label: 'Freezer', icon: 'Fridge', color: '#0000FF' },
+        { id: 2, label: 'Blaine\'s Food', icon: 'User', color: '#333300' },
+        { id: 3, label: 'Pantry', icon: 'ArrowRight', color: '#330000' }
+    ])
+    const [distributing, setDistributing] = useState(false)
+
+    useEffect(() => {
+        // get containers from household
+        // set containers
+    })
+
     return (
         <Box marginTop="xl" alignItems="center">
-            <Text variant="header" style={{marginBottom: 12}}>Containers</Text>
-            <Container/>
+            {
+                containers.map(c => 
+                    <ContainerButton
+                        key={c.id}
+                        container={c}
+                        distributing={distributing}
+                    />
+                )
+            }
             <Button
                 onPress={() => {}}
                 label="Add Container"
