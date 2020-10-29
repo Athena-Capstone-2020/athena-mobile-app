@@ -41,5 +41,13 @@
     "jest": "^26.5.2"
   },
   "version": "12",
-  "private": true
+  "private": true,
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/__tests__/test-setup.js"
+    ],
+    "testMatch": [
+      "**/__tests__/**.test.js"
+    ]
+  }
 }
