@@ -1,4 +1,4 @@
-const SENTRY_AUTH_TOKEN = '32a5935894d04db7aeae5bb59539d1174ce30ebc38df47e89af2fe6064fee8aa'
+import 'dotenv/config'
 
 export default {
     "expo": {
@@ -7,6 +7,9 @@ export default {
       "version": "1.0.0",
       "orientation": "portrait",
       "icon": "./assets/icon.png",
+      "extra": {
+        "BARCODE_LOOKUP_API_KEY": process.env.BARCODE_LOOKUP_API_KEY,
+      },
       "splash": {
         "image": "./assets/splash.png",
         "resizeMode": "contain",
@@ -31,7 +34,7 @@ export default {
             "config": {
               "organization": "athena-senior-cap-2020",
               "project": "athena-dev",
-              "authToken": SENTRY_AUTH_TOKEN
+              "authToken": process.env.SENTRY_AUTH_TOKEN
             }
           }
         ]
