@@ -74,6 +74,13 @@ const theme = createTheme({
       background: "monochrome1",
       border: "monochrome2"
     },
+    input: {
+      fontSize: 18,
+      fontFamily: "SFProDisplay-Semibold",
+      text: "black",
+      background: "white",
+      border: "primary"
+    },
     recentSearchesTitle: {
       fontSize: 18,
       fontFamily: "SFProDisplay-Semibold",
@@ -86,6 +93,11 @@ const theme = createTheme({
       fontSize: 16,
       fontFamily: "SFProDisplay-Regular",
       color: "greyBlue2"
+    },
+    boldText: {
+      fontSize: 36.41,
+      fontFamily: "SFProDisplay-Semibold",
+      color: "black"
     }
   },
   breakpoints: {

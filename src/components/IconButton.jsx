@@ -33,12 +33,19 @@ const styles = StyleSheet.create({
         marginTop: 10.5,
         marginLeft: 8
     },
-    backArrow: {
+    downArrow: {
         width: 6.81,
         height: 11.621,
         // backgroundColor: "red",
         marginTop: 18,
         marginLeft: 15
+    },
+    backArrow: {
+        width: 6.81,
+        height: 11.621,
+        // backgroundColor: "red",
+        marginTop: 15,
+        marginLeft: 17
     }
 })
 
@@ -58,11 +65,30 @@ const BarcodeIcon = () => {
 
 const DownArrowIcon = () => {
     return (
-        <Box style={styles.backArrow}>
+        <Box style={styles.downArrow}>
             <Svg width={12.041} height={7.031} viewBox="0 0 12.041 7.031">
                 <Path
                     data-name="Path 3391"
                     d="M1.06 1.06l4.891 5.221 5.03-5.029"
+                    fill="none"
+                    stroke="#111719"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    strokeDasharray="0 0"
+                />
+            </Svg>
+        </Box>
+    )
+}
+
+const BackArrowIcon = () => {
+    return (
+        <Box style={styles.backArrow}>
+            <Svg width={7.031} height={12.041} viewBox="0 0 7.031 12.041">
+                <Path
+                    data-name="Path 3391"
+                    d="M5.971 1.06L.75 5.951l5.029 5.03"
                     fill="none"
                     stroke="#111719"
                     strokeLinecap="round"
@@ -84,6 +110,7 @@ const IconButton = ({ style, onPress, variant }) => {
                 onPress={onPress}
             >
                 {variant === 'barcode' && <BarcodeIcon />}
+                {variant === 'backButton' && <BackArrowIcon />}
                 {variant === 'downButton' && <DownArrowIcon />}
             </RectButton>
         </Box>

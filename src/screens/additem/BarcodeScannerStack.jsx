@@ -5,6 +5,9 @@ import { Box, Text, ButtonAlt } from '../../components/index'
 import { IconButton } from '../../components/index'
 import Svg, { G, Path } from "react-native-svg"
 import { withBarcodeService } from '../../services';
+import { createStackNavigator } from '@react-navigation/stack';
+import ItemDescription from './ItemDescription'
+import BarcodeManual from './BarcodeManual'
 
 const styles = StyleSheet.create({
     container: {
@@ -86,6 +89,9 @@ const BarcodeAreaIcon = () => {
         </Svg>
     );
 }
+
+const Stack = createStackNavigator();
+
 const BarcodeScanner = ({ navigation }) => {
 
     const [hasPermission, setHasPermission] = useState(null);
@@ -100,10 +106,11 @@ const BarcodeScanner = ({ navigation }) => {
     }, []);
 
     const handleBarCodeScanned = async ({ data }) => {
-        setScanned(true);
+        setScanned(true)
         const response = await barcodeService.getDataFromBarcode(data)
         console.log(response)
     };
+
 
     if (hasPermission === null) {
         return <Text>Requesting for camera permission</Text>;
@@ -134,10 +141,35 @@ const BarcodeScanner = ({ navigation }) => {
                 />
             </Box>
             <Box style={styles.manualButton}>
-            <ButtonAlt variant="buttonAlt" label="Enter Barcode Manually" />
+                <ButtonAlt variant="buttonAlt" label="Enter Barcode Manually" onPress={() => navigation.navigate('BarcodeManual')} />
             </Box>
         </Box>
     )
 }
 
-export default BarcodeScanner
+
+const BarcodeScannerStack = () => {
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                headerShown: false
+            }}
+            initialRouteName='BarcodeScanner'
+        >
+            <Stack.Screen
+                name='BarcodeScanner'
+                component={BarcodeScanner}
+            />
+            <Stack.Screen
+                name='BarcodeManual'
+                component={BarcodeManual}
+            />
+            <Stack.Screen
+                name="ItemDescription"
+                component={ItemDescription}
+            />
+        </Stack.Navigator>
+    )
+}
+
+export default BarcodeScannerStack

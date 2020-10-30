@@ -3,7 +3,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { Box, Text, Search } from '../../components/index'
 import { IconButton } from '../../components/index'
 import Svg, { Path } from "react-native-svg"
-import BarcodeScanner from './BarcodeScanner'
+import BarcodeScannerStack from './BarcodeScannerStack'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -70,7 +70,7 @@ const AddItemSearch = ({ navigation }) => {
                 <IconButton
                     style={styles.barcode}
                     variant="barcode"
-                    onPress={() => navigation.navigate('BarcodeScanner')}
+                    onPress={() => navigation.navigate('BarcodeScannerStack')}
                 />
             </Box>
             <Text variant="recentSearchesTitle" style={styles.recentSearchesTitle}>Recent Searches</Text>
@@ -92,7 +92,7 @@ const AddItem = () => {
     return (
         <RootStack.Navigator mode="modal" screenOptions={{tabBarVisible: false}}>
             <RootStack.Screen name="AddItemSearch" component={AddItemSearch} options={{ headerShown: false }} />
-            <RootStack.Screen name="BarcodeScanner" component={BarcodeScanner} options={{ headerShown: false }} />
+            <RootStack.Screen name="BarcodeScannerStack" component={BarcodeScannerStack} options={{ headerShown: false }} />
         </RootStack.Navigator>
     )
 }
