@@ -384,6 +384,30 @@ test('should create a container, add a food item to it, check to see if its ther
     expect(doesExistTwo).toBe(false)
 })
 
+//getFoodItemArrayFromContainedWithId
+test('should create a container, add food items, and get the items an array', async () => {
+    const [containerService] = setup()
+
+    const newContainer = await containerService.createContainer('doesFoodItemExist', 'someHouseholdId')
+    const containerCreated = await containerService.getContainerById(newContainer.id)
+    expect(containerCreated).toMatchObject(newContainer)
+
+    const foodItemOne = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity')
+    const foodItemTwo = new FoodItem('secondFood', 'somePhotoURI', 'someQuantity')
+    const foodItemThree = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity')
+
+    await containerService.addFoodItemToContainer(containerCreated, foodItemOne)
+    await containerService.addFoodItemToContainer(containerCreated, foodItemTwo)
+    await containerService.addFoodItemToContainer(containerCreated, foodItemThree)
+    const updatedContainer = await containerService.getContainerById(containerCreated.id)
+    expect(updatedContainer).toMatchObject(containerCreated)
+
+    const arrayExpect = [foodItemOne, foodItemTwo, foodItemThree]
+
+    const foodItemArray = await containerService.getFoodItemArrayFromContainedWithId(containerCreated.id);
+    expect(arrayExpect).toStrictEqual(foodItemArray)
+})
+
 /**
  * helper function
  * @returns {[ContainerService]}

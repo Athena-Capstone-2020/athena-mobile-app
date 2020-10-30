@@ -11,7 +11,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -24,6 +23,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - uses: actions/cache@v2
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
     - run: npm i -g yarn
     - run: yarn
     - name: Creating config file for Firebase
@@ -31,4 +34,6 @@ jobs:
         FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
       run: echo "$FIREBASE_CONFIG" > ./src/firebase/config.js
     - name: Test Services
+      env:
+        BARCODE_LOOKUP_API_KEY: ${{ secrets.BARCODE_LOOKUP_API_KEY }}
       run: yarn test

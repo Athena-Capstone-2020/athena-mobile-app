@@ -10,7 +10,8 @@ import React from "react";
 const palette = {
   orange: "#FE724C",
   grey: "#D0CED5",
-  greyBlue: "#9DA4BB",
+  greyBlue1: "#9DA4BB",
+  greyBlue2: "#8387A7",
   monochrome1: "#F3F3F3",
   monochrome2: "#E7E7E7",
   white: "#FFFFFF",
@@ -22,7 +23,8 @@ const theme = createTheme({
   colors: {
     primary: palette.orange,
     grey: palette.grey,
-    greyBlue: palette.greyBlue,
+    greyBlue1: palette.greyBlue1,
+    greyBlue2: palette.greyBlue2,
     monochrome1: palette.monochrome1,
     monochrome2: palette.monochrome2,
     white: palette.white,
@@ -48,6 +50,13 @@ const theme = createTheme({
       background: "primary",
       text: "white"
     },
+    buttonAlt: {
+      fontSize: 15,
+      fontFamily: "SFProDisplay-Semibold",
+      textAlign: "center",
+      background: "white",
+      text: "primary"
+    },
     header: {
       fontSize: 18,
       fontFamily: "SFProDisplay-Medium",
@@ -72,6 +81,11 @@ const theme = createTheme({
     recentSearches: {
       fontSize: 15.4,
       fontFamily: "SFProDisplay-Regular",
+    },
+    barcodeInstructions: {
+      fontSize: 16,
+      fontFamily: "SFProDisplay-Regular",
+      color: "greyBlue2"
     }
   },
   breakpoints: {

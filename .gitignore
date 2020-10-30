@@ -131,5 +131,5 @@ docs/pages/versions/*/react-native/*.diff
 # Home
 /home/dist
 
-# Firebase
-src/firebase/config.js
+# Enviornment Variable/API Keys
+.env
