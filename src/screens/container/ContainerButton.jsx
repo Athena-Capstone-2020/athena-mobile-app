@@ -1,8 +1,10 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { RectButton } from "react-native-gesture-handler";
-import { Text, useTheme, Icon, ArrowRight } from "../../components/index";
-import { Box } from "../../components/Theme";
+import React from "react"
+import { StyleSheet } from "react-native"
+import { RectButton } from "react-native-gesture-handler"
+import { useNavigation } from "@react-navigation/native"
+
+import { Text, useTheme, Icon } from "../../components/index"
+import { Box } from "../../components/Theme"
 
 const styles = StyleSheet.create({
     button: {
@@ -53,41 +55,43 @@ const styles = StyleSheet.create({
 
 const ContainerButton = ({ container, distributing, style }) => {
 
-    const theme = useTheme();
+    const theme = useTheme()
+    const navigation = useNavigation()
 
-    const background = theme.textVariants["container"].background;
-    const backgroundColor = theme.colors[background];
+    const background = theme.textVariants["container"].background
+    const backgroundColor = theme.colors[background]
 
-    const fontColor = theme.textVariants["container"].text;
-    const color = theme.colors[fontColor];
+    const fontColor = theme.textVariants["container"].text
+    const color = theme.colors[fontColor]
 
     return (
         <Box style={styles.shadow}>
             <RectButton
                 style={[styles.button, style ? style : "", { backgroundColor }]}
-                onPress={distributing ? () => {} : () => {
-                    // navigate to <Container container={container} />
-                }}
+                onPress={distributing ? 
+                    () => {} 
+                : 
+                    () => navigation.navigate("Container", {
+                        container
+                    })
+                }
             >
                 {
                     distributing ?
                         <Box style={styles.content}>
                             <Box style={styles.icon}>
-                                <Icon name={container.icon} color={container.color} />
+                                <Icon name={container.icon.name} color={container.icon.color} />
                             </Box>
                         </Box>
                     :
                         <Box style={styles.content}>
                             <Box style={styles.icon}>
-                                <Icon name={container.icon} color={container.color} />
+                                <Icon name={container.icon.name} color={container.icon.color} />
                             </Box>
                             <Box style={styles.text}>
                                 <Text variant="container" style={{ color }}>
-                                    {container.label}
+                                    {container.name}
                                 </Text>
-                            </Box>
-                            <Box style={styles.arrow}>
-                                <ArrowRight style={styles.arrow} />
                             </Box>
                         </Box>
                 }
@@ -96,4 +100,4 @@ const ContainerButton = ({ container, distributing, style }) => {
     )
 }
 
-export default ContainerButton;
+export default ContainerButton
