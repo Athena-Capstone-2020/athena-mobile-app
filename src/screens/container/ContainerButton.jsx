@@ -80,21 +80,18 @@ const ContainerButton = ({ container, distributing, style }) => {
                     distributing ?
                         <Box style={styles.content}>
                             <Box style={styles.icon}>
-                                <Icon name={container.icon} color={container.color} />
+                                <Icon name={container.icon.name} color={container.icon.color} />
                             </Box>
                         </Box>
                     :
                         <Box style={styles.content}>
                             <Box style={styles.icon}>
-                                <Icon name={container.icon} color={container.color} />
+                                <Icon name={container.icon.name} color={container.icon.color} />
                             </Box>
                             <Box style={styles.text}>
                                 <Text variant="container" style={{ color }}>
-                                    {container.label}
+                                    {container.name}
                                 </Text>
-                            </Box>
-                            <Box style={styles.arrow}>
-                                <ArrowRight style={styles.arrow} />
                             </Box>
                         </Box>
                 }

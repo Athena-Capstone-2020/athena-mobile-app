@@ -10,10 +10,29 @@ const ContainerStack = createStackNavigator()
 const ContainerListView = () => {
 
     const [containers, setContainers] = useState([
-        { id: 0, label: 'Fridge', icon: 'Fridge', color: '#00AAAA' },
-        { id: 1, label: 'Freezer', icon: 'Fridge', color: '#0000FF' },
-        { id: 2, label: 'Blaine\'s Food', icon: 'User', color: '#333300' },
-        { id: 3, label: 'Pantry', icon: 'ArrowRight', color: '#330000' }
+        { householdId: 0, name: 'Fridge', icon: { name: 'Fridge', color: '#F17A6C', type: 'icon' }, foodItems: [
+
+        ] },
+        { householdId: 1, name: 'Freezer', icon: { name: 'Fridge', color: '#30A7BE', type: 'icon' }, foodItems: [
+            {
+                name: 'Milk',
+                photoURI: '',
+                count: '2 gallons',
+                expires: 'November 22nd'
+            },
+            {
+                name: 'Bacon',
+                photoURI: '',
+                count: '1',
+                expires: 'December 1st'
+            },
+            {
+                name: 'Swiss Cheese Slices',
+                photoURI: '',
+                count: '3',
+                expires: 'January 28th, 2021'
+            }
+        ] },
     ])
     const [distributing, setDistributing] = useState(false)
     const [adding, setAdding] = useState(false)
@@ -47,13 +66,10 @@ const ContainerListView = () => {
     )
 }
 
-const ContainerList = () => {
-    return (
-        <ContainerStack.Navigator>
-            <ContainerStack.Screen name="ContainerListView" component={ContainerListView} />
-            <ContainerStack.Screen name="Container" component={Container} options={{ headerShown: false }}/>
-        </ContainerStack.Navigator>
-    )
-}
+const ContainerList = () => 
+    <ContainerStack.Navigator>
+        <ContainerStack.Screen name="ContainerListView" component={ContainerListView} options={{ headerShown: false }} />
+        <ContainerStack.Screen name="Container" component={Container} options={{ headerShown: false }}/>
+    </ContainerStack.Navigator>
 
 export default ContainerList;
