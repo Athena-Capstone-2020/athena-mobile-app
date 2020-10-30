@@ -4,18 +4,18 @@ require('dotenv').config()
 test('should return a proper item with a valid barcode', async () => {
     const barcodeService = setup()
 
-    const barcode = '9780140157376'
+    const barcode = '051500720011'
 
     const returnedProduct = await barcodeService.getDataFromBarcode(barcode)
 
-    expect(returnedProduct.name).toBe('Haroun and the Sea of Stories')
-    expect(returnedProduct.photoURI).toBe('https://images.barcodelookup.com/134/1342375-1.jpg')
+    expect(returnedProduct.name).toBe('Jif Creamy Peanut Butter')
+    expect(returnedProduct.photoURI).toBe('https://www.edamam.com/food-img/420/42006f4d5d603fcfe77cdeccb782229a.jpg')
 })
 
 test('should return an error with an invalid barcode', async () => {
     const barcodeService = setup()
 
-    const barcode = '978014057376'
+    const barcode = '000720011'
 
     try {
         await barcodeService.getDataFromBarcode(barcode)

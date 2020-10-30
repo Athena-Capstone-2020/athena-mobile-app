@@ -8,7 +8,8 @@ export class BarcodeService {
     }
 
     BARCODE_API_KEY = null
-    BASE_URL = 'https://api.barcodelookup.com/v2/products'
+    BARCODE_APP_ID = '50969094'
+    BASE_URL = 'https://api.edamam.com/api/food-database/v2/parser'
 
     /**
      * Returns relevant information about the item given a barcode
@@ -18,41 +19,62 @@ export class BarcodeService {
     async getDataFromBarcode(barcode) {
         const requestUrl = this.__createRequestURL(barcode)
         try {
-            const results = await axios.get(requestUrl, { validateStatus: false })
-
+            let results = await axios.get(requestUrl, { validateStatus: false })
+            let needsRetry = true
             let error = null
-            switch(results.status) {
-                case (404):
-                    error = new Error('Bad Barcode')
-                    break
-                case(403):
-                    error = new Error('Bad API Key')
-                    break
-                case(200):
-                    break
-                default:
-                    error = new Error(`Unhandled Error Code: ${results.status}`)
-                    break
+
+            while (needsRetry) {
+                switch(results.status) {
+                    // Not found
+                    case (404):
+                        error = new Error('Bad Barcode')
+                        needsRetry = false
+                        break
+                    // Not Authenticated
+                    case(403):
+                    case(401):
+                        error = new Error('Bad API Key')
+                        needsRetry = false
+                        break
+                    // Ok
+                    case(200):
+                        needsRetry = false
+                        break
+                    // Too Many Requests
+                    case(429):
+                        needsRetry = true
+                        // Wait 5 seconds then send request again
+                        await (new Promise(resolve => setTimeout(resolve, 5000)))
+                        // Retry the request
+                        results = await axios.get(requestUrl, { validateStatus: false })
+                        break
+                    default:
+                        error = new Error(`Unhandled Error Code: ${results.status}`)
+                        needsRetry = false
+                        break
+                }
             }
-            // TODO: handle Too Many Requests
             
             if (error !== null) {
                 logError(error)
                 throw error
             }
     
-            const { product_name : productName } = results.data.products[0]
-            const photoUri = results.data.products[0].images[0]
-    
-            const foodItem = new FoodItem(productName, photoUri, '0')
-            return foodItem
+            return this.__parseResponseToItem(results.data)
         } catch (err) {
             logError(err)
             throw err
         }
     }
 
+    __parseResponseToItem(resultsData) {
+        const { label, image } = resultsData.hints[0].food
+
+        const foodItem = new FoodItem(label, image, '0')
+        return foodItem
+    }
+
     __createRequestURL(barcode) {
-        return `${this.BASE_URL}?barcode=${barcode}&formatted=y&key=${this.BARCODE_API_KEY}&geo=us`
+        return `${this.BASE_URL}?upc=${barcode}&app_id=${this.BARCODE_APP_ID}&app_key=${this.BARCODE_API_KEY}`
     }
 }
