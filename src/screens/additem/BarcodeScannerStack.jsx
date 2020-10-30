@@ -105,12 +105,12 @@ const BarcodeScanner = ({ navigation }) => {
         })();
     }, []);
 
-    const handleBarCodeScanned = async ({ data, navigation }) => {
-        setScanned(true);
+    const handleBarCodeScanned = async ({ data }) => {
+        setScanned(true)
         const response = await barcodeService.getDataFromBarcode(data)
         console.log(response)
-        console.log(navigation)
     };
+
 
     if (hasPermission === null) {
         return <Text>Requesting for camera permission</Text>;
@@ -134,7 +134,6 @@ const BarcodeScanner = ({ navigation }) => {
                 </Box>
                 <BarCodeScanner
                     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                    on
                     style={{
                         width: 326,
                         height: 201,
@@ -142,7 +141,7 @@ const BarcodeScanner = ({ navigation }) => {
                 />
             </Box>
             <Box style={styles.manualButton}>
-                <ButtonAlt variant="buttonAlt" label="Enter Barcode Manually" onPress={() => navigation.navigate('BarcodeManual')}/>
+                <ButtonAlt variant="buttonAlt" label="Enter Barcode Manually" onPress={() => navigation.navigate('BarcodeManual')} />
             </Box>
         </Box>
     )

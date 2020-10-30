@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const Input = ({ placeholder, style }) => {
+const Input = ({ placeholder, style, value, onChangeText, maxLength }) => {
 
     const theme = useTheme()
     const variant = "input"
@@ -48,7 +48,9 @@ const Input = ({ placeholder, style }) => {
                     returnKeyType="next"
                     returnKeyLabel="next"
                     keyboardType="number-pad"
-                    
+                    value={value}
+                    onChangeText={onChangeText}
+                    maxLength={maxLength}
                 />
             </Box>
         </Box>
