@@ -32,6 +32,7 @@ export class BarcodeService {
                         break
                     // Not Authenticated
                     case(403):
+                    case(401):
                         error = new Error('Bad API Key')
                         needsRetry = false
                         break
