@@ -125,7 +125,6 @@ export class HouseholdService extends BaseService {
     async getContainersForHousehold(householdId) {
         this.__UseCollection(this.HOUSEHOLD_CONTAINER_COLLECTION)
         const containerHouseholdRelations = await this.__SearchForEntity({ householdId })
-        // console.log(containerHouseholdRelations[0])
 
         const containers = []
 
