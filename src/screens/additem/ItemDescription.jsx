@@ -132,6 +132,10 @@ const styles = StyleSheet.create({
     },
     pushToContainer: {
         marginTop: 100
+    },
+    pushToContainerNotSelected: {
+        marginTop: 100,
+        opacity: .3
     }
 })
 
@@ -203,14 +207,6 @@ const ItemDescription = ({ navigation }) => {
             >
                 <Box style={styles.centeredBox}>
                     <Box style={styles.modalBox}>
-                        <TouchableHighlight
-                            style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                            onPress={() => {
-                                setModalVisible(!modalVisible);
-                            }}
-                        >
-                            <Text style={styles.textStyle}>Hide Modal</Text>
-                        </TouchableHighlight>
                         <Text style={styles.modalText} variant="itemDescriptionTitle">Pick a Container</Text>
                         <TouchableHighlight
                             style={selected ? styles.selected : styles.notSelected}
@@ -225,7 +221,10 @@ const ItemDescription = ({ navigation }) => {
                         >
                             <Text variant="recentSearchesTitle">{container ? container.name : ""}</Text>
                         </TouchableHighlight>
-                        <Button label="Add To Container" style={styles.pushToContainer}/>
+                        {
+                            selected ? <Button label="Add To Container" style={styles.pushToContainer} onPress={() => { setModalVisible(!modalVisible), navigation.goBack()}}/> : 
+                                <Button label="Add To Container" style={styles.pushToContainerNotSelected} onPress={() => { setModalVisible(!modalVisible), navigation.goBack() }} />
+                        }
                     </Box>
                 </Box>
             </Modal>
