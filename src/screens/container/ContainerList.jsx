@@ -1,50 +1,59 @@
 import React, { useState, useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { Button, Text, Box } from '../../components/index'
+import { Button, Text, Box, Input } from '../../components/index'
 import ContainerButton from './ContainerButton'
 import Container from './Container'
+import { withContainerService, withHouseholdService } from '../../services'
+import {logError} from '../../logger/Logger'
 
 const ContainerStack = createStackNavigator()
 
 const ContainerListView = () => {
-
-    const [containers, setContainers] = useState([
-        { householdId: 0, name: 'Fridge', icon: { name: 'Fridge', color: '#F17A6C', type: 'icon' }, foodItems: [
-
-        ] },
-        { householdId: 1, name: 'Freezer', icon: { name: 'Fridge', color: '#30A7BE', type: 'icon' }, foodItems: [
-            {
-                name: 'Milk',
-                photoURI: '',
-                count: '2 gallons',
-                expires: 'November 22nd'
-            },
-            {
-                name: 'Bacon',
-                photoURI: '',
-                count: '1',
-                expires: 'December 1st'
-            },
-            {
-                name: 'Swiss Cheese Slices',
-                photoURI: '',
-                count: '3',
-                expires: 'January 28th, 2021'
-            }
-        ] },
-    ])
+    const { containerService } = withContainerService()
+    const { householdService } = withHouseholdService()
+    const [containers, setContainers] = useState([])
     const [distributing, setDistributing] = useState(false)
-    const [adding, setAdding] = useState(false)
+    const [containerName, setContainerName] = useState('')
 
+    async function fetchExistingContainers() {
+        try {
+            
+        } catch (err) {
+
+        }
+    }
+
+    async function handleAddContainer() {
+        try {
+            // Create a container
+            const newContainer = await containerService.createContainer(containerName, 'ReyesHousehold')
+    
+            // Add the created container to the household
+            await householdService.addContainerToHousehold(newContainer.id, 'ReyesHousehold')
+
+            newContainer.icon = {
+                name: 'Fridge',
+                color: '#30A7BE',
+                type: 'icon'
+            }
+
+            setContainers((prevContainers) => {
+                prevContainers.push(newContainer)
+                return prevContainers
+            })
+        } catch (err) {
+            console.error(err)
+            logError(err)
+        }
+    }
+
+    /**
+     * On Screen load the first time
+     */
     useEffect(() => {
-        // get containers from household
-        // set containers
-    })
-
-    useEffect(() => {
-
-    }, [adding])
+        fetchExistingContainers()
+    }, [])
 
     return (
         <Box marginTop="xl" alignItems="center">
@@ -57,8 +66,16 @@ const ContainerListView = () => {
                     />
                 )
             }
+            <Input
+                placeholder={'Container Name'}
+                style={{ marginVertical: 15 }}
+                value={containerName}
+                onChangeText={(newContainerName) => setContainerName(newContainerName)}
+                keyboardType={'default'}
+                maxLength={25}
+            />
             <Button
-                onPress={() => setAdding(true)}
+                onPress={handleAddContainer}
                 label="Add Container"
                 variant="button"
             />
