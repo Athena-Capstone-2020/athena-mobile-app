@@ -4,9 +4,11 @@ import {
     Alert,
     Modal,
     TouchableHighlight,
-    View
+    TouchableOpacity
 } from 'react-native'
-import { Box, ButtonAddToContainer, ButtonMinus, ButtonPlus, IconButton, Text } from '../../components/index';
+import { Box, ButtonAddToContainer, Button, ButtonMinus, ButtonPlus, IconButton, Text } from '../../components/index';
+import { RadioButton } from 'react-native-paper';
+import { withContainerService } from '../../services';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -95,14 +97,14 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        height: windowHeight/2.5,
+        height: windowHeight / 2.5,
         width: (windowWidth - 64)
     },
     openButton: {
         backgroundColor: "#F194FF",
         borderRadius: 20,
         padding: 10,
-        elevation: 2
+        elevation: 2,
     },
     textStyle: {
         color: "white",
@@ -113,12 +115,23 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: "center"
     },
-    darken: {
-        height: windowHeight,
-        width: windowWidth,
-        backgroundColor: "#111719",
-        opacity: .75,
-        zIndex: 1
+    notSelected: {
+        backgroundColor: "#F194FF",
+        opacity: .5,
+        marginTop: 15,
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    selected: {
+        backgroundColor: "#F194FF",
+        marginTop: 15,
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    pushToContainer: {
+        marginTop: 100
     }
 })
 
@@ -130,6 +143,20 @@ const ItemDescription = ({ navigation }) => {
 
     const [count, setcount] = useState(1)
     const [modalVisible, setModalVisible] = useState(false)
+    const [container, setContainer] = useState()
+    const [selected, setSelected] = useState('')
+    const { containerService } = withContainerService();
+
+    async function getContainers(id) {
+        const response = await containerService.getContainerById(id)
+        setContainer(response)
+        console.log(container)
+    }
+
+    async function addItemToContainer(ID, item) {
+        const response = await containerService.addFoodItemToContainer(id, item)
+        console.log(response)
+    }
 
     return (
         <>
@@ -161,32 +188,47 @@ const ItemDescription = ({ navigation }) => {
                     </Box>
                     <Text style={{ marginTop: 10 }} variant="barcodeInstructions">Complete Pancake Mix Buttermilk Complete Pancake Mix Buttermilk.</Text>
                 </Box>
-                <ButtonAddToContainer style={styles.addToContainer} onPress={() => { setModalVisible(true) }} />
+                <ButtonAddToContainer style={styles.addToContainer} onPress={() => {
+                    setModalVisible(true), getContainers("CONTAINER_DEMO"), setSelected('')
+                }} />
             </Box>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                    }}
-                    style={styles.modal}
-                >
-                    <Box style={styles.centeredBox}>
-                        <Box style={styles.modalBox}>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                }}
+                style={styles.modal}
+            >
+                <Box style={styles.centeredBox}>
+                    <Box style={styles.modalBox}>
+                        <TouchableHighlight
+                            style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                            onPress={() => {
+                                setModalVisible(!modalVisible);
+                            }}
+                        >
+                            <Text style={styles.textStyle}>Hide Modal</Text>
+                        </TouchableHighlight>
                         <Text style={styles.modalText} variant="itemDescriptionTitle">Pick a Container</Text>
-
-                            <TouchableHighlight
-                                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                                onPress={() => {
-                                    setModalVisible(!modalVisible);
-                                }}
-                            >
-                                <Text style={styles.textStyle}>Hide Modal</Text>
-                            </TouchableHighlight>
-                        </Box>
+                        <TouchableHighlight
+                            style={selected ? styles.selected : styles.notSelected}
+                            onPress={() => {
+                                if (selected) {
+                                    setSelected('')
+                                } else {
+                                    setSelected(container)
+                                }
+                            }
+                            }
+                        >
+                            <Text variant="recentSearchesTitle">{container ? container.name : ""}</Text>
+                        </TouchableHighlight>
+                        <Button label="Add To Container" style={styles.pushToContainer}/>
                     </Box>
-                </Modal>
+                </Box>
+            </Modal>
         </>
     )
 }
