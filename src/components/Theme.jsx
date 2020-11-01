@@ -98,7 +98,12 @@ const theme = createTheme({
       fontSize: 36.41,
       fontFamily: "SFProDisplay-Semibold",
       color: "black"
-    }
+    },
+    itemDescriptionTitle: {
+      fontSize: 31,
+      fontFamily: "SFProDisplay-Medium",
+      color: "black"
+    },
   },
   breakpoints: {
     phone: 0,
