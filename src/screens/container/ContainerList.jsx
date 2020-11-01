@@ -18,25 +18,28 @@ const ContainerListView = () => {
 
     async function fetchExistingContainers() {
         try {
-            
+            const results = await householdService.getContainersForHousehold('ReyesHousehold')
+            setContainers(results)
         } catch (err) {
-
+            console.error(err)
+            logError(err)
         }
     }
 
     async function handleAddContainer() {
         try {
-            // Create a container
-            const newContainer = await containerService.createContainer(containerName, 'ReyesHousehold')
-    
-            // Add the created container to the household
-            await householdService.addContainerToHousehold(newContainer.id, 'ReyesHousehold')
-
-            newContainer.icon = {
+            // Create icon
+            const icon = {
                 name: 'Fridge',
                 color: '#30A7BE',
                 type: 'icon'
             }
+
+            // Create a container
+            const newContainer = await containerService.createContainer(containerName, 'ReyesHousehold', icon)
+    
+            // Add the created container to the household
+            await householdService.addContainerToHousehold(newContainer.id, 'ReyesHousehold')
 
             setContainers((prevContainers) => {
                 prevContainers.push(newContainer)

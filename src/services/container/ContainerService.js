@@ -5,6 +5,12 @@ export class ContainerService extends BaseService{
 
     CONTAINER_COLLECTION = 'CONTAINER_COLLECTION'
 
+    defaultIcon = {
+        name: "DefaultName",
+        color: "DefaultColor",
+        type: "DefaultType"
+    }
+
     constructor(){
         super()
     }
@@ -15,15 +21,11 @@ export class ContainerService extends BaseService{
      * @param {string} householdId id of the household where the container is held
      * @returns the container object that was created
      */
-    async createContainer(name, householdId){
+    async createContainer(name, householdId, icon = this.defaultIcon){
         this.__UseCollection(this.CONTAINER_COLLECTION)
         
-        const defaultIcon = {
-            name: "DefaultName",
-            color: "DefaultColor",
-            type: "DefaultType"
-        }
-        const container = new Container(name, householdId, [], defaultIcon)
+        
+        const container = new Container(name, householdId, [], icon)
 
         const newDocId = await this.__CreateEntity( container.toDocument() )
         container.id = newDocId
