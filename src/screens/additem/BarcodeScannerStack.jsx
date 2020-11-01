@@ -7,7 +7,7 @@ import Svg, { G, Path } from "react-native-svg"
 import { withBarcodeService } from '../../services';
 import { createStackNavigator } from '@react-navigation/stack';
 import ItemDescription from './ItemDescription'
-import BarcodeManual from './BarcodeManual'
+import BarcodeManualStack from './BarcodeManualStack'
 
 const styles = StyleSheet.create({
     container: {
@@ -141,7 +141,7 @@ const BarcodeScanner = ({ navigation }) => {
                 />
             </Box>
             <Box style={styles.manualButton}>
-                <ButtonAlt variant="buttonAlt" label="Enter Barcode Manually" onPress={() => navigation.navigate('BarcodeManual')} />
+                <ButtonAlt variant="buttonAlt" label="Enter Barcode Manually" onPress={() => navigation.navigate('BarcodeManualStack')} />
             </Box>
         </Box>
     )
@@ -161,8 +161,8 @@ const BarcodeScannerStack = () => {
                 component={BarcodeScanner}
             />
             <Stack.Screen
-                name='BarcodeManual'
-                component={BarcodeManual}
+                name='BarcodeManualStack'
+                component={BarcodeManualStack}
             />
             <Stack.Screen
                 name="ItemDescription"
