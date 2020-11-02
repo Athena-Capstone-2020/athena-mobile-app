@@ -205,17 +205,18 @@ export class ContainerService extends BaseService{
 
         if( !(item instanceof FoodItem) )
             return false
-        
-        const containerToCheck = await this.getContainerById(container.id)
-        if(containerToCheck == null)
-            return false
 
-        for(const aryObj of containerToCheck.foodItems){
-            if(item.name == aryObj.name && item.photoURI == aryObj.photoURI &&  item.quantity == aryObj.quantity)
-                return true
-        }
+        const foodItemAry = await this.getFoodItemArrayFromContainedWithId(container.id)
+        const itemJSONString = JSON.stringify(item)
 
-        return false
+        let result = false
+
+        foodItemAry.forEach(aryItem => {
+            if(JSON.stringify(aryItem) == itemJSONString)
+                result = true
+        })
+
+        return result
 
     }
 
@@ -234,7 +235,7 @@ export class ContainerService extends BaseService{
         const foodItemAry = [];
         
         container.foodItems.forEach(obj => {
-            const item = new FoodItem(obj.name, obj.photoURI, obj.quantity)
+            const item = new FoodItem(obj.name, obj.photoURI, obj.quantity, obj.description, new Date(obj.expireDate), obj.nutritionData)
             foodItemAry.push(item)
         })
 
