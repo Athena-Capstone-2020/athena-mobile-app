@@ -12,10 +12,9 @@ export class ContainerService extends BaseService{
     /**
      * Creates a new container and returns the container object with an id
      * @param {string} name name of the new container
-     * @param {string} householdId id of the household where the container is held
      * @returns the container object that was created
      */
-    async createContainer(name, householdId){
+    async createContainer(name){
         this.__UseCollection(this.CONTAINER_COLLECTION)
         
         const defaultIcon = {
@@ -23,7 +22,7 @@ export class ContainerService extends BaseService{
             color: "DefaultColor",
             type: "DefaultType"
         }
-        const container = new Container(name, householdId, [], defaultIcon)
+        const container = new Container(name, [], defaultIcon)
 
         const newDocId = await this.__CreateEntity( container.toDocument() )
         container.id = newDocId
@@ -33,17 +32,16 @@ export class ContainerService extends BaseService{
     /**
      * Creates a new container and returns the container object with an id
      * @param {string} name name of the new container
-     * @param {string} householdId id of the household where the container is held
      * @param {Object} icon object with attributes name, color, type as strings
      * @returns the container object that was created, or null if the icon was invalid
      */
-    async createContainerWithIcon(name, householdId, icon){
+    async createContainerWithIcon(name, icon){
         this.__UseCollection(this.CONTAINER_COLLECTION)
 
         if(icon.name == undefined || icon.color == undefined || icon.type == undefined )
             return null
 
-        const container = new Container(name, householdId, [], icon)
+        const container = new Container(name, [], icon)
         const newDocId = await this.__CreateEntity( container.toDocument() )
         container.id = newDocId
         return container
@@ -64,7 +62,7 @@ export class ContainerService extends BaseService{
         if(containerDoc == undefined)
             return null
             
-        const container = new Container(containerDoc.name, containerDoc.householdId, containerDoc.foodItems, containerDoc.icon)
+        const container = new Container(containerDoc.name, containerDoc.foodItems, containerDoc.icon)
         container.id = id
 
         return container
