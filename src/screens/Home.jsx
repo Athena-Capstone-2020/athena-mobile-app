@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native';
+import { useUserContext } from '../global/user-context/useUserContext';
 
 const styles = StyleSheet.create({
     container: {
@@ -11,6 +12,10 @@ const styles = StyleSheet.create({
 });
 
 export const Home = () => {
+    const { state: userCtx, actions} = useUserContext()
+    actions.__healthCheck('Test')
+    console.log(userCtx)
+
     return (
         <View style={styles.container}>
             <Text>Home Screen</Text>
