@@ -1,11 +1,12 @@
 import {Document} from './Document'
+import {FoodItem} from './FoodItem'
 
 export class Container extends Document{
 
     /**
      * @param {string} name  
      * @param {string} householdId 
-     * @param { Array<Object> } foodItems
+     * @param { Array<FoodItem> } foodItems
      * @param { Object } icon
      */
     constructor(name, householdId, foodItems, icon){
