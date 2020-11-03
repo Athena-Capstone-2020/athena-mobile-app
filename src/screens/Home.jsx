@@ -12,8 +12,10 @@ const styles = StyleSheet.create({
 });
 
 export const Home = () => {
-    const ctx = useUserContext()
-    console.log(ctx)
+    const { state: userCtx, actions} = useUserContext()
+    actions.__healthCheck('Test')
+    console.log(userCtx)
+
     return (
         <View style={styles.container}>
             <Text>Home Screen</Text>
