@@ -22,7 +22,7 @@ export function Provider(props) {
                 <GroceryListServiceProvider groceryListService={groceryListService}>
                     <HouseholdServiceProvider householdService={householdService}>
                         <BarcodeServiceProvider barcodeService={barcodeService}>
-                            <UserContextProvider>
+                            <UserContextProvider initState={{ household: null, householdMembers: [] }}>
                                 {props.children}
                             </UserContextProvider>
                         </BarcodeServiceProvider>
