@@ -54,7 +54,8 @@ export class BaseService {
         }
 
         const results = await databaseQuery.get()
-        return results.docs
+
+        return results.docs.map((doc) => doc.data())
     }
 
     /**

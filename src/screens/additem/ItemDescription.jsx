@@ -7,7 +7,6 @@ import {
     TouchableOpacity
 } from 'react-native'
 import { Box, ButtonAddToContainer, Button, ButtonMinus, ButtonPlus, IconButton, Text } from '../../components/index';
-import { RadioButton } from 'react-native-paper';
 import { withContainerService } from '../../services';
 
 const windowWidth = Dimensions.get('window').width;

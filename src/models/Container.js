@@ -1,4 +1,5 @@
 import {Document} from './Document'
+import {FoodItem} from './FoodItem'
 
 export class Container extends Document{
 

@@ -6,6 +6,12 @@ export class ContainerService extends BaseService{
 
     CONTAINER_COLLECTION = 'CONTAINER_COLLECTION'
 
+    defaultIcon = {
+        name: "DefaultName",
+        color: "DefaultColor",
+        type: "DefaultType"
+    }
+
     constructor(){
         super()
     }

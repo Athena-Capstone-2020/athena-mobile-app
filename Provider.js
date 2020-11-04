@@ -3,6 +3,7 @@ import { HouseholdServiceProvider, HouseholdService, GroceryListServiceProvider,
          ContainerServiceProvider, ContainerService, PersonService, PersonServiceProvider, BarcodeServiceProvider, BarcodeService } from "./src/services";
 import { initFirebase } from './src/firebase/config'
 import { initSentry } from './src/logger/sentry/config'
+import { UserContextProvider } from './src/global/user-context'
 import Constants from 'expo-constants'
 
 export function Provider(props) {
@@ -21,7 +22,9 @@ export function Provider(props) {
                 <GroceryListServiceProvider groceryListService={groceryListService}>
                     <HouseholdServiceProvider householdService={householdService}>
                         <BarcodeServiceProvider barcodeService={barcodeService}>
-                            {props.children}
+                            <UserContextProvider initState={{ household: null, householdMembers: [] }}>
+                                {props.children}
+                            </UserContextProvider>
                         </BarcodeServiceProvider>
                     </HouseholdServiceProvider>
                 </GroceryListServiceProvider>
