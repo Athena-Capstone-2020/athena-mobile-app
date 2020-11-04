@@ -48,14 +48,22 @@ test('should create container with custom icon without errors', async () => {
     })
 })
 
-test('attempt to create container with an invalid icon', async () => {
+test('attempts to create container with an invalid icon and errors', async () => {
     const [containerService] = setup()
 
     const customIcon = {
         attr: "Not name, color, or type"
     }
-    const createdContainer = await containerService.createContainerWithIcon('createByParams', customIcon)
-    expect(createdContainer).toBe(null)
+
+    let errorCaught = null
+    try{
+        const createdContainer = await containerService.createContainerWithIcon('createByParams', customIcon)
+    }
+    catch(err){
+        errorCaught = err
+    }
+
+    expect(errorCaught).toStrictEqual(new Error("icon must have the follow string attributes: name, color, type"))
 })
 
 //GetContainer
@@ -69,7 +77,7 @@ test('should get a container that has been created already without errors', asyn
     
 })
 
-test('should try to get a container that doesn\'t exist and return null without error', async () => {
+test('should try to get a container that does not exist and return null without error', async () => {
     const [containerService] = setup()
 
     const containerId = 'I_Do_Not_Exist'
@@ -94,7 +102,7 @@ test('should create and delete a container by id without error', async () => {
     expect(containerAfterDeletion).toBe(null)
 })
 
-test('should try to delete container by id that doesn\'t exist', async () => {
+test('should try to delete container by id that does not exist and returns null', async () => {
     const [containerService] = setup()
 
     const containerId = 'I_Do_Not_Exist'
@@ -118,7 +126,7 @@ test('should create and delete a container by object without error', async () =>
 
 })
 
-test('should try to delete a container by object that has a null id', async () => {
+test('attempts to delete a container by object that has a null id and errors', async () => {
     const [containerService] = setup()
 
     const defaultIcon = {
@@ -127,8 +135,16 @@ test('should try to delete a container by object that has a null id', async () =
         type: "DefaultType"
     }
     const container = new Container('toBeDeleted', [], defaultIcon)
-    const deletedContainer = await containerService.deleteContainerByObject(container)
-    expect(deletedContainer).toBe(null)
+
+    let errorCaught = null
+    try{
+        const deletedContainer = await containerService.deleteContainerByObject(container)
+    }
+    catch(err){
+        errorCaught = err
+    }
+
+    expect(errorCaught).toStrictEqual(new Error('the container does not have an id'))
 })
 
 //updateContainer
@@ -148,7 +164,7 @@ test('should create and update a container without error', async () => {
 
 })
 
-test('should try to update a container that has a null id and nothing happens', async () => {
+test('attempts to update a container that has a null id and errors', async () => {
     const [containerService] = setup()
 
     const defaultIcon = {
@@ -157,11 +173,19 @@ test('should try to update a container that has a null id and nothing happens', 
         type: "DefaultType"
     }
     const container = new Container('toBeDeleted', [], defaultIcon)
-    const updatedContainer = await containerService.updateContainer(container)
-    expect(updatedContainer).toBe(null)
+    
+    let errorCaught = null
+    try{
+        const updatedContainer = await containerService.updateContainer(container)
+    }
+    catch(err){
+        errorCaught = err
+    }
+
+    expect(errorCaught).toStrictEqual(new Error('the container does not have an id'))
 })
 
-test('should try to update a container with an id that doesn\'t exist and nothing happens', async () => {
+test('attempts to update a container with an id that does not exist and errors', async () => {
     const [containerService] = setup()
 
     const defaultIcon = {
@@ -171,8 +195,15 @@ test('should try to update a container with an id that doesn\'t exist and nothin
     }
     const container = new Container('toBeDeleted', [], defaultIcon)
     container.id = 'I_Do_Not_Exist'
-    const updatedContainer = await containerService.updateContainer(container)
-    expect(updatedContainer).toBe(null)
+
+    let errorCaught = null
+    try{
+        const updatedContainer = await containerService.updateContainer(container)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('the container is not in the database'))
 })
 
 //addFoodItemToContainer
@@ -190,7 +221,7 @@ test('should add a food item to a container without errors', async () => {
     expect(containerAfterUpdate).toMatchObject(updatedContainer)
 })
 
-test('attempt to send something other than food item without errors', async () => {
+test('attempts to add something other than food item to container and errors', async () => {
     const [containerService] = setup()
 
     const newContainer = await containerService.createContainer('addItemToContainer2')
@@ -198,11 +229,18 @@ test('attempt to send something other than food item without errors', async () =
     expect(containerCreated).toMatchObject(newContainer)
 
     const foodItemToAdd = new Object()
-    const updatedContainer = await containerService.addFoodItemToContainer(containerCreated, foodItemToAdd)
-    expect(updatedContainer).toBe(null)
+
+    let errorCaught = null
+    try{
+        const updatedContainer = await containerService.addFoodItemToContainer(containerCreated, foodItemToAdd)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('item is not of type FoodItem'))
 })
 
-test('attempt to send container that doesn\'t exist without error', async () => {
+test('attempts to add FoodItem to container that does not exist and errors', async () => {
     const [containerService] = setup()
 
     const defaultIcon = {
@@ -212,16 +250,21 @@ test('attempt to send container that doesn\'t exist without error', async () => 
     }
     const container = new Container('toBeDeleted', [], defaultIcon)
     container.id = 'I_Do_Not_Exist'
-
     const expireDate = new Date()
     const foodItem = new FoodItem('name', 'photoURI', 'quantity', 'someDescription', expireDate, {})
-
-    const updatedContainer = await containerService.addFoodItemToContainer(container, foodItem)
-    expect(updatedContainer).toBe(null)
+    
+    let errorCaught = null
+    try{
+        const updatedContainer = await containerService.addFoodItemToContainer(container, foodItem)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('the container is not in the database'))
 })
 
 //updateFoodItemInContainer
-test('create container, add some food items, and update one without error', async () => {
+test('should update a food item in a container without error', async () => {
     const [containerService] = setup()
 
     const newContainer = await containerService.createContainer('updateFoodItemInContainer1')
@@ -247,7 +290,7 @@ test('create container, add some food items, and update one without error', asyn
     
 })
 
-test('attempt to update an item in a container that doesn\'t exist without error', async () => {
+test('attempts to update an item in a nonexistent container and errors', async () => {
     const [containerService] = setup()
 
     const defaultIcon = {
@@ -256,14 +299,21 @@ test('attempt to update an item in a container that doesn\'t exist without error
         type: "DefaultType"
     }
     const container = new Container('toBeDeleted', [], defaultIcon)
+    container.id = 'I_DO_NOT_EXIST'
     const foodItem = new FoodItem('dummy', 'dummy', 'dummy')
 
-    const updatedContainer = await containerService.updateFoodItemInContainer(container, 0, foodItem)
-    expect(updatedContainer).toBe(null)
+    let errorCaught = null
+    try{
+        const updatedContainer = await containerService.updateFoodItemInContainer(container, 0, foodItem)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('the container is not in the database'))
     
 })
 
-test('attempt to update an item at an index that is out of bounds', async () => {
+test('attempts to update an item at an index that is out of bounds and errors', async () => {
     const [containerService] = setup()
 
     const newContainer = await containerService.createContainer('updateFoodItemInContainer2')
@@ -283,11 +333,18 @@ test('attempt to update an item at an index that is out of bounds', async () => 
 
     const changedExpireDate = new Date()
     const updatedFoodItem = new FoodItem('iChanged', 'iChanged', 'iChanged', 'iChanged', changedExpireDate, {something: 'iAmAdded'})
-    const updatedFoodItemContainer = await containerService.updateFoodItemInContainer(updatedContainer, -1, updatedFoodItem)
-    expect(updatedFoodItemContainer).toBe(null)
+
+    let errorCaught = null
+    try{
+        const updatedFoodItemContainer = await containerService.updateFoodItemInContainer(updatedContainer, -1, updatedFoodItem)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('the index is out of bounds'))
 })
 
-test('attempt to update an item that is not a FoodItem type', async () => {
+test('attempts to update an item that is not a FoodItem type and errors', async () => {
     const [containerService] = setup()
 
     const defaultIcon = {
@@ -297,11 +354,18 @@ test('attempt to update an item that is not a FoodItem type', async () => {
     }
     const container = new Container('toBeDeleted', [], defaultIcon)
     const foodItem = new Object()
-    const updatedContainer = await containerService.updateFoodItemInContainer(container, 0, foodItem)
-    expect(updatedContainer).toBe(null)
+    
+    let errorCaught = null
+    try{
+        const updatedFoodItemContainer = await containerService.updateFoodItemInContainer(container, 0, foodItem)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('updatedItem is not of type FoodItem'))
 })
 
-test('attempt to update food item at index = ary.length', async () => {
+test('attempts to update food item at index = ary.length and adds it to the end of the array', async () => {
     const [containerService] = setup()
 
     const newContainer = await containerService.createContainer('updateFoodItemInContainer3')
@@ -316,7 +380,7 @@ test('attempt to update food item at index = ary.length', async () => {
 })
 
 //removeItemFromContainer
-test('should create a container, add a food item to it, then delete the food item without error', async () => {
+test('should delete the food item from container without error', async () => {
     const [containerService] = setup()
 
     const newContainer = await containerService.createContainer('removeFoodItemFromContainer1')
@@ -339,18 +403,24 @@ test('should create a container, add a food item to it, then delete the food ite
     expect(containerAfterDelete).toMatchObject(deleteContainer)
 })
 
-test('attempt to delete a food item from an index that doesn\'t exist', async () => {
+test('attempts to delete a food item from index out of bounds and errors', async () => {
     const [containerService] = setup()
 
     const newContainer = await containerService.createContainer('removeFoodItemFromContainer2')
     const containerCreated = await containerService.getContainerById(newContainer.id)
     expect(containerCreated).toMatchObject(newContainer)
 
+    let errorCaught = null
+    try{
     const deleteContainer = await containerService.removeFoodItemFromContainer(containerCreated, 0)
-    expect(deleteContainer).toBe(null)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('the index is out of bounds'))
 })
 
-test('attempt to delete from a container that doesn\'t exist', async () => {
+test('attempts to delete from a container that does not exist and errors', async () => {
     const [containerService] = setup()
 
     const defaultIcon = {
@@ -359,9 +429,16 @@ test('attempt to delete from a container that doesn\'t exist', async () => {
         type: "DefaultType"
     }
     const container = new Container('toBeDeleted', [], defaultIcon)
+    container.id = 'I_DO_NOT_EXIST'
 
-    const updatedContainer = await containerService.removeFoodItemFromContainer(container, 0)
-    expect(updatedContainer).toBe(null)
+    let errorCaught = null
+    try{
+        const updatedContainer = await containerService.removeFoodItemFromContainer(container, 0)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('the container is not in the database'))
     
 })
 
