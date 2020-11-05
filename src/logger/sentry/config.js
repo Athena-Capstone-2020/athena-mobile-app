@@ -1,8 +1,8 @@
 import * as Sentry from 'sentry-expo';
-import Constants from 'expo-constants'
+import {SENTRY_DSN} from '@env'
 
 var sentryConfig = {
-    dsn: Constants.manifest.extra.SENTRY_DSN,
+    dsn: SENTRY_DSN,
     enableInExpoDevelopment: true,
     debug: true, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
 }
