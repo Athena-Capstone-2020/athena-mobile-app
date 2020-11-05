@@ -1,5 +1,6 @@
 import { BaseService } from "../base"
 import { Container, FoodItem } from "../../models"
+import { log, logError } from '../../logger/Logger'
 
 export class ContainerService extends BaseService{
 
@@ -18,114 +19,122 @@ export class ContainerService extends BaseService{
     /**
      * Creates a new container and returns the container object with an id
      * @param {string} name name of the new container
-     * @param {string} householdId id of the household where the container is held
-     * @returns the container object that was created
-     */
-    async createContainer(name, householdId, icon = this.defaultIcon){
-        this.__UseCollection(this.CONTAINER_COLLECTION)
-        
-        
-        const container = new Container(name, householdId, [], icon)
-
-        const newDocId = await this.__CreateEntity( container.toDocument() )
-        container.id = newDocId
-        return container
-    }
-
-    /**
-     * Creates a new container and returns the container object with an id
-     * @param {string} name name of the new container
-     * @param {string} householdId id of the household where the container is held
      * @param {Object} icon object with attributes name, color, type as strings
-     * @returns the container object that was created, or null if the icon was invalid
+     * @returns the container object that was created
+     * @throws errors if a container was not able to be made in DB
      */
-    async createContainerWithIcon(name, householdId, icon){
-        this.__UseCollection(this.CONTAINER_COLLECTION)
+    async createContainer(name, icon = this.defaultIcon){
+        try{
+            this.__UseCollection(this.CONTAINER_COLLECTION)
+            const container = new Container(name, [], icon)
 
-        if(icon.name == undefined || icon.color == undefined || icon.type == undefined )
-            return null
-
-        const container = new Container(name, householdId, [], icon)
-        const newDocId = await this.__CreateEntity( container.toDocument() )
-        container.id = newDocId
-        return container
+            const newDocId = await this.__CreateEntity( container.toDocument() )
+            container.id = newDocId
+            return container
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
     /**
      * Gets a container that has been created. If the container does not exist, a null will be returned
      * @param {string} id id of the container trying to be retrieved
-     * @returns a container object or null
+     * @returns a container object or null if container was not found
+     * @throws error if id is null
      */
     async getContainerById(id){
-        this.__UseCollection(this.CONTAINER_COLLECTION)
-        if(id == null)
-            return null
+        try{
+            this.__UseCollection(this.CONTAINER_COLLECTION)
+            if(id == null)
+                throw new Error("id cannot be null")
 
-        const containerDoc = await this.__GetById(id)
+            const containerDoc = await this.__GetById(id)
 
-        if(containerDoc == undefined)
-            return null
-            
-        const container = new Container(containerDoc.name, containerDoc.householdId, containerDoc.foodItems, containerDoc.icon)
-        container.id = id
+            if(containerDoc == undefined)
+                return null
+                
+            const container = new Container(containerDoc.name, containerDoc.foodItems, containerDoc.icon)
+            container.id = id
 
-        return container
+            return container
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
     /**
      * Attempts to delete a container by using its object id
      * @param {Container} container the container to be deleted.
-     * @returns the container obj that was deleted, or null if container was not found or its id was null
+     * @returns the container obj that was deleted, or null if container was not found in DB
+     * @throws error if container id is null
      */
     async deleteContainerByObject(container){
-        this.__UseCollection(this.CONTAINER_COLLECTION)
+        try{
+            this.__UseCollection(this.CONTAINER_COLLECTION)
 
-        const containerId = container.id
-        if( containerId == null )
-            return null
+            const containerId = container.id
+            if( containerId == null )
+                throw new Error('the container does not have an id')
 
-        const containerToDelete = await this.getContainerById(containerId)
-        if( containerToDelete == null )
-            return null
-
-        await this.__DeleteEntityById(containerId)
-        return containerToDelete
+            return await this.deleteContainerById(containerId)
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
     /**
      * Attempts to delete a container by just its id
-     * @param {Container} container the container to be deleted. MUST HAVE ID
+     * @param {string} id the id of the container container to be deleted
      * @returns the container obj that was deleted or null if container was not found
      */
     async deleteContainerById(id){
-        this.__UseCollection(this.CONTAINER_COLLECTION)
-        
-        const containerToDelete = await this.getContainerById(id)
-        if( containerToDelete == null)
-            return null
+        try{
+            this.__UseCollection(this.CONTAINER_COLLECTION)
+            
+            const containerToDelete = await this.getContainerById(id)
+            if( containerToDelete == null)
+                return null
 
-        await this.__DeleteEntityById(id)
-        return containerToDelete
+            await this.__DeleteEntityById(id)
+            return containerToDelete
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
     
     /**
-     * Updates a container object in the DB. If container Object has no id then returns null
+     * Updates a container object in the DB
      * @param {Container} updatedContainer updated container object
-     * @returns updated container if successful, or null if the id doesn't exist or is null
+     * @returns updated container if successful
+     * @throws error if container id is null or the container is not in the DB
      */
     async updateContainer(updatedContainer){
-        this.__UseCollection(this.CONTAINER_COLLECTION)
+        try{
+            this.__UseCollection(this.CONTAINER_COLLECTION)
 
-        const containerId = updatedContainer.id
-        if(containerId == null)
-            return null
-        
-        const oldContainer = await this.getContainerById(containerId)
-        if(oldContainer == null)
-            return null
+            const containerId = updatedContainer.id
+            if(containerId == null)
+                throw new Error('the container does not have an id')
+            
+            const oldContainer = await this.getContainerById(containerId)
+            if(oldContainer == null)
+                throw new Error('the container is not in the database')
 
-        await this.__UpdateById(containerId, updatedContainer.toDocument())
-        return updatedContainer
+            await this.__UpdateById(containerId, updatedContainer.toDocument())
+            return updatedContainer
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
     /**
@@ -133,19 +142,26 @@ export class ContainerService extends BaseService{
      * @param {Container} container the container the item is being added to
      * @param {FoodItem} item the food item being added to the container
      * @returns updated container if successful, otherwise returns null
+     * @throw error if item is not FoodItem or if container is not in the DB
      */
     async addFoodItemToContainer(container, item){
-        this.__UseCollection(this.CONTAINER_COLLECTION)
+        try{
+            this.__UseCollection(this.CONTAINER_COLLECTION)
 
-        if( !(item instanceof FoodItem) )
-            return null
+            if( !(item instanceof FoodItem) )
+                throw new Error('item is not of type FoodItem')
 
-        const containerToAddTo = await this.getContainerById(container.id)
-        if(containerToAddTo == null)
-            return null
+            const containerToAddTo = await this.getContainerById(container.id)
+            if(containerToAddTo == null)
+                throw new Error('the container is not in the database')
 
-        container.foodItems.push(item.toDocument())
-        return await this.updateContainer(container)
+            container.foodItems.push(item.toDocument())
+            return await this.updateContainer(container)
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
     /**
@@ -154,70 +170,92 @@ export class ContainerService extends BaseService{
      * @param {Number} index the location where the food item is located
      * @param {FoodItem} updatedItem
      * @returns updated container if successful, otherwise returns null
+     * @throws error if item is not FoodItem, if the container is not in the DB, or if the index is out of bounds
      */
     async updateFoodItemInContainer(container, index, updatedItem){
-        this.__UseCollection(this.CONTAINER_COLLECTION)
+        try{
+            this.__UseCollection(this.CONTAINER_COLLECTION)
 
-        if( !(updatedItem instanceof FoodItem) )
-            return null
-        
-        const containerToAddTo = await this.getContainerById(container.id)
-        if(containerToAddTo == null)
-            return null
+            if( !(updatedItem instanceof FoodItem) )
+                throw new Error('updatedItem is not of type FoodItem')
+            
+            const containerToAddTo = await this.getContainerById(container.id)
+            if(containerToAddTo == null)
+                throw new Error('the container is not in the database')
 
-        if(index < 0 || container.foodItems.length < index)
-            return null
+            if(index < 0 || container.foodItems.length < index)
+                 throw new Error('the index is out of bounds')
 
-        if(index == container.foodItems.length)
-            return await this.addFoodItemToContainer(container, updatedItem)
+            if(index == container.foodItems.length)
+                return await this.addFoodItemToContainer(container, updatedItem)
 
-        container.foodItems.splice(index, 1, updatedItem.toDocument())
-        return await this.updateContainer(container)
+            container.foodItems.splice(index, 1, updatedItem.toDocument())
+            return await this.updateContainer(container)
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
     /**
      * Removes the food item at the index in the specified container
      * @param {Container} container the container a food item is being removed from 
      * @param {Number} index the index at which the food item is located
-     * @returns updated container if successful, otherwise returns null 
+     * @returns updated container if successful, otherwise returns null
+     * @throw error if the container is not in the DB or if the index is out of bounds 
      */
     async removeFoodItemFromContainer(container, index){
-        this.__UseCollection(this.CONTAINER_COLLECTION)
+        try{
+            this.__UseCollection(this.CONTAINER_COLLECTION)
 
-        const containerToRemoveFrom = await this.getContainerById(container.id)
-        if(containerToRemoveFrom == null)
-            return null
+            const containerToRemoveFrom = await this.getContainerById(container.id)
+            if(containerToRemoveFrom == null)
+                throw new Error('the container is not in the database')
 
-        if( index < 0 || containerToRemoveFrom.foodItems.length <= index )
-            return null
+            if( index < 0 || containerToRemoveFrom.foodItems.length <= index )
+                throw new Error('the index is out of bounds')
 
-        containerToRemoveFrom.foodItems.splice(index, 1)
-        return await this.updateContainer(containerToRemoveFrom)
+            containerToRemoveFrom.foodItems.splice(index, 1)
+            return await this.updateContainer(containerToRemoveFrom)
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
     /**
      * Check if an item exist in the container
-     * @param {Container} container
-     * @param {FoodItem} item 
+     * @param {Container} container the container that is being checked for item
+     * @param {FoodItem} item the FoodItem that the container is being checked for
      * @returns true if the item is in the container, otherwise false if the item is not in the container, 
      *   the food item is invalid, or the container does not exist
+     * @throws error if item is not of type FoodItem
      */
     async doesFoodItemExistInContainer(container, item){
-        this.__UseCollection(this.CONTAINER_COLLECTION)
+        try{
+            this.__UseCollection(this.CONTAINER_COLLECTION)
 
-        if( !(item instanceof FoodItem) )
-            return false
-        
-        const containerToCheck = await this.getContainerById(container.id)
-        if(containerToCheck == null)
-            return false
+            if( !(item instanceof FoodItem) )
+                throw new Error('item is not of type FoodItem')
 
-        for(const aryObj of containerToCheck.foodItems){
-            if(item.name == aryObj.name && item.photoURI == aryObj.photoURI &&  item.quantity == aryObj.quantity)
-                return true
+            const foodItemAry = await this.getFoodItemArrayFromContainedWithId(container.id)
+            const itemJSONString = JSON.stringify(item)
+
+            let result = false
+
+            foodItemAry.forEach(aryItem => {
+                if(JSON.stringify(aryItem) == itemJSONString)
+                    result = true
+            })
+
+            return result
         }
-
-        return false
+        catch(err){
+            logError(err)
+            throw err
+        }
 
     }
 
@@ -227,20 +265,26 @@ export class ContainerService extends BaseService{
      * @returns {FoodItem[]} an array of FoodItems that are currently in the container
      */
     async getFoodItemArrayFromContainedWithId(id){
-        this.__UseCollection(this.CONTAINER_COLLECTION)
+        try{
+            this.__UseCollection(this.CONTAINER_COLLECTION)
 
-        const container = await this.getContainerById(id)
-        if(container == null)
-            return null
+            const container = await this.getContainerById(id)
+            if(container == null)
+                throw new Error('the container is not in the database')
 
-        const foodItemAry = [];
-        
-        container.foodItems.forEach(obj => {
-            const item = new FoodItem(obj.name, obj.photoURI, obj.quantity)
-            foodItemAry.push(item)
-        })
+            const foodItemAry = [];
+            
+            container.foodItems.forEach(obj => {
+                const item = new FoodItem(obj.name, obj.photoURI, obj.quantity, obj.description, new Date(obj.expireDate), obj.nutritionData)
+                foodItemAry.push(item)
+            })
 
-        return foodItemAry
+            return foodItemAry
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
 }
