@@ -26,46 +26,6 @@ test('should create container without errors', async () => {
     })
 })
 
-//CreateContainerWithIcon
-test('should create container with custom icon without errors', async () => {
-    const [containerService] = setup()
-
-    const customIcon = {
-        name: "CustomName",
-        color: "CustomColor",
-        type: "CustomType"
-    }
-    const createdContainer = await containerService.createContainerWithIcon('createByParams', customIcon)
-    expect(createdContainer.id).toBeDefined()
-    expect(createdContainer.toDocument()).toMatchObject({
-        name: 'createByParams',
-        foodItems: [],
-        icon: {
-            name: "CustomName",
-            color: "CustomColor",
-            type: "CustomType"
-        }
-    })
-})
-
-test('attempts to create container with an invalid icon and errors', async () => {
-    const [containerService] = setup()
-
-    const customIcon = {
-        attr: "Not name, color, or type"
-    }
-
-    let errorCaught = null
-    try{
-        const createdContainer = await containerService.createContainerWithIcon('createByParams', customIcon)
-    }
-    catch(err){
-        errorCaught = err
-    }
-
-    expect(errorCaught).toStrictEqual(new Error("icon must have the follow string attributes: name, color, type"))
-})
-
 //GetContainer
 test('should get a container that has been created already without errors', async () => {
     const [containerService] = setup()
