@@ -19,45 +19,15 @@ export class ContainerService extends BaseService{
     /**
      * Creates a new container and returns the container object with an id
      * @param {string} name name of the new container
+     * @param {Object} icon object with attributes name, color, type as strings
      * @returns the container object that was created
      * @throws errors if a container was not able to be made in DB
      */
-    async createContainer(name){
+    async createContainer(name, icon = this.defaultIcon){
         try{
             this.__UseCollection(this.CONTAINER_COLLECTION)
-            
-            const defaultIcon = {
-                name: "DefaultName",
-                color: "DefaultColor",
-                type: "DefaultType"
-            }
-            const container = new Container(name, [], defaultIcon)
-
-            const newDocId = await this.__CreateEntity( container.toDocument() )
-            container.id = newDocId
-            return container
-        }
-        catch(err){
-            logError(err)
-            throw err
-        }
-    }
-
-    /**
-     * Creates a new container and returns the container object with an id
-     * @param {string} name name of the new container
-     * @param {Object} icon object with attributes name, color, type as strings
-     * @returns the container object that was created
-     * @throws errors if icon is invalid or if container was not able to be created in DB
-     */
-    async createContainerWithIcon(name, icon){
-        try{
-            this.__UseCollection(this.CONTAINER_COLLECTION)
-
-            if(icon.name == undefined || icon.color == undefined || icon.type == undefined )
-                throw new Error("icon must have the follow string attributes: name, color, type")
-
             const container = new Container(name, [], icon)
+
             const newDocId = await this.__CreateEntity( container.toDocument() )
             container.id = newDocId
             return container
