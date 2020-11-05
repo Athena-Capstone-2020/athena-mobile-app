@@ -33,6 +33,10 @@ jobs:
       env:
         FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
       run: echo "$FIREBASE_CONFIG" > ./src/firebase/config.js
+    - name: Creating config file for Sentry
+      env:
+        SENTRY_CONFIG: ${{ secrets.SENTRY_CONFIG }}
+      run: echo "$SENTRY_CONFIG" > ./src/logger/sentry/config.js
     - name: Test Services
       env:
         BARCODE_LOOKUP_API_KEY: ${{ secrets.BARCODE_LOOKUP_API_KEY }}
