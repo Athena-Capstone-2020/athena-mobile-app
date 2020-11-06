@@ -261,7 +261,7 @@ export class ContainerService extends BaseService{
      * @param {string} id id of the container to get the food items from
      * @returns {FoodItem[]} an array of FoodItems that are currently in the container
      */
-    async getFoodItemArrayFromContainedWithId(id){
+    async getFoodItemArrayFromContainer(id){
         try{
             this.__UseCollection(this.CONTAINER_COLLECTION)
 

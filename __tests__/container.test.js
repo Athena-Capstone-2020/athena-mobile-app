@@ -437,7 +437,7 @@ test('should create a container, add food items, and get the items an array', as
 
     const arrayExpect = [foodItemOne, foodItemTwo, foodItemThree]
 
-    const foodItemArray = await containerService.getFoodItemArrayFromContainedWithId(containerCreated.id);
+    const foodItemArray = await containerService.getFoodItemArrayFromContainer(containerCreated.id);
     expect(arrayExpect).toStrictEqual(foodItemArray)
 })
 
