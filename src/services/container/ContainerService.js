@@ -213,7 +213,7 @@ export class ContainerService extends BaseService{
             if( index < 0 || container.foodItems.length <= index )
                 throw new Error('the index is out of bounds')
 
-                container.foodItems.splice(index, 1)
+            container.foodItems.splice(index, 1)
             return await this.updateContainer(container)
         }
         catch(err){
