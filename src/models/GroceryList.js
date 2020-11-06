@@ -1,11 +1,12 @@
 import {Document} from './Document'
+import { FoodItem } from './FoodItem'
 
 export class GroceryList extends Document{
 
     /**
      * @param {string} name 
      * @param {string} ownerId 
-     * @param {List< Map<FoodItem, string> >} items 
+     * @param {Array<Object>} foodItems 
      */
     constructor(name, ownerId, items){
         this.name = name
