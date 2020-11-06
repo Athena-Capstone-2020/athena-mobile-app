@@ -8,17 +8,18 @@ export class GroceryList extends Document{
      * @param {string} ownerId 
      * @param {Array<Object>} foodItems 
      */
-    constructor(name, ownerId, items){
+    constructor(name, ownerId, foodItems){
+        super()
         this.name = name
         this.ownerId = ownerId
-        this.items = items
+        this.foodItems = foodItems
     }
 
     toDocument(){
         return {
             name: this.name,
             ownerId: this.ownerId,
-            items: this.items
+            foodItems: this.foodItems
         }
     }
 

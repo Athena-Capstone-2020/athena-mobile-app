@@ -1,14 +1,31 @@
 import { BaseService } from "../base";
+import { logError } from "../../logger/Logger";
+import { GroceryList } from "../../models/GroceryList";
 
 export class GroceryListService extends BaseService{
 
+    GROCERY_LIST_COLLECTION = 'GROCERY_LIST_COLLECTION'
+
     /**
      * Creates a new grocery list
-     * @param {string} name 
-     * @param {string} ownerId 
+     * @param {string} name name of the grocery list
+     * @param {string} ownerId the household/person the container belongs to
+     * @returns the groceryList object that was created
+     * @throws error if grocery list was not able to be made in DB
      */
-    createGroceryList(name, ownerId){
-        throw new Error('Not Implemented')
+    async createGroceryList(name, ownerId){
+        try{
+            this.__UseCollection(this.GROCERY_LIST_COLLECTION)
+            const groceryList = new GroceryList(name, ownerId, [])
+
+            const newDocId = await this.__CreateEntity( groceryList.toDocument() )
+            groceryList.id = newDocId
+            return groceryList
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
     /**
