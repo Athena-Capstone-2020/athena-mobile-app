@@ -7,19 +7,24 @@ export class GroceryList extends Document{
      * @param {string} name 
      * @param {string} ownerId 
      * @param {Array<Object>} foodItems 
+     * @param {Date} dateCreated 
      */
-    constructor(name, ownerId, foodItems){
+    constructor(name, ownerId, foodItems = [], dateCreated = new Date(), lastModified = new Date()){
         super()
         this.name = name
         this.ownerId = ownerId
         this.foodItems = foodItems
+        this.dateCreated = dateCreated
+        this.lastModified = lastModified
     }
 
     toDocument(){
         return {
             name: this.name,
             ownerId: this.ownerId,
-            foodItems: this.foodItems
+            foodItems: this.foodItems,
+            dateCreated: this.dateCreated.toISOString(),
+            lastModified: this.lastModified.toISOString()
         }
     }
 
