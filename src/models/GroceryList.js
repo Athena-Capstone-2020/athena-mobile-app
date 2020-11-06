@@ -8,6 +8,7 @@ export class GroceryList extends Document{
      * @param {string} ownerId 
      * @param {Array<Object>} foodItems 
      * @param {Date} dateCreated 
+     * @param {Date} lastModified
      */
     constructor(name, ownerId, foodItems = [], dateCreated = new Date(), lastModified = new Date()){
         super()
