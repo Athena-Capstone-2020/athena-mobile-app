@@ -183,11 +183,8 @@ export class ContainerService extends BaseService{
             if(containerToAddTo == null)
                 throw new Error('the container is not in the database')
 
-            if(index < 0 || container.foodItems.length < index)
+            if(index < 0 || container.foodItems.length <= index)
                  throw new Error('the index is out of bounds')
-
-            if(index == container.foodItems.length)
-                return await this.addFoodItemToContainer(container, updatedItem)
 
             container.foodItems.splice(index, 1, updatedItem.toDocument())
             return await this.updateContainer(container)
