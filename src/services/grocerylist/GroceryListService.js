@@ -16,7 +16,7 @@ export class GroceryListService extends BaseService{
     async createGroceryList(name, ownerId){
         try{
             this.__UseCollection(this.GROCERY_LIST_COLLECTION)
-            const groceryList = new GroceryList(name, ownerId, [])
+            const groceryList = new GroceryList(name, ownerId)
 
             const newDocId = await this.__CreateEntity( groceryList.toDocument() )
             groceryList.id = newDocId
@@ -45,7 +45,7 @@ export class GroceryListService extends BaseService{
             if(groceryListDoc == undefined)
                 return null
 
-            const groceryList = new GroceryList(groceryListDoc.name, groceryListDoc.ownerId, groceryListDoc.foodItems)
+            const groceryList = new GroceryList(groceryListDoc.name, groceryListDoc.ownerId, groceryListDoc.foodItems, new Date(groceryListDoc.dateCreated), new Date(groceryListDoc.lastModified))
             groceryList.id = id
 
             return groceryList
@@ -118,6 +118,7 @@ export class GroceryListService extends BaseService{
             if(oldGroceryList == null)
                 throw new Error('the grocery list is not in the database')
 
+            updatedGroceryList.lastModified = new Date()
             await this.__UpdateById(groceryListId, updatedGroceryList.toDocument())
             return updatedGroceryList
         }
