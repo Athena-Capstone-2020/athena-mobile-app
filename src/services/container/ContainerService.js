@@ -206,8 +206,8 @@ export class ContainerService extends BaseService{
         try{
             this.__UseCollection(this.CONTAINER_COLLECTION)
 
-            const containerToGetFrom = await this.getContainerById(container.id)
-            if(containerToGetFrom == null)
+            const containerToRemoveFrom = await this.getContainerById(container.id)
+            if(containerToRemoveFrom == null)
                 throw new Error('the container is not in the database')
 
             if( index < 0 || container.foodItems.length <= index )
