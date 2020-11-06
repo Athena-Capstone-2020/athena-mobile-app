@@ -146,8 +146,8 @@ export class GroceryListService extends BaseService{
             if(groceryListToAddTo == null)
                 throw new Error('the grocery list is not in the database')
 
-            groceryListToAddTo.foodItems.push(item.toDocument())
-            return await this.updateGroceryList(groceryListToAddTo)
+            groceryList.foodItems.push(item.toDocument())
+            return await this.updateGroceryList(groceryList)
         }
         catch(err){
             logError(err)

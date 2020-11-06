@@ -210,9 +210,9 @@ test('should update a food item in a grocery list without error', async () => {
 
     await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemOne)
     await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemTwo)
-    const groceryListAfterAddingFood = await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemThree)
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemThree)
     const updatedGroceryList = await groceryListService.getGroceryListById(groceryListCreated.id)
-    expect(updatedGroceryList).toMatchObject(groceryListAfterAddingFood)
+    expect(updatedGroceryList).toMatchObject(groceryListCreated)
 
     const changedExpireDate = new Date()
     const updatedFoodItem = new FoodItem('iChanged', 'iChanged', 'iChanged', 'iChanged', changedExpireDate, {something: 'iAmAdded'})
@@ -231,7 +231,7 @@ test('attempts to update a food item in a nonexistant grocery list and errors', 
 
     let errorCaught = null
     try{
-        const updatedGroceryList = await groceryListService.updateFoodItemInGroceryList(groceryList, 0, foodItem)
+        const attemptToUpdate = await groceryListService.updateFoodItemInGroceryList(groceryList, 0, foodItem)
     }
     catch(err){
         errorCaught = err
@@ -253,9 +253,9 @@ test('attemps to update an item at an index that is out of bounds and errors', a
 
     await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemOne)
     await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemTwo)
-    const groceryListAfterAddingFood = await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemThree)
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemThree)
     const updatedGroceryList = await groceryListService.getGroceryListById(groceryListCreated.id)
-    expect(updatedGroceryList).toMatchObject(groceryListAfterAddingFood)
+    expect(updatedGroceryList).toMatchObject(groceryListCreated)
 
     const changedExpireDate = new Date()
     const updatedFoodItem = new FoodItem('iChanged', 'iChanged', 'iChanged', 'iChanged', changedExpireDate, {something: 'iAmAdded'})
