@@ -13,7 +13,7 @@ export function Provider(props) {
     const groceryListService = new GroceryListService()
     const containerService = new ContainerService()
     const personService = new PersonService()
-    const householdService = new HouseholdService(personService, containerService)
+    const householdService = new HouseholdService(personService, containerService, groceryListService)
     const barcodeService = new BarcodeService(Constants.manifest.extra.BARCODE_LOOKUP_API_KEY)
 
     return (

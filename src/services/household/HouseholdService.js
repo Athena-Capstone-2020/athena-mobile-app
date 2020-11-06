@@ -1,11 +1,13 @@
 import { BaseService } from "../base";
 import { Household } from '../../models/Household'
-import { ContainerService, PersonService } from '../'
+import { ContainerService, PersonService, GroceryListService } from '../'
+import { logError } from "../../logger/Logger";
 
 export class HouseholdService extends BaseService {
     HOUSEHOLD_COLLECTION = 'HOUSEHOLD_COLLECTION'
     HOUSEHOLD_MEMBER_COLLECTION = 'HOUSEHOLD_MEMBER_COLLECTION'
     HOUSEHOLD_CONTAINER_COLLECTION = 'HOUSEHOLD_CONTAINER_COLLECTION'
+    HOUSEHOLD_GROCERY_LIST_COLLECTION = 'HOUSEHOLD_GROCERY_LIST_COLLECTION'
 
     /**
      * @type PersonService
@@ -18,13 +20,20 @@ export class HouseholdService extends BaseService {
     containerService = null
 
     /**
-     * @param {PersonService} personService 
-     * @param {ContainerService} containerService 
+     * @type GroceryListService 
      */
-    constructor(personService, containerService) {
+    groceryListService = null
+
+    /**
+     * @param {PersonService} personService 
+     * @param {ContainerService} containerService
+     * @param {GroceryListService} groceryListService 
+     */
+    constructor(personService, containerService, groceryListService) {
         super()
         this.personService = personService
         this.containerService = containerService
+        this.groceryListService = groceryListService
     }
 
     /**
@@ -134,5 +143,54 @@ export class HouseholdService extends BaseService {
         }
 
         return containers
+    }
+
+    async addGroceryListToHousehold(groceryListId, householdId){
+        try{
+            if( !(await this.groceryListService.getGroceryListById(groceryListId) || !(await this.getHouseholdById(householdId))) )
+                throw new Error(`Cannont create association between groceryList: ${groceryListId} and household: ${householdId}`)
+
+            this.__UseCollection(this.HOUSEHOLD_GROCERY_LIST_COLLECTION)
+            this.__CreateEntity( {groceryListId, householdId} )
+            
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
+    }
+
+    async removeGroceryListFromHousehold(groceryListId, householdId){
+        try{
+            this.__UseCollection(this.HOUSEHOLD_GROCERY_LIST_COLLECTION)
+
+            const results = await this.db.where('householdId', '==', householdId).where('groceryListId', '==', groceryListId).get()
+            for (const result of results.docs) {
+                await result.ref.delete()
+            }
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
+    }
+
+    async getGroceryListsForHousehold(householdId){
+        try{
+            this.__UseCollection(this.HOUSEHOLD_GROCERY_LIST_COLLECTION)
+            const groceryListHouseholdRelations = await this.__SearchForEntity({ householdId })
+
+            const groceryLists = []
+            for(const { groceryListId } of groceryListHouseholdRelations){
+                const groceryListObject = await this.groceryListService.getGroceryListById(groceryListId)
+                groceryLists.push(groceryListObject)
+            }
+
+            return groceryLists
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 }
