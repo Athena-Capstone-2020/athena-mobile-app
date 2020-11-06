@@ -101,6 +101,33 @@ export class GroceryListService extends BaseService{
     }
 
     /**
+     * Updates a grocery list object in the DB
+     * @param {GroceryList} updatedGroceryList the updated grocery list obj
+     * @returns the updated grocery list object if successful
+     * @throws error if grocery list id is null or grocery list is not in the DB
+     */
+    async updateGroceryList(updatedGroceryList){
+        try{
+            this.__UseCollection(this.GROCERY_LIST_COLLECTION)
+
+            const groceryListId = updatedGroceryList.id
+            if( groceryListId == null )
+                throw new Error('the grocery list does not have an id')
+
+            const oldGroceryList = await this.getGroceryListById(groceryListId)
+            if(oldGroceryList == null)
+                throw new Error('the grocery list is not in the database')
+
+            await this.__UpdateById(groceryListId, updatedGroceryList.toDocument())
+            return updatedGroceryList
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
+    }
+
+    /**
      * Adds a food item to grocery list
      * @param {FoodItem} item
      * @param {string} amount

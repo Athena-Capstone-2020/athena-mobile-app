@@ -95,6 +95,54 @@ test('attemps to delete a container by objec that has a null is and errors', asy
     expect(errorCaught).toStrictEqual(new Error('the grocery list does not have an id'))
 })
 
+//updateGroceryList
+test('should create and update a container without error', async () => {
+    const [groceryListService] = setup()
+
+    const newGroceryList = await groceryListService.createGroceryList('nameToBeUpdated', 'someOwnerId')
+    const groceryListCreated = await groceryListService.getGroceryListById(newGroceryList.id)
+    expect(groceryListCreated).toMatchObject(newGroceryList)
+
+    groceryListCreated.name = 'updateGroceryList'
+    const updatedGroceryList = await groceryListService.updateGroceryList(groceryListCreated)
+    expect(updatedGroceryList).toMatchObject(groceryListCreated)
+
+    const groceryListAfterUpdate = await groceryListService.getGroceryListById(newGroceryList.id)
+    expect(groceryListAfterUpdate).toMatchObject(updatedGroceryList)
+})
+
+test('attempts to updated a grocery list that has a null id and errors', async () => {
+    const [groceryListService] = setup()
+
+    const groceryList = new GroceryList('toBeUpdated', 'someOwnerId', [])
+
+    let errorCaught = null
+    try{
+        const updatedGroceryList = await groceryListService.updateGroceryList(groceryList)
+    }
+    catch(err){
+        errorCaught = err
+    }
+
+    expect(errorCaught).toStrictEqual(new Error('the grocery list does not have an id'))
+})
+
+test('attempts to update a container with an id that does not exist and errors', async () => {
+    const [groceryListService] = setup()
+
+    const groceryList = new GroceryList('toBeUpdated', 'someOwnerId', [])
+    groceryList.id = 'I_DO_NOT_EXIST'
+
+    let errorCaught = null
+    try{
+        const updatedGroceryList = await groceryListService.updateGroceryList(groceryList)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('the grocery list is not in the database'))
+})
+
 //addItemToGroceryList
 //updateItemInGroceryList
 //removeItemFromGroceryList
