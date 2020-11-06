@@ -156,12 +156,35 @@ export class GroceryListService extends BaseService{
     }
 
     /**
-     * Updates an item in the grocery list if it exists
-     * @param {FoodItem} item 
-     * @param {string} amount 
+     * Updates an item in the grocery list at the specified index
+     * @param {GroceryList} groceryList the grocery list the item is being updated in
+     * @param {Number} index the location where the food item is located
+     * @param {FoodItem} updatedItem the updated food item
+     * @returns updated grocery list if successful
+     * @throws error if the item is not a food item, if the grocery list is not in the DB, or the index is out of bounds
      */
-    updateItem(item, amount){
-        throw new Error('Not Implemented')
+    async updateFoodItemInGroceryList(groceryList, index, updatedItem){
+        try{
+            this.__UseCollection(this.GROCERY_LIST_COLLECTION)
+
+            if( !(updatedItem instanceof FoodItem) )
+                throw new Error('updatedItem is not of type FoodItem')
+
+            const groceryListToAddTo = await this.getGroceryListById(groceryList.id)
+            if(groceryListToAddTo == null)
+                throw new Error('the grocery list is not in the database')
+
+            if(index < 0 || groceryList.foodItems.length <= index)
+                throw new Error('the index is out of bounds')
+
+            groceryList.foodItems.splice(index, 1, updatedItem.toDocument())
+            return await this.updateGroceryList(groceryList)
+
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
     /**

@@ -196,6 +196,96 @@ test('attempts to add FoodItem to grocery list that does not exist and errors', 
 })
 
 //updateItemInGroceryList
+test('should update a food item in a grocery list without error', async () => {
+    const [groceryListService] = setup()
+
+    const newGroceryList = await groceryListService.createGroceryList('updateFoodItemInGroceryList1')
+    const groceryListCreated = await groceryListService.getGroceryListById(newGroceryList.id)
+    expect(groceryListCreated).toMatchObject(newGroceryList)
+
+    const expireDate = new Date()
+    const foodItemOne = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+    const foodItemTwo = new FoodItem('secondFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+    const foodItemThree = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemOne)
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemTwo)
+    const groceryListAfterAddingFood = await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemThree)
+    const updatedGroceryList = await groceryListService.getGroceryListById(groceryListCreated.id)
+    expect(updatedGroceryList).toMatchObject(groceryListAfterAddingFood)
+
+    const changedExpireDate = new Date()
+    const updatedFoodItem = new FoodItem('iChanged', 'iChanged', 'iChanged', 'iChanged', changedExpireDate, {something: 'iAmAdded'})
+    const updatedFoodItemGroceryList = await groceryListService.updateFoodItemInGroceryList(updatedGroceryList, 0, updatedFoodItem)
+    const finalDBGroceryList = await groceryListService.getGroceryListById(updatedGroceryList.id)
+    expect(finalDBGroceryList).toMatchObject(updatedFoodItemGroceryList)
+
+})
+
+test('attempts to update a food item in a nonexistant grocery list and errors', async () => {
+    const [groceryListService] = setup()
+
+    const groceryList = new GroceryList('name', null)
+    groceryList.id = 'I_DO_NOT_EXIST'
+    const foodItem = new FoodItem('dummy','dummy','dummy')
+
+    let errorCaught = null
+    try{
+        const updatedGroceryList = await groceryListService.updateFoodItemInGroceryList(groceryList, 0, foodItem)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('the grocery list is not in the database'))
+})
+
+test('attemps to update an item at an index that is out of bounds and errors', async () => {
+    const [groceryListService] = setup()
+
+    const newGroceryList = await groceryListService.createGroceryList('updateFoodItemInGroceryList1')
+    const groceryListCreated = await groceryListService.getGroceryListById(newGroceryList.id)
+    expect(groceryListCreated).toMatchObject(newGroceryList)
+
+    const expireDate = new Date()
+    const foodItemOne = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+    const foodItemTwo = new FoodItem('secondFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+    const foodItemThree = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemOne)
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemTwo)
+    const groceryListAfterAddingFood = await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemThree)
+    const updatedGroceryList = await groceryListService.getGroceryListById(groceryListCreated.id)
+    expect(updatedGroceryList).toMatchObject(groceryListAfterAddingFood)
+
+    const changedExpireDate = new Date()
+    const updatedFoodItem = new FoodItem('iChanged', 'iChanged', 'iChanged', 'iChanged', changedExpireDate, {something: 'iAmAdded'})
+    
+    let errorCaught = null
+    try{
+        const attemptToUpdate = await groceryListService.updateFoodItemInGroceryList(updatedGroceryList, -1, updatedFoodItem)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('the index is out of bounds'))
+}) 
+
+test('attempts to updated an item that is not a FoodItem type and errors', async () => {
+    const [groceryListService] = setup()
+    
+    const groceryList = new GroceryList('name', null)
+    const foodItemToAdd = new Object()
+
+    let errorCaught = null
+    try{
+        const updatedGroceryList = await groceryListService.updateFoodItemInGroceryList(groceryList, 0, foodItemToAdd)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('updatedItem is not of type FoodItem'))
+})
+
 //removeItemFromGroceryList
 //getItemFromGroceryList
 
