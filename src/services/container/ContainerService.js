@@ -210,11 +210,11 @@ export class ContainerService extends BaseService{
             if(containerToRemoveFrom == null)
                 throw new Error('the container is not in the database')
 
-            if( index < 0 || containerToRemoveFrom.foodItems.length <= index )
+            if( index < 0 || container.foodItems.length <= index )
                 throw new Error('the index is out of bounds')
 
-            containerToRemoveFrom.foodItems.splice(index, 1)
-            return await this.updateContainer(containerToRemoveFrom)
+                container.foodItems.splice(index, 1)
+            return await this.updateContainer(container)
         }
         catch(err){
             logError(err)
