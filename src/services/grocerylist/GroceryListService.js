@@ -1,6 +1,6 @@
 import { BaseService } from "../base";
 import { logError } from "../../logger/Logger";
-import { GroceryList } from "../../models/GroceryList";
+import { GroceryList, FoodItem } from "../../models";
 
 export class GroceryListService extends BaseService{
 
@@ -129,11 +129,29 @@ export class GroceryListService extends BaseService{
 
     /**
      * Adds a food item to grocery list
-     * @param {FoodItem} item
-     * @param {string} amount
+     * @param {GroceryList} groceryList the grocery list the item is being added to
+     * @param {FoodItem} item the food item being added to the grocery list
+     * @returns updated grocery list if successful, otherwise null
+     * @throws error if item is not FoodItem or if container is not in the DB
      */
-    addItem(item, amount){
-        throw new Error('Not Implemented')
+    async addFoodItemToGroceryList(groceryList, item){
+        try{
+            this.__UseCollection(this.GROCERY_LIST_COLLECTION)
+
+            if( !(item instanceof FoodItem) )
+                throw new Error('item is not of type FoodItem')
+
+            const groceryListToAddTo = await this.getGroceryListById(groceryList.id)
+            if(groceryListToAddTo == null)
+                throw new Error('the grocery list is not in the database')
+
+            groceryListToAddTo.foodItems.push(item.toDocument())
+            return await this.updateGroceryList(groceryListToAddTo)
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
     /**
