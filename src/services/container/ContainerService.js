@@ -155,8 +155,8 @@ export class ContainerService extends BaseService{
             if(containerToAddTo == null)
                 throw new Error('the container is not in the database')
 
-            containerToAddTo.foodItems.push(item.toDocument())
-            return await this.updateContainer(containerToAddTo)
+            container.foodItems.push(item.toDocument())
+            return await this.updateContainer(container)
         }
         catch(err){
             logError(err)
