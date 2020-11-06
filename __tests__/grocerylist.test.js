@@ -343,7 +343,30 @@ test('attempts to delete from grocery list that does not exist and errors', asyn
     expect(errorCaught).toStrictEqual(new Error('the grocery list is not in the database'))
 })
 
-//getItemFromGroceryList
+//getFoodItemArrayFromGroceryList
+test('should create grocery list, add food items, and get the items an array', async () => {
+    const [groceryListService] = setup()
+
+    const newGroceryList = await groceryListService.createGroceryList('removeFoodItemInGroceryList1')
+    const groceryListCreated = await groceryListService.getGroceryListById(newGroceryList.id)
+    expect(groceryListCreated).toMatchObject(newGroceryList)
+
+    const expireDate = new Date()
+    const foodItemOne = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+    const foodItemTwo = new FoodItem('secondFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+    const foodItemThree = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemOne)
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemTwo)
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemThree)
+    const updatedGroceryList = await groceryListService.getGroceryListById(groceryListCreated.id)
+    expect(updatedGroceryList).toMatchObject(groceryListCreated)
+
+    const arrayExpect = [foodItemOne, foodItemTwo, foodItemThree]
+
+    const foodItemArray = await groceryListService.getFoodItemArrayFromGroceryList(groceryListCreated.id)
+    expect(foodItemArray).toStrictEqual(arrayExpect)
+})
 
 /**
  * helper function

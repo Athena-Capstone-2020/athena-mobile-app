@@ -1,6 +1,6 @@
 import { BaseService } from "../base";
 import { logError } from "../../logger/Logger";
-import { GroceryList, FoodItem } from "../../models";
+import { GroceryList, FoodItem, Container } from "../../models";
 
 export class GroceryListService extends BaseService{
 
@@ -10,7 +10,7 @@ export class GroceryListService extends BaseService{
      * Creates a new grocery list and returns the grocery list object with an id
      * @param {string} name name of the grocery list
      * @param {string} ownerId the household/person the container belongs to
-     * @returns the groceryList object that was created
+     * @returns {GroceryList} the groceryList object that was created
      * @throws error if grocery list was not able to be made in DB
      */
     async createGroceryList(name, ownerId = null){
@@ -31,7 +31,7 @@ export class GroceryListService extends BaseService{
     /**
      * Gets a grocery list that has been created. If the grocery list does not exist, a null will be returned
      * @param {string} id id of the grocery list trying to be retrieved
-     * @returns a grocery list object or null if not found
+     * @returns {GroceryList} a grocery list object or null if not found
      * @throws error if id is null 
      */
     async getGroceryListById(id){
@@ -59,7 +59,7 @@ export class GroceryListService extends BaseService{
     /**
      * Attempts to delete a grocery list by using its object id
      * @param {GroceryList} groceryList the grocery list to be deleted
-     * @returns the grocery list obj that was deleted, or null if the grocery list was not found in the DB
+     * @returns {GroceryList} the grocery list obj that was deleted, or null if the grocery list was not found in the DB
      * @throws error if grocery list id is null 
      */
     async deleteGroceryListByObject(groceryList){
@@ -81,7 +81,7 @@ export class GroceryListService extends BaseService{
     /**
      * Attemps to delete a grocery list by its id
      * @param {string} id the id of the grocery list to be deleted
-     * @returns the container obj that was deleted, or null if the container was not found
+     * @returns {GroceryList} the container obj that was deleted, or null if the container was not found
      */
     async deleteGroceryListById(id){
         try{
@@ -103,7 +103,7 @@ export class GroceryListService extends BaseService{
     /**
      * Updates a grocery list object in the DB
      * @param {GroceryList} updatedGroceryList the updated grocery list obj
-     * @returns the updated grocery list object if successful
+     * @returns {GroceryList} the updated grocery list object if successful
      * @throws error if grocery list id is null or grocery list is not in the DB
      */
     async updateGroceryList(updatedGroceryList){
@@ -132,7 +132,7 @@ export class GroceryListService extends BaseService{
      * Adds a food item to grocery list
      * @param {GroceryList} groceryList the grocery list the item is being added to
      * @param {FoodItem} item the food item being added to the grocery list
-     * @returns updated grocery list if successful, otherwise null
+     * @returns {GroceryList} updated grocery list if successful, otherwise null
      * @throws error if item is not FoodItem or if container is not in the DB
      */
     async addFoodItemToGroceryList(groceryList, item){
@@ -160,7 +160,7 @@ export class GroceryListService extends BaseService{
      * @param {GroceryList} groceryList the grocery list the item is being updated in
      * @param {Number} index the location where the food item is located
      * @param {FoodItem} updatedItem the updated food item
-     * @returns updated grocery list if successful
+     * @returns {GroceryList} updated grocery list if successful
      * @throws error if the item is not a food item, if the grocery list is not in the DB, or the index is out of bounds
      */
     async updateFoodItemInGroceryList(groceryList, index, updatedItem){
@@ -191,7 +191,7 @@ export class GroceryListService extends BaseService{
      * Remove an item at the index in the specified grocery list
      * @param {GroceryList} groceryList the grocery list a food item is being removed from
      * @param {Number} index the index at which the food item is located
-     * @returns updated container if successful
+     * @returns {GroceryList} updated container if successful
      * @throws error if the grocery list is not in the DB or he index is out of bounds 
      */
     async removeFoodItemFromContainer(groceryList, index){
@@ -215,12 +215,31 @@ export class GroceryListService extends BaseService{
     }
 
     /**
-     * Gets an item from the grocery list if it exists
-     * @param {FoodItem} item 
-     * @returns a food item if found, otherwise null
+     * Gets all the food items from a grocery list
+     * @param {string} id the id of the grocery list to get the food items from
+     * @returns {FoodItem[]} an array of FoodItems that are currently in the grocery list
      */
-    getItem(item){
-        throw new Error('Not Implemented')
+    async getFoodItemArrayFromGroceryList(id){
+        try{
+            this.__UseCollection(this.GROCERY_LIST_COLLECTION)
+
+            const groceryList = await this.getGroceryListById(id)
+            if( groceryList == null)
+                throw new Error('the grocery list is not in the database')
+
+            const foodItemAry = [];
+
+            groceryList.foodItems.forEach(obj => {
+                const item = new FoodItem(obj.name, obj.photoURI, obj.quantity, obj.description, new Date(obj.expireDate), obj.nutritionData)
+                foodItemAry.push(item)
+            })            
+
+            return foodItemAry
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
     /**
