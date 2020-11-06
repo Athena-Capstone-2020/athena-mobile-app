@@ -287,6 +287,62 @@ test('attempts to updated an item that is not a FoodItem type and errors', async
 })
 
 //removeItemFromGroceryList
+test('should delete a food item from container without error', async () => {
+    const [groceryListService] = setup()
+
+    const newGroceryList = await groceryListService.createGroceryList('removeFoodItemInGroceryList1')
+    const groceryListCreated = await groceryListService.getGroceryListById(newGroceryList.id)
+    expect(groceryListCreated).toMatchObject(newGroceryList)
+
+    const expireDate = new Date()
+    const foodItemOne = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+    const foodItemTwo = new FoodItem('secondFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+    const foodItemThree = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemOne)
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemTwo)
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemThree)
+    const updatedGroceryList = await groceryListService.getGroceryListById(groceryListCreated.id)
+    expect(updatedGroceryList).toMatchObject(groceryListCreated)
+
+    const deleteGroceryList = await groceryListService.removeFoodItemFromContainer(updatedGroceryList, 1)
+    const groceryListAfterDelete = await groceryListService.getGroceryListById(deleteGroceryList.id)
+    expect(groceryListAfterDelete).toMatchObject(deleteGroceryList)
+})
+
+test('attempts to delete a food item from index out of bounds and errors', async () => {
+    const [groceryListService] = setup()
+
+    const newGroceryList = await groceryListService.createGroceryList('removeFoodItemInGroceryList1')
+    const groceryListCreated = await groceryListService.getGroceryListById(newGroceryList.id)
+    expect(groceryListCreated).toMatchObject(newGroceryList)
+
+    let errorCaught = null
+    try{
+        const attemptToUpdate = await groceryListService.removeFoodItemFromContainer(groceryListCreated, -1)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('the index is out of bounds'))
+})
+
+test('attempts to delete from grocery list that does not exist and errors', async () => {
+    const [groceryListService] = setup()
+
+    const groceryList = new GroceryList('someName', null)
+    groceryList.id = 'I_DO_NOT_EXIST'
+
+    let errorCaught = null
+    try{
+        const attemptToUpdate = await groceryListService.removeFoodItemFromContainer(groceryList, 0)
+    }
+    catch(err){
+        errorCaught = err
+    }
+    expect(errorCaught).toStrictEqual(new Error('the grocery list is not in the database'))
+})
+
 //getItemFromGroceryList
 
 /**

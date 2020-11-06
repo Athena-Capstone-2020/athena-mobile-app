@@ -188,11 +188,30 @@ export class GroceryListService extends BaseService{
     }
 
     /**
-     * Remove an item from the grocery list if it exists
-     * @param {FoodItem} item 
+     * Remove an item at the index in the specified grocery list
+     * @param {GroceryList} groceryList the grocery list a food item is being removed from
+     * @param {Number} index the index at which the food item is located
+     * @returns updated container if successful
+     * @throws error if the grocery list is not in the DB or he index is out of bounds 
      */
-    removeItem(item){
-        throw new Error('Not Implemented')
+    async removeFoodItemFromContainer(groceryList, index){
+        try{
+            this.__UseCollection(this.GROCERY_LIST_COLLECTION)
+
+            const groceryListToRemoveFrom = await this.getGroceryListById(groceryList.id)
+            if(groceryListToRemoveFrom == null)
+                throw new Error('the grocery list is not in the database')
+
+            if( index < 0 || groceryList.foodItems.length <= index)
+                throw new Error('the index is out of bounds')
+
+            groceryList.foodItems.splice(index, 1)
+            return await this.updateGroceryList(groceryList)
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
     /**
