@@ -368,6 +368,42 @@ test('should create grocery list, add food items, and get the items an array', a
     expect(foodItemArray).toStrictEqual(arrayExpect)
 })
 
+//searchItemInGroceryList
+test('should create a grocery list, add food items and perform a search', async () => {
+    const [groceryListService] = setup()
+
+    const newGroceryList = await groceryListService.createGroceryList('removeFoodItemInGroceryList1')
+    const groceryListCreated = await groceryListService.getGroceryListById(newGroceryList.id)
+    expect(groceryListCreated).toMatchObject(newGroceryList)
+
+    const expireDate = new Date()
+    const foodItemOne = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+    const foodItemTwo = new FoodItem('secondFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+    const foodItemThree = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
+
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemOne)
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemTwo)
+    await groceryListService.addFoodItemToGroceryList(groceryListCreated, foodItemThree)
+    const updatedGroceryList = await groceryListService.getGroceryListById(groceryListCreated.id)
+    expect(updatedGroceryList).toMatchObject(groceryListCreated)
+
+    const aryTest1 = [foodItemOne, foodItemThree]
+    const result1 = await groceryListService.searchItemInGroceryList(updatedGroceryList.id, 'ir')
+    expect(result1).toStrictEqual(aryTest1)
+
+    const aryTest2 = [foodItemOne, foodItemTwo, foodItemThree]
+    const result2 = await groceryListService.searchItemInGroceryList(updatedGroceryList.id, 'food')
+    expect(result2).toStrictEqual(aryTest2)
+
+    const aryTest3 = []
+    const result3 = await groceryListService.searchItemInGroceryList(updatedGroceryList.id, 'a')
+    expect(result3).toStrictEqual(aryTest3)
+    
+    const aryTest4 = [foodItemOne, foodItemTwo, foodItemThree]
+    const result4 = await groceryListService.searchItemInGroceryList(updatedGroceryList.id, '')
+    expect(result4).toStrictEqual(aryTest4)
+})
+
 /**
  * helper function
  * @returns {[GroceryListService]}

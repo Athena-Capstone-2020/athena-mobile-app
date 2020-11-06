@@ -245,11 +245,29 @@ export class GroceryListService extends BaseService{
     /**
      * Finds and returns a list of food items who name
      *      matches the search
-     * @param {String} itemName
+     * @param {string} id the id of the grocery list being searched
+     * @param {string} itemName the name of the item being search for
      * @returns a list of food items 
      */
-    searchItem(itemName){
-        throw new Error('Not Implemented')
+    async searchItemInGroceryList(id, itemName){
+        try{
+            this.__UseCollection(this.GROCERY_LIST_COLLECTION)
+            const foodItemAry = await this.getFoodItemArrayFromGroceryList(id)
+
+            const regexString = "".concat('.*(',itemName.toLowerCase(), ').*')
+            let regex = RegExp(regexString)
+
+            const result = []
+            foodItemAry.forEach(foodItem => {
+                if(regex.test(foodItem.name.toLowerCase()))
+                    result.push(foodItem)
+            })
+            return result
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
     }
 
 }
