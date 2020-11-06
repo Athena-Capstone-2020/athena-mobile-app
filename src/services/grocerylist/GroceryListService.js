@@ -13,7 +13,7 @@ export class GroceryListService extends BaseService{
      * @returns the groceryList object that was created
      * @throws error if grocery list was not able to be made in DB
      */
-    async createGroceryList(name, ownerId){
+    async createGroceryList(name, ownerId = null){
         try{
             this.__UseCollection(this.GROCERY_LIST_COLLECTION)
             const groceryList = new GroceryList(name, ownerId)
