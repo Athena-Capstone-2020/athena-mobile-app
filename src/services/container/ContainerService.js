@@ -237,7 +237,7 @@ export class ContainerService extends BaseService{
             if( !(item instanceof FoodItem) )
                 throw new Error('item is not of type FoodItem')
 
-            const foodItemAry = await this.getFoodItemArrayFromContainedWithId(container.id)
+            const foodItemAry = await this.getFoodItemArrayFromContainer(container.id)
             const itemJSONString = JSON.stringify(item)
 
             let result = false
