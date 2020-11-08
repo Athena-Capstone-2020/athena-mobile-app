@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
 
 const UncheckedIcon = () => {
     return (
-        //used to be 23
         <Svg width={30} height={30} viewBox="0 0 23 23">
         <Path d="M7.667 0h7.667A7.839 7.839 0 0123 8v7a7.839 7.839 0 01-7.667 8H7.667A7.839 7.839 0 010 15V8a7.839 7.839 0 017.667-8z" />
         <Path
@@ -44,7 +43,6 @@ const UncheckedIcon = () => {
 
 const CheckedIcon = () => {
     return (
-        //used to be 24
         <Svg width={30} height={30} viewBox="0 0 24 24">
         <Path
           data-name="Tick Square"
@@ -64,7 +62,7 @@ const CheckedIcon = () => {
 const CheckBoxButton = ({ style }) => {
     const[checked, setChecked] = useState(false)
     return (
-        <Box style={[styles.shadow, style ? style : ""]}>
+        <Box style={[styles.shadow, style ? style : {}]}>
             <RectButton
                 onPress={() => {setChecked(!checked)}}
             >

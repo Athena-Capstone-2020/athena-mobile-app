@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     groceryList: {
         marginTop: 17,
         alignSelf: "flex-start",
-        marginLeft: 15 //used to be 39
+        marginLeft: 15
      },
     item: {
         marginLeft: 16
@@ -38,7 +38,7 @@ const listItems = ["Hot Dogs", "Bananas", "Red Onions", "Bacon"];
 
 const GroceryListItem = ({ style }) => {
     return (
-        <Box style={[styles.groceryList, style ? style : ""]}>
+        <Box style={[styles.groceryList, style ? style : {}]}>
             {listItems.map((item, key) => {
                 return (
                     <Box style={styles.container} flexDirection="row" key={key}>
