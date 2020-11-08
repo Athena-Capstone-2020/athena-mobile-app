@@ -254,6 +254,8 @@ export class GroceryListService extends BaseService{
             this.__UseCollection(this.GROCERY_LIST_COLLECTION)
             const foodItemAry = await this.getFoodItemArrayFromGroceryList(id)
 
+            //Regex searching for any part of the search string to match the
+            //  food item name in lowercase
             const regexString = "".concat('.*(',itemName.toLowerCase(), ').*')
             let regex = RegExp(regexString)
 
