@@ -1,23 +1,31 @@
 import {Document} from './Document'
+import { FoodItem } from './FoodItem'
 
 export class GroceryList extends Document{
 
     /**
      * @param {string} name 
      * @param {string} ownerId 
-     * @param {List< Map<FoodItem, string> >} items 
+     * @param {Array<Object>} foodItems 
+     * @param {Date} dateCreated 
+     * @param {Date} lastModified
      */
-    constructor(name, ownerId, items){
+    constructor(name, ownerId, foodItems = [], dateCreated = new Date(), lastModified = new Date()){
+        super()
         this.name = name
         this.ownerId = ownerId
-        this.items = items
+        this.foodItems = foodItems
+        this.dateCreated = dateCreated
+        this.lastModified = lastModified
     }
 
     toDocument(){
         return {
             name: this.name,
             ownerId: this.ownerId,
-            items: this.items
+            foodItems: this.foodItems,
+            dateCreated: this.dateCreated.toISOString(),
+            lastModified: this.lastModified.toISOString()
         }
     }
 

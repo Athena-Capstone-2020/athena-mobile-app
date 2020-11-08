@@ -183,11 +183,8 @@ export class ContainerService extends BaseService{
             if(containerToAddTo == null)
                 throw new Error('the container is not in the database')
 
-            if(index < 0 || container.foodItems.length < index)
+            if(index < 0 || container.foodItems.length <= index)
                  throw new Error('the index is out of bounds')
-
-            if(index == container.foodItems.length)
-                return await this.addFoodItemToContainer(container, updatedItem)
 
             container.foodItems.splice(index, 1, updatedItem.toDocument())
             return await this.updateContainer(container)
@@ -213,11 +210,11 @@ export class ContainerService extends BaseService{
             if(containerToRemoveFrom == null)
                 throw new Error('the container is not in the database')
 
-            if( index < 0 || containerToRemoveFrom.foodItems.length <= index )
+            if( index < 0 || container.foodItems.length <= index )
                 throw new Error('the index is out of bounds')
 
-            containerToRemoveFrom.foodItems.splice(index, 1)
-            return await this.updateContainer(containerToRemoveFrom)
+            container.foodItems.splice(index, 1)
+            return await this.updateContainer(container)
         }
         catch(err){
             logError(err)
@@ -240,7 +237,7 @@ export class ContainerService extends BaseService{
             if( !(item instanceof FoodItem) )
                 throw new Error('item is not of type FoodItem')
 
-            const foodItemAry = await this.getFoodItemArrayFromContainedWithId(container.id)
+            const foodItemAry = await this.getFoodItemArrayFromContainer(container.id)
             const itemJSONString = JSON.stringify(item)
 
             let result = false
@@ -264,7 +261,7 @@ export class ContainerService extends BaseService{
      * @param {string} id id of the container to get the food items from
      * @returns {FoodItem[]} an array of FoodItems that are currently in the container
      */
-    async getFoodItemArrayFromContainedWithId(id){
+    async getFoodItemArrayFromContainer(id){
         try{
             this.__UseCollection(this.CONTAINER_COLLECTION)
 

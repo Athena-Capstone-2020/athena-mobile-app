@@ -325,20 +325,6 @@ test('attempts to update an item that is not a FoodItem type and errors', async 
     expect(errorCaught).toStrictEqual(new Error('updatedItem is not of type FoodItem'))
 })
 
-test('attempts to update food item at index = ary.length and adds it to the end of the array', async () => {
-    const [containerService] = setup()
-
-    const newContainer = await containerService.createContainer('updateFoodItemInContainer3')
-    const containerCreated = await containerService.getContainerById(newContainer.id)
-    expect(containerCreated).toMatchObject(newContainer)
-
-    const expireDate = new Date()
-    const foodItemToAdd = new FoodItem('someFoodItemName', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
-    const updatedContainer = await containerService.updateFoodItemInContainer(containerCreated, 0, foodItemToAdd)
-    const containerAfterUpdate = await containerService.getContainerById(newContainer.id)
-    expect(containerAfterUpdate).toMatchObject(updatedContainer)
-})
-
 //removeItemFromContainer
 test('should delete the food item from container without error', async () => {
     const [containerService] = setup()
@@ -451,7 +437,7 @@ test('should create a container, add food items, and get the items an array', as
 
     const arrayExpect = [foodItemOne, foodItemTwo, foodItemThree]
 
-    const foodItemArray = await containerService.getFoodItemArrayFromContainedWithId(containerCreated.id);
+    const foodItemArray = await containerService.getFoodItemArrayFromContainer(containerCreated.id);
     expect(arrayExpect).toStrictEqual(foodItemArray)
 })
 
