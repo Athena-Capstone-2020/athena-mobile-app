@@ -1,5 +1,5 @@
 const { Person } = require("../src/models/Person")
-const { PersonService, HouseholdService, ContainerService } = require("../src/services")
+const { PersonService, HouseholdService, ContainerService, GroceryListService } = require("../src/services")
 const { initFirebase } = require('../src/firebase/config')
 const uuid = require('uuid')
 
@@ -79,7 +79,7 @@ test('should be able to add a container to a household', async () => {
     const [_, householdService, containerService] = setup()
 
     const householdId = await householdService.createHousehold('Household 1')
-    const { id: containerId } = await containerService.createContainer('Fridge', 'Household 1')
+    const { id: containerId } = await containerService.createContainer('Fridge')
 
     await householdService.addContainerToHousehold(containerId, householdId)
 
@@ -88,14 +88,35 @@ test('should be able to add a container to a household', async () => {
     expect(containersForHousehold.length).toBe(1)
 })
 
+test('should be able to add and remove a grocery list to a household', async () => {
+    const [_, householdService, __, groceryListService] = setup()
+
+    const householdId = await householdService.createHousehold('Household 1')
+    const {id: groceryListId1} = await groceryListService.createGroceryList('Monday Shopping')
+    const {id: groceryListId2} = await groceryListService.createGroceryList('Tuesday Shopping')
+
+    await householdService.addGroceryListToHousehold(groceryListId1, householdId)
+    await householdService.addGroceryListToHousehold(groceryListId2, householdId)
+
+    const groceryListForHousehold = await householdService.getGroceryListsForHousehold(householdId)
+    expect(groceryListForHousehold.length).toBe(2)
+
+    await householdService.removeGroceryListFromHousehold(groceryListId1, householdId)
+    const groceryListForHouseholdAfterRemoval = await householdService.getGroceryListsForHousehold(householdId)
+    expect(groceryListForHouseholdAfterRemoval.length).toBe(1)
+
+
+})
+
 /**
- * @returns {[PersonService, HouseholdService, ContainerService]}
+ * @returns {[PersonService, HouseholdService, ContainerService, GroceryListService]}
  */
 function setup() {
     initFirebase()
     const personService = new PersonService()
     const containerService = new ContainerService()
-    const householdService = new HouseholdService(personService, containerService)
+    const groceryListService = new GroceryListService()
+    const householdService = new HouseholdService(personService, containerService, groceryListService)
 
-    return [personService, householdService, containerService]
+    return [personService, householdService, containerService, groceryListService]
 }
