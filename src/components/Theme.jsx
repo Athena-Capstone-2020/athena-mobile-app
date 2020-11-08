@@ -104,6 +104,16 @@ const theme = createTheme({
       fontFamily: "SFProDisplay-Medium",
       color: "black"
     },
+    groceryListName: {
+      fontSize: 32,
+      fontFamily: "SFProDisplay-Semibold",
+      color: "black"
+    },
+    groceryListItemDetails: {
+      fontSize: 15,
+      fontFamily: "SFProDisplay-Regular",
+      color: "grey"
+    }
   },
   breakpoints: {
     phone: 0,
