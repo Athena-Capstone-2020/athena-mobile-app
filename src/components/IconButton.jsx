@@ -101,6 +101,21 @@ const BackArrowIcon = () => {
     )
 }
 
+const AddItemIcon = () => {
+    return (
+        <Box style={styles.barcode}>
+            <Svg width={133} height={133} viewBox="0 0 133 133">
+            <Path
+            d="M68.25 53.999h7.266a2.118 2.118 0 002.123-2.072 2.081 2.081 0 00-2.123-2.048H68.25v-6.957a2.125 2.125 0 00-4.247 0v6.957h-7.24a2.263 2.263 0 00-1.509.592 2.1 2.1 0 00-.615 1.456 2.118 2.118 0 002.123 2.072h7.24v6.982a2.125 2.125 0 004.247 0z"
+            fill="#fe724c"
+            stroke="#fe724c"
+            fillRule="evenodd"
+            />
+        </Svg>
+      </Box>
+    )
+}
+
 const IconButton = ({ style, onPress, variant }) => {
 
     return (
@@ -112,6 +127,7 @@ const IconButton = ({ style, onPress, variant }) => {
                 {variant === 'barcode' && <BarcodeIcon />}
                 {variant === 'backButton' && <BackArrowIcon />}
                 {variant === 'downButton' && <DownArrowIcon />}
+                {variant === 'additem' && <AddItemIcon />}
             </RectButton>
         </Box>
     )
