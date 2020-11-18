@@ -139,7 +139,7 @@ export class HouseholdService extends BaseService {
 
         for (const { containerId } of containerHouseholdRelations) {
             const containerObject = await this.containerService.getContainerById(containerId)
-            containers.push(containerObject)
+            if (!!containerObject) containers.push(containerObject)
         }
 
         return containers
