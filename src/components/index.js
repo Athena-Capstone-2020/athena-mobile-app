@@ -1,4 +1,5 @@
 export { Text, Box, useTheme, makeStyles } from "./Theme"
+export * from './Card'
 export { default as LoadAssets } from "./LoadAssets"
 export { default as Button } from "./Button"
 export { default as ButtonAlt } from "./ButtonAlt"

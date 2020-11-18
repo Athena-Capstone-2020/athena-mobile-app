@@ -1,13 +1,14 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTheme } from '../../components/Theme';
 import { Icon } from '../../components/index'
 import AddItem from '../additem/AddItem';
 import ContainerList from '../container/ContainerList';
 import GroceryList from '../GroceryList';
-import Home from '../Home';
+import { Home } from '../home';
 import User from '../User';
+import { useUserContext } from '../../global/user-context'
 
 const Navbar = () => {
 
