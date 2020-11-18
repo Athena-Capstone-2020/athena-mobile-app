@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 
 const UncheckedIcon = () => {
     return (
-        <Svg width={30} height={30} viewBox="0 0 23 23">
+        <Svg width={25} height={25} viewBox="0 0 23 23">
         <Path d="M7.667 0h7.667A7.839 7.839 0 0123 8v7a7.839 7.839 0 01-7.667 8H7.667A7.839 7.839 0 010 15V8a7.839 7.839 0 017.667-8z" />
         <Path
           d="M7.667 1C3.99 1 1 4.14 1 8v7c0 3.86 2.99 7 6.667 7h7.666C19.01 22 22 18.86 22 15V8c0-3.86-2.99-7-6.667-7H7.667m0-1h7.666C19.568 0 23 3.582 23 8v7c0 4.418-3.432 8-7.667 8H7.667C3.432 23 0 19.418 0 15V8c0-4.418 3.432-8 7.667-8z"
@@ -43,7 +43,7 @@ const UncheckedIcon = () => {
 
 const CheckedIcon = () => {
     return (
-        <Svg width={30} height={30} viewBox="0 0 24 24">
+        <Svg width={25} height={25} viewBox="0 0 24 24">
         <Path
           data-name="Tick Square"
           d="M16.991.5h-9.97C3.122.5.5 3.237.5 7.308v9.4c0 4.055 2.622 6.792 6.521 6.792h9.97c3.898 0 6.509-2.737 6.509-6.8V7.3c0-4.063-2.611-6.8-6.509-6.8"

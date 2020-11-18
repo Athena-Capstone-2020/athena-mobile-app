@@ -11,11 +11,9 @@ const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     groceryList: {
         paddingTop: 17,
-        alignSelf: "flex-start",
-        paddingLeft: 15
+        alignSelf: "flex-start"
      },
     item: {
-        paddingTop: 2,
         paddingLeft: 8
     },
     container: {
@@ -23,11 +21,10 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
     hamburger: {
-        paddingTop: 8,
-        paddingRight: 30
+        paddingTop: 5
     },
     addItem: {
-       paddingLeft: 18,
+       paddingLeft: 40,
        paddingTop: 350
     }
 });
