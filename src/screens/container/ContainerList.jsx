@@ -36,14 +36,17 @@ const ContainerListView = () => {
             }
 
             // Create a container
-            const newContainer = await containerService.createContainer(containerName, 'ReyesHousehold', icon)
+            //TODO: Do sometype of name validation
+            if(containerName !== ''){
+                const newContainer = await containerService.createContainer(containerName, icon)
             
             // Add the created container to the household
-            await householdService.addContainerToHousehold(newContainer.id, 'ReyesHousehold')
+                await householdService.addContainerToHousehold(newContainer.id, 'ReyesHousehold')
 
-            setContainers((prevContainers) => {
-                return [...prevContainers, newContainer]
-            })
+                setContainers((prevContainers) => {
+                    return [...prevContainers, newContainer]
+                })
+            }
         } catch (err) {
             console.error(err)
             logError(err)
