@@ -57,8 +57,18 @@ const theme = createTheme({
       background: "white",
       text: "primary"
     },
+    superHeader: {
+      fontSize: 36,
+      fontFamily: "SFProDisplay-Medium",
+      textAlign: "center",
+    },
     header: {
-      fontSize: 18,
+      fontSize: 24,
+      fontFamily: "SFProDisplay-Medium",
+      textAlign: "center",
+    },
+    body: {
+      fontSize: 20,
       fontFamily: "SFProDisplay-Medium",
       textAlign: "center",
     },
@@ -98,6 +108,12 @@ const theme = createTheme({
       fontSize: 36.41,
       fontFamily: "SFProDisplay-Semibold",
       color: "black"
+    },
+    subtitleText: {
+      fontSize: 20,
+      fontFamily: "SFProDisplay-Semibold",
+      color: "black",
+      opacity: 0.7
     },
     itemDescriptionTitle: {
       fontSize: 31,
