@@ -109,10 +109,10 @@ const theme = createTheme({
       fontFamily: "SFProDisplay-Semibold",
       color: "black"
     },
-    groceryListItemDetails: {
-      fontSize: 15,
+    groceryListItem: {
+      fontSize: 20,
       fontFamily: "SFProDisplay-Regular",
-      color: "grey"
+      color: "black"
     }
   },
   breakpoints: {

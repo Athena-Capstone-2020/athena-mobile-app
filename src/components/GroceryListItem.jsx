@@ -10,27 +10,39 @@ const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     groceryList: {
-        marginTop: 17,
+        paddingTop: 17,
         alignSelf: "flex-start",
-        marginLeft: 15
+        paddingLeft: 15
      },
     item: {
-        marginLeft: 16
+        paddingTop: 2,
+        paddingLeft: 8
     },
     container: {
-        width: windowWidth - 64
+        width: windowWidth - 64,
+        justifyContent: "space-between"
+    },
+    hamburger: {
+        paddingTop: 8,
+        paddingRight: 30
+    },
+    addItem: {
+       paddingLeft: 18,
+       paddingTop: 350
     }
 });
 
-const HamburgerIcon = () => {
+const HamburgerIcon = (props) => {
     return (
-        <Svg width={21.546} height={15} viewBox="0 0 21.546 15">
-      <G fill="none" stroke="#d0ced5" strokeLinecap="round" strokeWidth={3}>
-        <Path data-name="Path 52" d="M1.5 1.5h18.546" />
-        <Path data-name="Path 53" d="M1.5 7.5h18.546" />
-        <Path data-name="Path 54" d="M1.5 13.5h18.546" />
-      </G>
-    </Svg>
+        <Box style={props.style}>
+            <Svg width={21.546} height={15} viewBox="0 0 21.546 15">
+            <G fill="none" stroke="#d0ced5" strokeLinecap="round" strokeWidth={3}>
+                <Path data-name="Path 52" d="M1.5 1.5h18.546" />
+                <Path data-name="Path 53" d="M1.5 7.5h18.546" />
+                <Path data-name="Path 54" d="M1.5 13.5h18.546" />
+            </G>
+            </Svg>
+        </Box>
     )
 }
 
@@ -42,16 +54,17 @@ const GroceryListItem = ({ style }) => {
             {listItems.map((item, key) => {
                 return (
                     <Box style={styles.container} flexDirection="row" key={key}>
-                        <CheckBoxButton />
-                        <Box flexDirection="column">
-                            <Text variant="recentSearches" style={styles.item}>{item}</Text>
-                            <Text variant="groceryListItemDetails" style={styles.item}>Quantity: 2</Text>
+                        <Box flexDirection="row">
+                            <CheckBoxButton style={styles.checkBox}/>
+                            <Box flexDirection="column">
+                                <Text variant="groceryListItem" style={styles.item}>{item}</Text>
+                            </Box>
                         </Box>
-                        <HamburgerIcon />
+                        <HamburgerIcon style={styles.hamburger}/>
                     </Box>
                 )
             })}
-            <IconButton variant="addItem"></IconButton>
+            <IconButton variant="addItem" style={styles.addItem}></IconButton>
         </Box>
     )
     
