@@ -54,7 +54,7 @@ const SearchIcon = () => {
     )
 }
 
-const Search = ({ placeholder, style }) => {
+const Search = ({ placeholder, style, onSubmitEditing, value, onChange }) => {
 
     const theme = useTheme()
     const variant = "search"
@@ -76,12 +76,14 @@ const Search = ({ placeholder, style }) => {
             <Box style={[styles.searchBox, { backgroundColor, borderColor }]}>
                 <TextInput
                     variant="search"
-                    style={[styles.input, { color, fontFamily, fontSize}]}
+                    style={[styles.input, { color, fontFamily, fontSize }]}
                     placeholder={placeholder}
                     autoCapitalize="none"
-                    returnKeyType="next"
-                    returnKeyLabel="next"
-
+                    returnKeyType="search"
+                    returnKeyLabel="search"
+                    onSubmitEditing={onSubmitEditing ? onSubmitEditing : ""}
+                    value={value}
+                    onChange={onChange}
                 />
             </Box>
             <Box style={styles.searchIcon}>
