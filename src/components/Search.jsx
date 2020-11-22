@@ -1,6 +1,6 @@
 import React from 'react'
-import { Box, useTheme, Text } from './index'
-import { TextInput, StyleSheet } from "react-native";
+import { Box, useTheme } from './index'
+import { TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard } from "react-native";
 import Svg, { G, Path, Circle } from "react-native-svg"
 
 const styles = StyleSheet.create({
@@ -54,6 +54,12 @@ const SearchIcon = () => {
     )
 }
 
+const DismissKeyboard = ({ children }) => {
+    return (
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
+    )
+}
+
 const Search = ({ placeholder, style, onSubmitEditing, value, onChange }) => {
 
     const theme = useTheme()
@@ -72,24 +78,27 @@ const Search = ({ placeholder, style, onSubmitEditing, value, onChange }) => {
     const fontSize = theme.textVariants[variant].fontSize;
 
     return (
-        <Box style={style ? style : ""}>
-            <Box style={[styles.searchBox, { backgroundColor, borderColor }]}>
-                <TextInput
-                    variant="search"
-                    style={[styles.input, { color, fontFamily, fontSize }]}
-                    placeholder={placeholder}
-                    autoCapitalize="none"
-                    returnKeyType="search"
-                    returnKeyLabel="search"
-                    onSubmitEditing={onSubmitEditing ? onSubmitEditing : ""}
-                    value={value}
-                    onChange={onChange}
-                />
+        <DismissKeyboard>
+            <Box style={style ? style : ""}>
+                <Box style={[styles.searchBox, { backgroundColor, borderColor }]}>
+                    <TextInput
+                        variant="search"
+                        style={[styles.input, { color, fontFamily, fontSize }]}
+                        placeholder={placeholder}
+                        autoCapitalize="none"
+                        returnKeyType="search"
+                        returnKeyLabel="search"
+                        onSubmitEditing={onSubmitEditing ? onSubmitEditing : ""}
+                        value={value}
+                        onChange={onChange}
+                        showSoftInputOnFocus={true}
+                    />
+                </Box>
+                <Box style={styles.searchIcon}>
+                    <SearchIcon />
+                </Box>
             </Box>
-            <Box style={styles.searchIcon}>
-                <SearchIcon />
-            </Box>
-        </Box>
+        </DismissKeyboard>
     )
 }
 

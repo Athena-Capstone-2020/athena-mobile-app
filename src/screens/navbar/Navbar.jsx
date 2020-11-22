@@ -7,6 +7,7 @@ import AddItem from '../additem/AddItem';
 import ContainerList from '../container/ContainerList';
 import GroceryList from '../GroceryList';
 import Home from '../Home';
+import Onboarding from '../onboarding/Onboarding'
 import User from '../User';
 
 const Navbar = () => {
@@ -16,7 +17,7 @@ const Navbar = () => {
     const { primary, grey } = theme.colors;
 
     return (
-        <NavigationContainer 
+        <NavigationContainer
             independent={true}
         >
             <Tab.Navigator
@@ -32,7 +33,7 @@ const Navbar = () => {
                     }
                 }}
             >
-                <Tab.Screen name="Home" component={Home} />
+                <Tab.Screen name="Home" component={Onboarding} />
                 <Tab.Screen name="ContainerList" component={ContainerList} />
                 <Tab.Screen name="AddItem" component={AddItem} />
                 <Tab.Screen name="GroceryList" component={GroceryList} />

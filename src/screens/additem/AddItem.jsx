@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { StyleSheet, Dimensions, FlatList, ListItem } from 'react-native';
-import { Box, Text, Search, Button } from '../../components/index'
-import { IconButton } from '../../components/index'
-import Svg, { Path, G, parse } from "react-native-svg"
-import BarcodeScannerStack from './BarcodeScannerStack'
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createStackNavigator } from '@react-navigation/stack';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, FlatList, SafeAreaView, StyleSheet } from 'react-native';
+import Svg, { G, Path } from "react-native-svg";
+import { Box, Button, IconButton, Search, Text } from '../../components/index';
+import BarcodeManual from './BarcodeManual';
+import { default as BarcodeScanner, default as BarcodeScannerStack } from './BarcodeScanner';
+import ItemDescription from './ItemDescription';
 
 const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     screenName: {
-        marginTop: 10,
+        // marginTop: 10,
         marginBottom: 12,
     },
     searchAndButton: {
@@ -77,8 +77,6 @@ const XIcon = () => {
     )
 }
 
-const RootStack = createStackNavigator();
-
 const AddItemSearch = ({ navigation }) => {
 
     const [searches, setSearches] = useState([])
@@ -142,54 +140,60 @@ const AddItemSearch = ({ navigation }) => {
     };
 
     return (
-        <Box style={styles.container} marginTop="xl" alignItems="center">
-            <Text variant="header" style={styles.screenName}>Add Item</Text>
-            <Box style={styles.searchAndButton}>
-                <Search
-                    style={styles.search}
-                    placeholder="Search Food Items"
-                    onSubmitEditing={e => submitHandler(e.nativeEvent.text)}
-                    value={text}
-                    onChange={text => setText(text)}
-                />
-                <IconButton
-                    style={styles.barcode}
-                    variant="barcode"
-                    onPress={() => navigation.navigate('BarcodeScannerStack')}
-                />
-            </Box>
-            {recents ?
-                <Box>
-                    <Box flexDirection="row" justifyContent="space-between" style={{ width: windowWidth - 64 }}>
-                        <Text variant="recentSearchesTitle" style={styles.recentSearchesTitle}>Recent Searches</Text>
-                        <Button style={{ width: 50, height: 30, borderRadius: 15, marginTop: 23 }} label="clear" onPress={clearStorage} />
-                    </Box>
-                    <Box style={styles.recentSearches}>
-                        <FlatList
-                            data={searches}
-                            renderItem={({ item }) => {
-                                return (
-                                    <Box flexDirection="row" key={item.key} marginTop="s">
-                                        <ClockIcon />
-                                        <Text variant="recentSearches" style={styles.item}>{item.text}</Text>
-                                    </Box>)
-                            }}
-                        />
-                    </Box>
+        <SafeAreaView>
+            <Box style={styles.container} marginTop="xl" alignItems="center">
+                <Text variant="header" style={styles.screenName}>Add Item</Text>
+                <Box style={styles.searchAndButton}>
+                    <Search
+                        style={styles.search}
+                        placeholder="Search Food Items"
+                        onSubmitEditing={e => submitHandler(e.nativeEvent.text)}
+                        value={text}
+                        onChange={text => setText(text)}
+                    />
+                    <IconButton
+                        style={styles.barcode}
+                        variant="barcode"
+                        onPress={() => navigation.navigate('BarcodeScannerStack')}
+                    />
                 </Box>
-                : null}
+                {recents ?
+                    <Box>
+                        <Box flexDirection="row" justifyContent="space-between" style={{ width: windowWidth - 64 }}>
+                            <Text variant="recentSearchesTitle" style={styles.recentSearchesTitle}>Recent Searches</Text>
+                            <Button style={{ width: 50, height: 30, borderRadius: 15, marginTop: 23 }} label="clear" onPress={clearStorage} />
+                        </Box>
+                        <Box style={styles.recentSearches}>
+                            <FlatList
+                                data={searches}
+                                renderItem={({ item }) => {
+                                    return (
+                                        <Box flexDirection="row" key={item.key} marginTop="s">
+                                            <ClockIcon />
+                                            <Text variant="recentSearches" style={styles.item}>{item.text}</Text>
+                                        </Box>)
+                                }}
+                            />
+                        </Box>
+                    </Box>
+                    : null}
 
-        </Box>
-
+            </Box>
+        </SafeAreaView>
     )
 }
 
+const addItemStack = createStackNavigator();
+
 const AddItem = () => {
     return (
-        <RootStack.Navigator mode="modal" screenOptions={{ tabBarVisible: false }}>
-            <RootStack.Screen name="AddItemSearch" component={AddItemSearch} options={{ headerShown: false }} />
-            <RootStack.Screen name="BarcodeScannerStack" component={BarcodeScannerStack} options={{ headerShown: false }} />
-        </RootStack.Navigator>
+        <addItemStack.Navigator screenOptions={{ tabBarVisible: false, headerShown: false }} >
+            <addItemStack.Screen name="AddItemSearch" component={AddItemSearch} />
+            <addItemStack.Screen name="BarcodeScannerStack" component={BarcodeScannerStack} options={{ mode: "modal" }} />
+            <addItemStack.Screen name='BarcodeManual' component={BarcodeManual} />
+            <addItemStack.Screen name="ItemDescription" component={ItemDescription} />
+            <addItemStack.Screen name="BarcodeScanner" component={BarcodeScanner} />
+        </addItemStack.Navigator>
     )
 }
 

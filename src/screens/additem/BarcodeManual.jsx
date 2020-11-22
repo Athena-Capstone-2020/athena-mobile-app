@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
-import { StyleSheet, Dimensions } from 'react-native';
-import { IconButton, Input, Box, Text, Button } from '../../components/index'
+import React, { useState } from 'react';
+import { Dimensions, StyleSheet } from 'react-native';
+import { Box, Button, IconButton, Input, Text } from '../../components/index';
 import { withBarcodeService } from '../../services';
-import { createStackNavigator } from '@react-navigation/stack';
-import ItemDescription from './ItemDescription'
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -73,33 +71,11 @@ const BarcodeManual = ({ navigation }) => {
                 <Text variant="boldText">Enter Barcode</Text>
                 <Text variant="barcodeInstructions" style={styles.instructions}>Enter the 12-digit UPC on the back of </Text>
                 <Text variant="barcodeInstructions">the food item</Text>
-                <Input style={styles.input} placeholder="12-digit UPC" value={data} onChangeText={text => setData(text)}/>
-                <Button style={styles.enterButton} label='Enter' onPress={() => { entered ? undefined : handleBarCodeEntered, navigation.navigate('ItemDescription')}} />
+                <Input style={styles.input} placeholder="12-digit UPC" value={data} onChangeText={text => setData(text)} />
+                <Button style={styles.enterButton} label='Enter' onPress={() => { entered ? undefined : handleBarCodeEntered, navigation.navigate('ItemDescription') }} />
             </Box>
         </Box>
     )
 }
 
-const Stack = createStackNavigator();
-
-const BarcodeManualStack = () => {
-    return (
-        <Stack.Navigator
-            screenOptions={{
-                headerShown: false
-            }}
-            initialRouteName='BarcodeScanner'
-        >
-            <Stack.Screen
-                name='BarcodeManual'
-                component={BarcodeManual}
-            />
-            <Stack.Screen
-                name="ItemDescription"
-                component={ItemDescription}
-            />
-        </Stack.Navigator>
-    )
-}
-
-export default BarcodeManualStack;
+export default BarcodeManual;

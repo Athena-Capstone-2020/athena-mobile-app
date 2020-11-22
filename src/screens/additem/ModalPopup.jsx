@@ -2,11 +2,10 @@ import React from 'react';
 import {
     Alert,
     Modal,
-    StyleSheet,
     Text,
-    TouchableHighlight,
-    View } from 'react-native'
-import { Box, Text } from '../../components/index';
+    TouchableHighlight
+} from 'react-native';
+import { Box } from '../../components/index';
 
 const ModalPopup = () => {
     return (
@@ -22,7 +21,6 @@ const ModalPopup = () => {
                 <Box style={styles.centeredBox}>
                     <Box style={styles.modalBox}>
                         <Text style={styles.modalText}>Hello World!</Text>
-
                         <TouchableHighlight
                             style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
                             onPress={() => {
