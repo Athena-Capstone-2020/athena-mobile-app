@@ -1,6 +1,7 @@
 import React from 'react'
 import { HouseholdServiceProvider, HouseholdService, GroceryListServiceProvider, GroceryListService, 
-         ContainerServiceProvider, ContainerService, PersonService, PersonServiceProvider, BarcodeServiceProvider, BarcodeService } from "./src/services";
+         ContainerServiceProvider, ContainerService, PersonService, PersonServiceProvider, BarcodeServiceProvider, BarcodeService,
+         RecipeServiceProvider, RecipeService } from "./src/services";
 import { initFirebase } from './src/firebase/config'
 import { initSentry } from './src/logger/sentry/config'
 import { UserContextProvider } from './src/global/user-context'
@@ -15,20 +16,23 @@ export function Provider(props) {
     const personService = new PersonService()
     const householdService = new HouseholdService(personService, containerService, groceryListService)
     const barcodeService = new BarcodeService(Constants.manifest.extra.BARCODE_LOOKUP_API_KEY)
+    const recipeService = new RecipeService()
 
     return (
-        <PersonServiceProvider personService={personService}>
-            <ContainerServiceProvider containerService={containerService}>    
-                <GroceryListServiceProvider groceryListService={groceryListService}>
-                    <HouseholdServiceProvider householdService={householdService}>
-                        <BarcodeServiceProvider barcodeService={barcodeService}>
-                            <UserContextProvider initState={{ household: null, householdMembers: [] }}>
-                                {props.children}
-                            </UserContextProvider>
-                        </BarcodeServiceProvider>
-                    </HouseholdServiceProvider>
-                </GroceryListServiceProvider>
-            </ContainerServiceProvider>
-        </PersonServiceProvider>
+        <RecipeServiceProvider recipeService={recipeService}>
+            <PersonServiceProvider personService={personService}>
+                <ContainerServiceProvider containerService={containerService}>    
+                    <GroceryListServiceProvider groceryListService={groceryListService}>
+                        <HouseholdServiceProvider householdService={householdService}>
+                            <BarcodeServiceProvider barcodeService={barcodeService}>
+                                <UserContextProvider initState={{ household: null, householdMembers: [] }}>
+                                    {props.children}
+                                </UserContextProvider>
+                            </BarcodeServiceProvider>
+                        </HouseholdServiceProvider>
+                    </GroceryListServiceProvider>
+                </ContainerServiceProvider>
+            </PersonServiceProvider>
+        </RecipeServiceProvider>
     )
 }

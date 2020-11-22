@@ -1,15 +1,18 @@
 import { default as axios } from 'axios'
 import { FoodItem } from '../../models'
 import { logError } from '../../logger/Logger'
+import { BaseService } from '../base'
 
-export class BarcodeService {
+export class BarcodeService extends BaseService{
     constructor(barcodeApiKey){
+        super()
         this.BARCODE_API_KEY = barcodeApiKey
     }
 
     BARCODE_API_KEY = null
     BARCODE_APP_ID = '50969094'
     BASE_URL = 'https://api.edamam.com/api/food-database/v2/parser'
+    FOOD_COLLECTION = 'DUMMY_ITEMS'
 
     /**
      * Returns relevant information about the item given a barcode
@@ -62,6 +65,51 @@ export class BarcodeService {
     
             return this.__parseResponseToItem(results.data)
         } catch (err) {
+            logError(err)
+            throw err
+        }
+    }
+
+    /**
+     * 
+     * @param {string} barcodeUPC 
+     */
+    async mockGetDataFromBarcodeUPC(barcodeUPC){
+        try{
+            this.__UseCollection(this.FOOD_COLLECTION)
+            const foodObj = this.__GetById(barcodeUPC)
+            if(foodObj == undefined)
+                return null
+
+            const res = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, null, foodObj.nutritionData)
+            return res 
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
+    }
+
+    /**
+     * 
+     * @param {string} name 
+     */
+    async queryFoodByName(name){
+        try{
+            this.__UseCollection(this.FOOD_COLLECTION)
+            const query = await this.db.where('name', '==', name.charAt(0).toUpperCase() + name.substr(1).toLowerCase()).get()
+            const foodObjs = query.docs.map((doc) => doc.data())
+
+            const res = []
+
+            foodObjs.forEach( (foodObj) => {
+                const foodToAdd = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, null, foodObj.nutritionData)
+                res.push(foodToAdd)
+            })
+
+            return res
+        }
+        catch(err){
             logError(err)
             throw err
         }
