@@ -8,7 +8,6 @@ export class Recipe{
      * @param {string} prepTime
      */
     constructor(name, photoURI, ingredients, directions, servingSize, prepTime){
-        super()
         this.name = name
         this.photoURI = photoURI
         this.ingredients = ingredients
