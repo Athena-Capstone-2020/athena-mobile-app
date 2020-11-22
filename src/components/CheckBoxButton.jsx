@@ -59,13 +59,11 @@ const CheckedIcon = () => {
     )
 }
 
-const CheckBoxButton = ({ style }) => {
-    const[checked, setChecked] = useState(false)
+const CheckBoxButton = ({ style, onPress }) => {
+    const[checked, setChecked] = useState(false);
     return (
         <Box style={[styles.shadow, style ? style : {}]}>
-            <RectButton
-                onPress={() => {setChecked(!checked)}}
-            >
+            <RectButton onPress={onPress} onPressIn={() => {setChecked(!checked)}}>
                 {checked ? <CheckedIcon /> : <UncheckedIcon />}
             </RectButton>
         </Box>
@@ -73,3 +71,5 @@ const CheckBoxButton = ({ style }) => {
 }
 
 export default CheckBoxButton;
+
+//{setChecked(!checked)}

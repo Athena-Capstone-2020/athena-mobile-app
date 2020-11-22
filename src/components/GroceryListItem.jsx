@@ -11,7 +11,7 @@ const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     groceryList: {
-        height: windowHeight - windowHeight*0.25,
+        height: windowHeight*.75,
         paddingTop: 17,
         alignSelf: "flex-start"
      },

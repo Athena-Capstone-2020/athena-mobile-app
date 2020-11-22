@@ -1,39 +1,85 @@
-import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Box, Text } from '../components/index';
 import GroceryListItem from "../components/GroceryListItem";
+import GroceryTodoList from "../components/GroceryTodoList";
+import GroceryTodoForm from "../components/GroceryTodoForm";
 import Svg, { G, Path, Rect, TSpan } from "react-native-svg";
+import IconButton from '../components/IconButton';
 
 const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
  
  const styles = StyleSheet.create({
     groceryListName: {
         width: windowWidth - 64,
-        height: 51,
-        marginTop: 18,
+        height: 35,
+        marginTop: 18
     },
-    groceryList: {
-        marginTop: 17,
+     groceryList: {
+        height: windowHeight*.60,
+        marginTop: 40,
+        marginLeft: 32,
         alignSelf: "flex-start",
-        marginLeft: 39
+        flexDirection: "row"
      },
     item: {
         marginLeft: 16,
         marginBottom: 20
-    }
+    },
+    addItem: {
+        marginRight: 250,
+        marginLeft: 15
+     }
  });
 
  const GroceryList = () => {
+    const [todos, setTodos] = useState([]);
+
+    function addTodo(todo) {
+        // adds new todo to beginning of todos array
+        setTodos([...todos, todo]);
+    }
+    
+    function toggleComplete(id) {
+        setTodos(
+          todos.map(todo => {
+            if (todo.id === id) {
+              return {
+                ...todo,
+                completed: !todo.completed
+              };
+            }
+            return todo;
+          })
+        );
+    }
+    
+    function removeTodo(id) {
+        setTodos(todos.filter(todo => todo.id !== id));
+    }
+
      return (
         <Box marginTop="xl" alignItems="center">
             <Box style={styles.groceryListName}>
-                <Text variant="groceryListName">List</Text>
-                <Box >
-                    <GroceryListItem />
-                </Box>
+                <Text variant="groceryListName">Grocery List</Text>
+             </Box>
+            <GroceryTodoForm addTodo={addTodo}/>
+            <Box style={styles.groceryList}>
+                <ScrollView showsVerticalScrollIndicator ={false}>
+                    <GroceryTodoList 
+                        todos={todos}
+                        removeTodo={removeTodo}
+                        toggleComplete={toggleComplete}
+                    />
+                </ScrollView>
             </Box>
         </Box>
     );
  }
 
 export default GroceryList;
+
+/*
+<IconButton variant="addItem" style={styles.addItem}></IconButton>
+*/

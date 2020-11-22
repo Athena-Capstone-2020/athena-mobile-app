@@ -129,6 +129,11 @@ const theme = createTheme({
       fontSize: 20,
       fontFamily: "SFProDisplay-Regular",
       color: "black"
+    },
+    groceryListItemCompleted: {
+      fontSize: 20,
+      fontFamily: "SFProDisplay-Regular",
+      color: "grey"
     }
   },
   breakpoints: {
