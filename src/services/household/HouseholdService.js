@@ -119,7 +119,7 @@ export class HouseholdService extends BaseService {
     async getHouseholdById(householdId) {
         this.__UseCollection(this.HOUSEHOLD_COLLECTION)
 
-        this.__GetById(householdId)
+        return await this.__GetById(householdId)
     }
 
     async addContainerToHousehold(containerId, householdId) {
