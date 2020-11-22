@@ -23,11 +23,12 @@ export class UserContextActionHandler {
         this.__dispatch({ type: UserContextActions.FETCH_HOUSEHOLD })
         try {
             const household = await this.householdService.getHouseholdById(householdId)
-            const householdMembersRef = await this.householdService.listHousehold(household.id)
+            const householdMembersRef = await this.householdService.listHousehold(householdId)
             const householdMembers = householdMembersRef.map((householdMemberRef) => ({ id: householdMemberRef.id, ...householdMemberRef.data }))
 
-            this.__dispatch({ type: UserContextActions.SET_HOUSEHOLD, payload: { household, householdMembers } })
+            this.__dispatch({ type: UserContextActions.SET_HOUSEHOLD, payload: { household: { id: householdId, ...household }, householdMembers } })
         } catch (error) {
+            console.error(error)
             this.__dispatch({ type: UserContextActions.ERROR_OUT, payload: { error } })
         }
     }
