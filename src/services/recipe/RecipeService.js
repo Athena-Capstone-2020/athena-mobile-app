@@ -23,6 +23,7 @@ export class RecipeService extends BaseService{
             })
 
             this.__UseCollection(this.RECIPE_COLLECTION)
+            //get all recipes to check against
             const collection = await this.db.where('name', '!=', '').get()
             const recipeObjs = collection.docs.map((doc) => doc.data())
             

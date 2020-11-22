@@ -1,4 +1,5 @@
 import { BarcodeService } from '../src/services/barcode'
+import { initFirebase } from '../src/firebase/config'
 require('dotenv').config()
 
 test('should return a proper item with a valid barcode', async () => {
@@ -25,10 +26,35 @@ test('should return an error with an invalid barcode', async () => {
     }
 })
 
+test('should get fooditem with mock barcode scan', async () =>  {
+    const barcodeService = setup()
+
+    const barcode = '0380001817191'
+    const foodObj = await barcodeService.mockGetDataFromBarcodeUPC(barcode)
+    expect(foodObj).toBeDefined()
+})
+
+test('should be able to query food', async () => {
+    const barcodeService = setup()
+
+    const testInput1 = 'banana'
+    const res1 = await barcodeService.queryFoodByName(testInput1)
+    expect(res1.length).toBe(1)
+
+    const testInput2 = 'CHicKeN'
+    const res2 = await barcodeService.queryFoodByName(testInput2)
+    expect(res2.length).toBe(1)
+
+    const testInput3 = 'Chick'
+    const res3 = await barcodeService.queryFoodByName(testInput3)
+    expect(res3.length).toBe(0)
+})
+
 /**
  * @returns {BarcodeService}
  */
 function setup() {
+    initFirebase()
     const barcodeApiKey = process.env.BARCODE_LOOKUP_API_KEY
     const barcodeService = new BarcodeService(barcodeApiKey)
 
