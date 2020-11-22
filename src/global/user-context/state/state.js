@@ -1,4 +1,5 @@
 export const initialUserContextState = {
     household: null,
-    householdMembers: []
+    householdMembers: [],
+    user: null
 }
