@@ -30,15 +30,14 @@ export const Home = () => {
     }, [householdService, navigation])
 
     async function displayExpireSoon() {
-        console.log(userCtx)
-        const results = await householdService.getContainersForHousehold('2TfHPkYOMDAofThS0N8h') // Reyes Household
-        console.log(results)
+        const results = await householdService.getContainersForHousehold(userCtx.household.id) // Reyes Household
     }
 
+    console.log({ userCtx })
     return (
         <SafeAreaView style={styles.container}>
             <Box style={styles.innerContainer}>
-            <Text variant='superHeader' style={{ marginVertical: 40 }}>Reyes Household</Text>
+            <Text variant='superHeader' style={{ marginVertical: 40 }}>{userCtx.household !== null ? userCtx.household.name : 'Loading...'}</Text>
             <Text variant='header'>Expiring Soon</Text>
             <ExpireCard title='Banana' />
             {/* <Text variant='header' style={{ marginTop: 30 }}>Recipies</Text>
