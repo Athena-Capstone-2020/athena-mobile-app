@@ -45,7 +45,7 @@ const GroceryItem = ({ todo, index, completeTodo, removeTodo }) => {
     return (
         <Box style={styles.container} >
             <Box flexDirection="row">
-                <CheckBoxButton onPress={completeTodo(index)}/>
+                <CheckBoxButton />
                 {editing ? 
                 <GroceryListInput 
                     onPress={() => setEditing(e => !e)} 
