@@ -5,17 +5,10 @@ import Svg, { G, Path, Rect, Text, TSpan } from "react-native-svg";
 import { Box } from "./index";
 
 const styles = StyleSheet.create({
-    shadow: {
+    checkBox: {
         width: 40,
         height: 40,
         borderRadius: 14,
-        shadowColor: "#6F6F6F",
-        shadowOffset: {
-            width: 18.2,
-            height: 18.2,
-        },
-        shadowOpacity: .56,
-        shadowRadius: 17,
         marginBottom: 21.4,
         flexDirection: "row"
     },
@@ -62,8 +55,8 @@ const CheckedIcon = () => {
 const CheckBoxButton = ({ style }) => {
     const [checked, setChecked] = useState(false);
     return (
-        <Box style={[styles.shadow, style ? style : {}]}>
-            <RectButton onPress={() => setChecked(v => !v)}>
+        <Box style={[styles.checkBox, style ? style : {}]}>
+            <RectButton onPress={() => setChecked(c => !c)}>
                 {checked ? <CheckedIcon /> : <UncheckedIcon />}
             </RectButton>
         </Box>

@@ -6,11 +6,6 @@ const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     searchBox: {
-        height: 65,
-        borderWidth: 1,
-        borderRadius: 10,
-    },
-    searchBoxFixedWidth: {
         width: windowWidth - 64,
         height: 65,
         borderWidth: 1,
@@ -20,8 +15,7 @@ const styles = StyleSheet.create({
         height: 55,
         marginRight: 8,
         marginTop: 5,
-        marginLeft: 20,
-        // backgroundColor: "blue"
+        marginLeft: 20
     }
 })
 
@@ -44,7 +38,7 @@ const Input = ({ placeholder, style, value, onChangeText, maxLength, keyboardTyp
 
     return (
         <Box style={style ? style : ""}>
-            <Box style={style.width ? [style, styles.searchBox, {backgroundColor, borderColor} ] : [styles.searchBoxFixedWidth, { backgroundColor, borderColor }]}>
+            <Box style={[styles.searchBox, { backgroundColor, borderColor }]}>
                 <TextInput
                     variant="search"
                     style={[styles.input, { color, fontFamily, fontSize }]}
@@ -63,5 +57,3 @@ const Input = ({ placeholder, style, value, onChangeText, maxLength, keyboardTyp
 }
 
 export default Input
-
-//<Box style={[styles.searchBox, { backgroundColor, borderColor }]}>
