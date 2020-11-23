@@ -3,7 +3,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import { useTheme, Box } from "./index";
-import Svg, { G, Path, Rect, TSpan, Text } from "react-native-svg"
+import Svg, { G, Path, Rect } from "react-native-svg"
 
 const styles = StyleSheet.create({
     // container: {
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 
 const Plus = () => {
     return (
-        <Svg 
+        <Svg
             width={30.598}
             height={30.598}
             viewBox="21 14 33.598 33.598"
@@ -51,7 +51,7 @@ const ButtonPlus = ({ onPress, style }) => {
                 underlayColor="#fff"
                 {...{ onPress }}
             >
-                <Plus/>
+                <Plus />
             </RectButton>
         </Box>
     );

@@ -1,7 +1,7 @@
 import {
-  createBox, 
+  createBox,
   createText,
-  createTheme, 
+  createTheme,
   ThemeProvider as ReStyleThemeProvider,
   useTheme as useReTheme
 } from "@shopify/restyle";
@@ -10,6 +10,8 @@ import React from "react";
 const palette = {
   orange: "#FE724C",
   grey: "#D0CED5",
+  onboardingGrey: "#616772",
+  onboardingBlack: "#131A38",
   greyBlue1: "#9DA4BB",
   greyBlue2: "#8387A7",
   monochrome1: "#F3F3F3",
@@ -27,6 +29,8 @@ const theme = createTheme({
     greyBlue2: palette.greyBlue2,
     monochrome1: palette.monochrome1,
     monochrome2: palette.monochrome2,
+    onboardingGrey: palette.onboardingGrey,
+    onboardingBlack: palette.onboardingBlack,
     white: palette.white,
     black: palette.black
   },
@@ -129,6 +133,26 @@ const theme = createTheme({
       fontSize: 15,
       fontFamily: "SFProDisplay-Regular",
       color: "grey"
+    },
+    onboardingDesc: {
+      fontSize: 17,
+      fontFamily: "SFProDisplay-Regular",
+      color: "onboardingGrey"
+    },
+    onboardingTitle: {
+      fontSize: 36,
+      fontFamily: "SFProDisplay-Medium",
+      color: "onboardingBlack"
+    },
+    signIn: {
+      fontSize: 14,
+      fontFamily: "SFProDisplay-Medium",
+      color: "white"
+    },
+    Google: {
+      fontSize: 13,
+      fontFamily: "SFProDisplay-Medium",
+      color: "black"
     }
   },
   breakpoints: {

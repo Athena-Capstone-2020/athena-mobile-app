@@ -8,7 +8,6 @@ import ContainerList from '../container/ContainerList';
 import GroceryList from '../GroceryList';
 import { Home } from '../home';
 import User from '../User';
-import { useUserContext } from '../../global/user-context'
 
 const Navbar = () => {
 
@@ -33,7 +32,7 @@ const Navbar = () => {
                     }
                 }}
             >
-                <Tab.Screen name="Home" component={Onboarding} />
+                <Tab.Screen name="Home" component={Home} />
                 <Tab.Screen name="ContainerList" component={ContainerList} />
                 <Tab.Screen name="AddItem" component={AddItem} />
                 <Tab.Screen name="GroceryList" component={GroceryList} />

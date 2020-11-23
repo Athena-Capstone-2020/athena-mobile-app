@@ -3,14 +3,14 @@ import { StyleSheet } from "react-native";
 import { Provider } from "./Provider";
 import { LoadAssets } from "./src/components/index";
 import { ThemeProvider } from './src/components/Theme'
-import Navbar from "./src/screens/navbar/Navbar";
+import Athena from './src/screens/Athena'
 
 export default function App() {
   return (
     <Provider>
       <ThemeProvider>
         <LoadAssets>
-          <Navbar />
+          <Athena />
         </LoadAssets>
       </ThemeProvider>
     </Provider>
