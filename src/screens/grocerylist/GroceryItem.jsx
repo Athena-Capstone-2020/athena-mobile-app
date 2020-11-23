@@ -41,24 +41,26 @@ const GroceryItem = ({ todo, index, completeTodo, removeTodo }) => {
 
     const [editing, setEditing] = useState(true);
     const [value, setValue] = useState("");
+    const [checked, setChecked] = useState(false);
 
     return (
         <Box style={styles.container} >
             <Box flexDirection="row">
-                <CheckBoxButton />
-                {editing ? 
-                <GroceryListInput 
-                    onPress={() => setEditing(e => !e)} 
-                    style={styles.item}
-                    onBlur={() => setEditing(false)}
-                    autoFocus 
-                    value={value} 
-                    onChangeText={(e) => setValue(e)} /> : 
-                <Text 
-                    onPress={() => setEditing(e => !e)} 
-                    variant={todo.isComplete ? "groceryListItemCompleted" : "groceryListItem"}
-                    style={styles.item}>{value}
-                </Text>
+                <CheckBoxButton onPress={() => setChecked(c => !c)} checked={checked} />
+                {editing ?
+                    <GroceryListInput
+                        onPress={() => setEditing(e => !e)}
+                        style={styles.item}
+                        onBlur={() => setEditing(false)}
+                        autoFocus
+                        value={value}
+                        onChangeText={(e) => setValue(e)} /> :
+                    <Text
+                        onPress={() => setEditing(e => !e)}
+                        // variant={todo.isComplete ? "groceryListItemCompleted" : "groceryListItem"}
+                        variant={checked ? "groceryListItemCompleted" : "groceryListItem"}
+                        style={styles.item}>{value}
+                    </Text>
                 }
             </Box>
             <RectButton onPress={() => removeTodo(index)}>

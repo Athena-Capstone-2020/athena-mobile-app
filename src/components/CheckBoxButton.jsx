@@ -52,11 +52,10 @@ const CheckedIcon = () => {
     )
 }
 
-const CheckBoxButton = ({ style }) => {
-    const [checked, setChecked] = useState(false);
+const CheckBoxButton = ({ style, checked, onPress }) => {
     return (
         <Box style={[styles.checkBox, style ? style : {}]}>
-            <RectButton onPress={() => setChecked(c => !c)}>
+            <RectButton onPress={onPress}>
                 {checked ? <CheckedIcon /> : <UncheckedIcon />}
             </RectButton>
         </Box>

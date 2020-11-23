@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 const GroceryListInput = ({ autoFocus, onBlur, onPress, placeholder, style, value, onChangeText, maxLength, keyboardType = "default" }) => {
 
     const theme = useTheme()
-    const variant = "input"
+    const variant = "groceryListItemCompleted"
 
     const fontColor = theme.textVariants[variant].text;
     const color = theme.colors[fontColor];
