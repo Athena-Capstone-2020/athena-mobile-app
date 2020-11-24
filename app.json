@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "ios": {
+      "bundleIdentifier": "example.expo.googlesignin",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.1021500470015-feiad4ttvc6q2465d6vmqijdhehq6dmg"
+        }
+      },
+      "googleServicesFile": "./GoogleService-Info.plist"
+    },
+    "android": {
+      "package": "example.expo.googlesignin",
+      "googleServicesFile": "./google-services.json"
+    }
+  }
+}

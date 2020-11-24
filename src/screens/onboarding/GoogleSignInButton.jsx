@@ -5,14 +5,40 @@ const { width, height } = Dimensions.get('window')
 import Svg, { Defs, G, Rect, TSpan, Path } from "react-native-svg"
 import { RectButton } from "react-native-gesture-handler";
 
+const styles = StyleSheet.create({
+    container: {
+        height: 55,
+        width: 139.26,
+        justifyContent: "center",
+        alignSelf: "center"
+    },
+    button: {
+        flex: 1,
+        width: 139.26,
+        height: 54,
+        borderRadius: 27.4,
+        justifyContent: "center",
+        alignSelf: 'center',
+        alignItems: 'center'
+    },
+    text: {
+        alignSelf: "center",
+        bottom: 22,
+        right: 40,
+        zIndex: 1,
+        position: "absolute"
+    }
+
+})
 
 const Button = () => {
     return (
-        <Svg
+        <Svg style={styles.button}
             xmlns="http://www.w3.org/2000/svg"
             width={246.504}
             height={161.241}
-            viewBox="0 0 246.504 161.241"
+            viewBox="-20 -16 246.504 161.241"
+        // viewBox="0 0 246.504 161.241"
         >
             <Defs></Defs>
             <G data-name="Group 17865">
@@ -26,7 +52,6 @@ const Button = () => {
                         fill="#fff"
                     />
                 </G>
-                <Text variant="Google">Google</Text>
                 <G data-name="Group 17967">
                     <G data-name="super g">
                         <Path
@@ -60,19 +85,15 @@ const Button = () => {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-
-    }
-})
-
-const GoogleSignInButton = () => {
+const GoogleSignInButton = ({ style, onPress }) => {
     return (
-        <Box>
-            <RectButton>
+        <Box style={[styles.container, style ? style : ""]}>
+            <RectButton style={styles.button} onPress={onPress}>
                 <Button />
+                <Text variant="Google" style={styles.text}>Sign In</Text>
             </RectButton>
-        </Box>
+        </Box >
+
     )
 }
 

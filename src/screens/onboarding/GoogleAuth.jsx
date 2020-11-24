@@ -6,6 +6,8 @@ import image from '../../../assets/Onboarding/Onboarding.png'
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path } from "react-native-svg"
 import GoogleSignInButton from './GoogleSignInButton'
+import { useUserContext } from '../../global/user-context/useUserContext'
+
 
 const styles = StyleSheet.create({
     container: {
@@ -18,19 +20,33 @@ const styles = StyleSheet.create({
         flex: 1,
         width,
     },
+    text: {
+        flex: .25,
+        justifyContent: 'center',
+        left: 30,
+        width,
+    },
     signIn: {
         width: width - 120,
         height: .2 * height,
-        backgroundColor: 'black',
+        // backgroundColor: 'blue',
         alignSelf: 'center',
         position: 'absolute',
         bottom: 200
     },
     lines: {
+        flex: 1,
         alignSelf: 'center',
         justifyContent: 'center',
         position: 'absolute',
         top: 50
+    },
+    signInButton: {
+        top: 100
+    },
+    signInText: {
+        position: "absolute",
+        alignSelf: "center"
     }
 
 })
@@ -62,14 +78,16 @@ const Line = () => {
 }
 
 const GoogleAuth = () => {
+
+    const { googleAuth } = useUserContext()
+
     return (
         <Box style={styles.container}>
             <ImageBackground source={image} style={styles.image} imageStyle={{
                 resizeMode: "cover",
-                alignSelf: "flex-end"
+                alignSelf: "flex-end",
             }}>
                 <LinearGradient
-                    // Background Linear Gradient
                     colors={['transparent', '#43465C',]}
                     style={{
                         position: 'absolute',
@@ -79,11 +97,20 @@ const GoogleAuth = () => {
                         height,
                     }}
                 >
+                    <Box style={styles.text}>
+                        <Text variant="WelcomeTo">Welcome To</Text>
+                        <Text variant="Athena">Athena</Text>
+                        <Box style={{ marginTop: 20 }}>
+                            <Text variant="AthenaDesc">A personal food management</Text>
+                            <Text variant="AthenaDesc" style={{ marginTop: 8 }}>app for your household </Text>
+                        </Box>
+                    </Box>
                     <Box style={styles.signIn}>
-                        <Line style={styles.lines}>
-                            <Text variant="signIn">Sign In</Text>
-                        </Line>
-                        <GoogleSignInButton />
+                        <Box style={styles.lines}>
+                            <Line />
+                            <Text style={styles.signInText} variant="signIn">Sign In</Text>
+                        </Box>
+                        <GoogleSignInButton onPress={() => { googleAuth.SignInWithGoogle() }} style={styles.signInButton} />
                     </Box>
                 </LinearGradient>
             </ImageBackground>
