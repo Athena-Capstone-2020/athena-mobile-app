@@ -79,10 +79,10 @@ const Line = () => {
 
 const GoogleAuth = () => {
 
-    const { googleAuth, actions } = useUserContext()
+    const { googleAuth, actions, state } = useUserContext()
 
     const handleGoogleSignIn = async () => {
-        await googleAuth.SignInWithGoogle().then((res) => actions.setUser(res.id, res.email))
+        await googleAuth.SignInWithGoogle().then((res) => actions.setUser(res.id, { name: res.name, email: res.email, photoUrl: res.photoUrl }).then(() => console.log(state)))
     }
 
     return (
