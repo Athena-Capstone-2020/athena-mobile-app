@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Dimensions, TextInput, CheckBox } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Dimensions, TextInput } from 'react-native';
 import { Box, Text } from '../../components/index';
 import CheckBoxButton from '../../components/CheckBoxButton';
 import Svg, { G, Path, Rect, TSpan } from "react-native-svg";
@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
     container: {
         width: windowWidth - 64,
         justifyContent: "space-between",
-        flexDirection: "row"
+        flexDirection: "row",
+        height: 50
     }
 });
 
@@ -37,14 +38,31 @@ const HamburgerIcon = ({ style }) => {
     )
 }
 
-const GroceryItem = ({ todo, index, completeTodo, removeTodo }) => {
+const GroceryItem = ({ todo, index, removeTodo, updateTodo }) => {
 
-    const [editing, setEditing] = useState(true);
+    const [editing, setEditing] = useState(false);
     const [value, setValue] = useState("");
     const [checked, setChecked] = useState(false);
 
+    function updater() {
+        updateTodo(value, index);
+    }
+
+    function initlializeTodo() {
+        if(todo != null) {
+            setValue(todo);
+        }
+        else {
+            setEditing(true);
+        }
+    }
+
+    useEffect(() => {
+        initlializeTodo()
+    }, [])
+
     return (
-        <Box style={styles.container} >
+        <Box style={styles.container}>
             <Box flexDirection="row">
                 <CheckBoxButton onPress={() => setChecked(c => !c)} checked={checked} />
                 {editing ?
@@ -52,12 +70,12 @@ const GroceryItem = ({ todo, index, completeTodo, removeTodo }) => {
                         onPress={() => setEditing(e => !e)}
                         style={styles.item}
                         onBlur={() => setEditing(false)}
+                        onEndEditing={updater(value)}
                         autoFocus
                         value={value}
                         onChangeText={(e) => setValue(e)} /> :
                     <Text
                         onPress={() => setEditing(e => !e)}
-                        // variant={todo.isComplete ? "groceryListItemCompleted" : "groceryListItem"}
                         variant={checked ? "groceryListItemCompleted" : "groceryListItem"}
                         style={styles.item}>{value}
                     </Text>
