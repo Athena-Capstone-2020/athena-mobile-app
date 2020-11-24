@@ -79,23 +79,11 @@ const Line = () => {
 
 const GoogleAuth = () => {
 
-    const { googleAuth, actions, state } = useUserContext()
-
-    console.log(actions.userContextActionHandler)
-
-    const [user, setUser] = useState()
+    const { googleAuth, actions } = useUserContext()
 
     const handleGoogleSignIn = async () => {
-        await googleAuth.SignInWithGoogle().then((res) => setUser(res))
+        await googleAuth.SignInWithGoogle().then((res) => actions.setUser(res.id, res.email))
     }
-
-    useEffect(() => {
-        if (user) {
-            console.log('user in useEffect Hook:', user)
-            actions.userContextActionHandler.setUser(user.id, user.email);
-            console.log("New Set User:", state.user)
-        }
-    }, [user])
 
     return (
         <Box style={styles.container}>
@@ -126,7 +114,7 @@ const GoogleAuth = () => {
                             <Line />
                             <Text style={styles.signInText} variant="signIn">Sign In</Text>
                         </Box>
-                        <GoogleSignInButton onPress={() => { handleGoogleSignIn() }} style={styles.signInButton} />
+                        <GoogleSignInButton onPress={handleGoogleSignIn} style={styles.signInButton} />
                     </Box>
                 </LinearGradient>
             </ImageBackground>
