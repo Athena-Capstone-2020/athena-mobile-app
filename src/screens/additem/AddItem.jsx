@@ -7,6 +7,8 @@ import { Box, Button, IconButton, Search, Text } from '../../components/index';
 import BarcodeManual from './BarcodeManual';
 import { default as BarcodeScanner, default as BarcodeScannerStack } from './BarcodeScanner';
 import ItemDescription from './ItemDescription';
+import { withBarcodeService } from '../../services';
+
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -83,12 +85,18 @@ const AddItemSearch = ({ navigation }) => {
     const [text, setText] = useState('')
     const [recents, setRecents] = useState(false)
 
+    const { barcodeService } = withBarcodeService()
+
     useEffect(() => {
         restoreSearchesAsync();
     }, []);
 
-    const submitHandler = text => {
+    const submitHandler = async (text) => {
+        const response = await barcodeService.getDataFromBarcode(text);
         if (text.length === 0) return;
+
+        console.log(response);
+
         const key = Math.random().toString();
 
         const newSearches = [{ text, key }, ...searches];

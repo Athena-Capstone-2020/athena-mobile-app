@@ -3,7 +3,7 @@ import { withHouseholdService } from "../../services";
 import { reducer as userContextReducer } from "./state/reducer";
 import { UserContextActionHandler } from "./state/actions";
 import { initialUserContextState } from "./state/state";
-import firebase from "../../firebase/config";
+import GoogleAuth from "./google";
 
 export const UserContext = createContext(null);
 
@@ -35,22 +35,4 @@ export function UserContextProvider({
       {children}
     </UserContext.Provider>
   );
-}
-
-function GoogleAuth() {
-  const SignInWithGoogle = () => {
-    return firebase
-      .auth()
-      .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  return {
-    SignInWithGoogle,
-  };
 }
