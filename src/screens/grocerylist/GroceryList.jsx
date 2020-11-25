@@ -69,6 +69,9 @@ const GroceryList = () => {
             const itemToUpdate = new FoodItem(text, "", "", "", new Date(), {});
             let newList = await groceryListService.updateFoodItemInGroceryList(grocList, index, itemToUpdate);
             setGrocList(newList);
+            const newTodos = [...todos];
+            newTodos[index].name = text;
+            setTodos(newTodos);
         } catch (err) {
             console.error(err);
             logError(err);
