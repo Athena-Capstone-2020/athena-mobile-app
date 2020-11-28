@@ -10,7 +10,7 @@ export { default as Icon } from "./Svg"
 export { default as Search } from "./Search"
 export { default as IconButton } from "./IconButton"
 export { default as CheckBoxButton } from "./CheckBoxButton"
-export { default as GroceryListItem } from "./GroceryListItem"
+export { default as GroceryListInput } from "./GroceryListInput"
 export { default as FoodItem } from "./FoodItem"
 export { default as Input } from "./Input"
 
