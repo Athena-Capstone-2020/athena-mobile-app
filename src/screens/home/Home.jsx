@@ -26,20 +26,14 @@ const styles = StyleSheet.create({
 export const Home = () => {
   const { state: userCtx, actions } = useUserContext();
 
-  const [expireSoonFoodItems, setExpireSoonFoodItems] = useState([]);
   const [shownRecipes, setShownRecipes] = useState([]);
   const { recipeService } = withRecipeService();
   const { householdService } = withHouseholdService();
   const navigation = useNavigation();
 
   useEffect(() => {
-    // displayExpireSoon()
     findRecipes();
   }, [householdService, navigation]);
-
-  // async function displayExpireSoon() {
-  //     const results = await householdService.getContainersForHousehold(userCtx.household.id) // Reyes Household
-  // }
 
   async function findRecipes() {
     const results = await recipeService.queryRecipes(["banana", "butter"]);
