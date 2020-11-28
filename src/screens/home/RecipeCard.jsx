@@ -64,11 +64,14 @@ function RecipeCardBottomContent({ recipe }) {
           showsVerticalScrollIndicator={false}
           data={recipe.directions}
           renderItem={({ item }) => (
-            <Text variant="bottomCardContentBody" style={{ marginBottom: 5 }}>
-              • {item}
+          <View style={{ display: 'flex', flexDirection: 'row', paddingBottom: 10 }}>
+            <Icon name='circle' solid size={5} color="gray" style={{ margin: 'auto', paddingTop: 7, paddingRight: 5}} />
+            <Text variant="bottomCardContentBody">
+              {item}
             </Text>
+          </View>
           )}
-          />
+        />
       </View>
     </View>
   );
