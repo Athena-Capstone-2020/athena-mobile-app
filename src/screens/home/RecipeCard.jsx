@@ -13,7 +13,7 @@ export function RecipeCard(props) {
     <Card
       imageUri={props.recipe.photoURI}
       width={250}
-      height={380}
+      height={340}
       bottomContent={<RecipeCardBottomContent {...props} />}
       cardStyle={{ margin: 10}}
     />
@@ -55,7 +55,7 @@ function RecipeCardBottomContent({ recipe }) {
           {recipe.prepTime}
         </Text>
       </View>
-      <View style={{ height: 180 }}>
+      <View style={{ height: 150 }}>
         <FlatList
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}

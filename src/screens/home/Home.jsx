@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     alignItems: "flex-start",
-    marginHorizontal: 30,
   },
 });
 
@@ -36,33 +35,65 @@ export const Home = () => {
   }, [householdService, navigation]);
 
   async function findRecipes() {
-    const results = await recipeService.queryRecipes(["banana", "butter"]);
+    const results = await recipeService.queryRecipes([
+      "banana",
+      "butter",
+      "ground beef",
+    ]);
     setShownRecipes(results);
   }
+
+  const expireItems = [
+    {
+      title: "Banana",
+      image: "https://i.redd.it/febxrcjqpeb41.jpg",
+    },
+    {
+      title: "Chicken",
+      image:
+        "https://media.discordapp.net/attachments/764602206556389398/780206221839433738/fat-chicken-2.png",
+    },
+    {
+      title: "Beef",
+      image: "https://i.ebayimg.com/images/g/WccAAOSwnDZT3jSG/s-l300.jpg",
+    },
+  ];
 
   return (
     <SafeAreaView style={styles.container}>
       <Box style={styles.innerContainer}>
-        <Text variant="superHeader" style={{ marginVertical: 40 }}>
+        <Text
+          variant="superHeader"
+          style={{ marginVertical: 40, marginLeft: 20 }}
+        >
           {userCtx.household !== null ? userCtx.household.name : "Loading..."}
         </Text>
-        <Text variant="header">Expiring Soon</Text>
-        <ExpireCard title="Banana" />
-        <Text variant="header" style={{ marginTop: 30 }}>
+        <Text variant="header" style={{ marginLeft: 20 }}>
+          Expiring Soon
+        </Text>
+        <View style={{ height: 200 }}>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            data={expireItems}
+            horizontal
+            renderItem={({ item }) => (
+              <ExpireCard title={item.title} imageUri={item.image} />
+            )}
+          />
+        </View>
+        <Text variant="header" style={{ marginTop: 30, marginLeft: 20 }}>
           Recipies
         </Text>
       </Box>
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-            style={{ overflow: 'hidden' }}
-            data={shownRecipes}
-            renderItem={({ item }) => <RecipeCard recipe={item} />}
-            horizontal
-        />
+      <FlatList
+        showsHorizontalScrollIndicator={false}
+        style={{ overflow: "hidden" }}
+        data={shownRecipes}
+        renderItem={({ item }) => <RecipeCard recipe={item} />}
+        horizontal
+      />
     </SafeAreaView>
   );
 };
-
-
 
 export default Home;
