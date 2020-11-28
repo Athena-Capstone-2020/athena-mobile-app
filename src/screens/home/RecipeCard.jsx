@@ -3,7 +3,7 @@ import { Card } from "../../components";
 import { Recipe } from "../../models/Recipe";
 import { Box, Text } from "../../components/Theme";
 import { FlatList, StyleSheet, View } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 /**
  *
@@ -16,7 +16,7 @@ export function RecipeCard(props) {
       width={250}
       height={340}
       bottomContent={<RecipeCardBottomContent {...props} />}
-      cardStyle={{ margin: 10}}
+      cardStyle={{ margin: 10 }}
     />
   );
 }
@@ -48,15 +48,23 @@ function RecipeCardBottomContent({ recipe }) {
       >
         {recipe.name}
       </Text>
-      <View style={{ display: "flex", flexDirection: "row", marginHorizontal: 5, marginVertical: 10 }}>
-        <Icon name='users' size={15} color="gray"/>
-        <Text variant="bottomCardContentBody">
-          {` ${recipe.servingSize}`}
-        </Text>
-        <Icon name='clock' size={15} color="gray" style={{ marginLeft: 'auto' }} />
-        <Text variant="bottomCardContentBody">
-          {` ${recipe.prepTime}`}
-        </Text>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          marginHorizontal: 5,
+          marginVertical: 10,
+        }}
+      >
+        <Icon name="users" size={15} color="gray" />
+        <Text variant="bottomCardContentBody">{` ${recipe.servingSize}`}</Text>
+        <Icon
+          name="clock"
+          size={15}
+          color="gray"
+          style={{ marginLeft: "auto" }}
+        />
+        <Text variant="bottomCardContentBody">{` ${recipe.prepTime}`}</Text>
       </View>
       <View style={{ height: 150 }}>
         <FlatList
@@ -64,12 +72,22 @@ function RecipeCardBottomContent({ recipe }) {
           showsVerticalScrollIndicator={false}
           data={recipe.directions}
           renderItem={({ item }) => (
-          <View style={{ display: 'flex', flexDirection: 'row', paddingBottom: 10 }}>
-            <Icon name='circle' solid size={5} color="gray" style={{ margin: 'auto', paddingTop: 7, paddingRight: 5}} />
-            <Text variant="bottomCardContentBody">
-              {item}
-            </Text>
-          </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                paddingBottom: 10,
+              }}
+            >
+              <Icon
+                name="circle"
+                solid
+                size={5}
+                color="gray"
+                style={{ margin: "auto", paddingTop: 7, paddingRight: 5 }}
+              />
+              <Text variant="bottomCardContentBody">{item}</Text>
+            </View>
           )}
         />
       </View>
