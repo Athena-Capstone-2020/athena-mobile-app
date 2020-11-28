@@ -3,6 +3,7 @@ import { Card } from "../../components";
 import { Recipe } from "../../models/Recipe";
 import { Box, Text } from "../../components/Theme";
 import { FlatList, StyleSheet, View } from "react-native";
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 /**
  *
@@ -48,11 +49,13 @@ function RecipeCardBottomContent({ recipe }) {
         {recipe.name}
       </Text>
       <View style={{ display: "flex", flexDirection: "row", marginHorizontal: 5, marginVertical: 10 }}>
+        <Icon name='users' size={15} color="gray"/>
         <Text variant="bottomCardContentBody">
-          Serves: {recipe.servingSize}
+          {` ${recipe.servingSize}`}
         </Text>
-        <Text style={{ marginLeft: "auto" }} variant="bottomCardContentBody">
-          {recipe.prepTime}
+        <Icon name='clock' size={15} color="gray" style={{ marginLeft: 'auto' }} />
+        <Text variant="bottomCardContentBody">
+          {` ${recipe.prepTime}`}
         </Text>
       </View>
       <View style={{ height: 150 }}>
