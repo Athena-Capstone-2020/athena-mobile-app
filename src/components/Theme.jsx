@@ -129,6 +129,11 @@ const theme = createTheme({
       fontSize: 15,
       fontFamily: "SFProDisplay-Regular",
       color: "grey"
+    },
+    bottomCardContentBody: {
+      fontSize: 15,
+      fontFamily: "SFProDisplay-Regular",
+      opacity: 0.6
     }
   },
   breakpoints: {

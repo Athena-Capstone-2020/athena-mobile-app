@@ -26,5 +26,5 @@ function ExpireCardContent(props) {
         }
     }
 
-    return (<Text variant='body' style={style.title}>{props.title}</Text>)
+    return (<Text adjustsFontSizeToFit numberOfLines={1} allowFontScaling={true} variant='body' style={style.title}>{props.title}</Text>)
 }
