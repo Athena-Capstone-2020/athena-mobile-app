@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Box, Text } from '../../components/index';
-import Svg, { G, Path, Rect, TSpan } from "react-native-svg";
 import IconButton from '../../components/IconButton';
 import GroceryItem from "./GroceryItem";
 import { withGroceryListService } from '../../services'
@@ -31,9 +30,6 @@ const styles = StyleSheet.create({
     addItem: {
         marginLeft: 45,
         marginTop: 10
-    },
-    container: {
-        height: windowHeight
     }
 });
 
@@ -55,9 +51,8 @@ const GroceryList = () => {
         try {
             const itemToAdd = new FoodItem(text, "", "", "", new Date(), {});
             let newList = await groceryListService.addFoodItemToGroceryList(grocList, itemToAdd);
-            setGrocList(newList);
-            const newTodos = [...todos, {text}];
-            setTodos(newTodos);
+            const foodItemArr = await groceryListService.getFoodItemArrayFromGroceryList("ReyesGroceryList");
+            setTodos(foodItemArr);
         } catch (err) {
             console.error(err);
             logError(err);
@@ -69,6 +64,8 @@ const GroceryList = () => {
             const itemToUpdate = new FoodItem(text, "", "", "", new Date(), {});
             let newList = await groceryListService.updateFoodItemInGroceryList(grocList, index, itemToUpdate);
             setGrocList(newList);
+            const foodItemArr = await groceryListService.getFoodItemArrayFromGroceryList("ReyesGroceryList");
+            setTodos(foodItemArr);
         } catch (err) {
             console.error(err);
             logError(err);
@@ -79,9 +76,9 @@ const GroceryList = () => {
         try {
             let newList = await groceryListService.removeFoodItemFromContainer(grocList, index);
             setGrocList(newList);
-            const newTodos = [...todos];
-            newTodos.splice(index, 1);
-            setTodos(newTodos);
+            const foodItemArr = await groceryListService.getFoodItemArrayFromGroceryList("ReyesGroceryList");
+            setTodos([]);
+            setTodos(foodItemArr);
         } catch(err) {
             console.error(err);
             logError(err);
@@ -89,16 +86,16 @@ const GroceryList = () => {
     };
 
     useEffect(() => {
-        fetchGroceryList()
+        fetchGroceryList();
     }, [])
 
     return (
-        <Box marginTop="xl" style={styles.container}>
+        <Box marginTop="xl">
             <Box style={styles.groceryListName}>
                 <Text variant="groceryListName">Grocery List</Text>
             </Box>
             <Box style={styles.groceryList}>
-                <ScrollView showsVerticalScrollIndicator={false} height={windowHeight*.65}>
+                <ScrollView showsVerticalScrollIndicator={false} height={575}>
                     {todos.map((todo, index) => {
                         return (
                             <GroceryItem 
