@@ -115,6 +115,30 @@ export class BarcodeService extends BaseService{
         }
     }
 
+    /**
+     * @returns {FoodItem[]}
+     */
+    async mockGetAllFoods(){
+        try{
+            this.__UseCollection(this.FOOD_COLLECTION)
+            const foodDocs = await this.db.where('name', '!=', '').get()
+            const foodObjs = foodDocs.docs.map((doc) => doc.data())
+
+            const res = []
+
+            foodObjs.forEach( (foodObj) => {
+                const foodToAdd = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, null, foodObj.nutritionData)
+                res.push(foodToAdd)
+            })
+
+            return res
+        }
+        catch(err){
+            logError(err)
+            throw err
+        }
+    }
+
     __parseResponseToItem(resultsData) {
         const { label, image } = resultsData.hints[0].food
 
