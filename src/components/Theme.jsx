@@ -131,8 +131,13 @@ const theme = createTheme({
       fontFamily: "SFProDisplay-Semibold",
       color: "black"
     },
-    groceryListItemDetails: {
-      fontSize: 15,
+    groceryListItem: {
+      fontSize: 20,
+      fontFamily: "SFProDisplay-Regular",
+      color: "black"
+    },
+    groceryListItemCompleted: {
+      fontSize: 20,
       fontFamily: "SFProDisplay-Regular",
       color: "grey"
     },
@@ -170,8 +175,12 @@ const theme = createTheme({
       fontSize: 21,
       fontFamily: "SFProDisplay-Regular",
       color: "greyBlue3"
+    },
+    bottomCardContentBody: {
+      fontSize: 15,
+      fontFamily: "SFProDisplay-Regular",
+      opacity: 0.6
     }
-
   },
   breakpoints: {
     phone: 0,

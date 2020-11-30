@@ -5,7 +5,7 @@ import { useTheme } from '../../components/Theme';
 import { Icon } from '../../components/index'
 import AddItem from '../additem/AddItem';
 import ContainerList from '../container/ContainerList';
-import GroceryList from '../GroceryList';
+import GroceryList from '../grocerylist/GroceryList';
 import { Home } from '../home';
 import User from '../User';
 
