@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
         marginLeft: 32,
     },
     screenName: {
-        marginLeft: 135,
+        marginLeft: 110,
+        // backgroundColor: 'blue'
     },
     backButton: {
         marginLeft: -270,
@@ -125,7 +126,7 @@ const BarcodeScanner = ({ navigation }) => {
 
     return (
         <Box style={styles.container}>
-            <IconButton style={styles.backButton} variant="downButton" onPress={() => navigation.goBack()} />
+            <IconButton style={styles.backButton} variant="backButton" onPress={() => navigation.goBack()} />
             <Text variant="header" style={styles.screenName}>Scan Food</Text>
             <Box style={styles.infoContainer}>
                 <Text variant="barcodeInstructions" style={styles.info1}>Please hold the bar code inside the frame</Text>
