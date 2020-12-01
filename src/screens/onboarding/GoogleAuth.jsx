@@ -82,7 +82,11 @@ const GoogleAuth = () => {
     const { googleAuth, actions, state } = useUserContext()
 
     const handleGoogleSignIn = async () => {
-        await googleAuth.SignInWithGoogle().then((res) => actions.setUser(res.id, { name: res.name, email: res.email, photoUrl: res.photoUrl }).then(() => console.log(state)))
+        await googleAuth
+            .SignInWithGoogle()
+            // .then(res => console.log('res', res))
+            .then(res => actions.setUser(res.user.id, { name: res.user.name, email: res.user.email, photoUrl: res.user.photoUrl, accessToken: res.accessToken }))
+            .then(() => console.log('Logged in user', state))
     }
 
     return (

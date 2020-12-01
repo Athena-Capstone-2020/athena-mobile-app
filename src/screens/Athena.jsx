@@ -1,7 +1,8 @@
-import React from 'react'
-import { useUserContext } from '../global/user-context'
-import Onboarding from './onboarding/Onboarding'
+import React, { useState, useEffect } from 'react'
+import firebase from 'firebase'
 import Navbar from './navbar/Navbar'
+import Onboarding from './onboarding/Onboarding'
+import { useUserContext } from '../global/user-context/useUserContext'
 
 const Athena = () => {
 
@@ -9,7 +10,7 @@ const Athena = () => {
 
     return (
         <>
-            { state.user ? <Navbar /> : <Onboarding />}
+            {state.user ? <Navbar /> : <Onboarding />}
         </>
     )
 }

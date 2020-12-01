@@ -1,10 +1,7 @@
-import { useState } from "react";
 import * as Google from "expo-google-app-auth";
+import firebase from "../../firebase/config";
 
 export default function GoogleAuth() {
-  const [userInfo, setUserInfo] = useState();
-  const [token, setToken] = useState();
-
   const SignInWithGoogle = async () => {
     try {
       const { type, accessToken, user } = await Google.logInAsync({
@@ -15,12 +12,11 @@ export default function GoogleAuth() {
       });
 
       if (type === "success") {
-        setUserInfo(user);
-        setToken(accessToken);
-        return user;
+        return { user, accessToken };
       } else {
         return { cancelled: true };
       }
+      // });
     } catch (e) {
       return { error: true };
     }
