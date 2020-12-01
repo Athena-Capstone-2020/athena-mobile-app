@@ -6,8 +6,9 @@ import {
     TouchableHighlight,
     TouchableOpacity
 } from 'react-native'
-import { Box, ButtonAddToContainer, Button, ButtonMinus, ButtonPlus, IconButton, Text } from '../../components/index';
+import { Box, ButtonAddToContainer, Button, ButtonMinus, ButtonPlus, IconButton, Text, FoodItem } from '../../components/index';
 import { withContainerService, withHouseholdService } from '../../services';
+import * as Models from '../../models'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -165,7 +166,8 @@ const ItemDescription = ({ route, navigation }) => {
 
     async function addItemToContainer(containerID, item) {
         if (containerID) {
-            await containerService.addFoodItemToContainer(containerID, { name: item.name, photoURI: item.photoURI, description: item.description, quantity: count, expireDate: new Date(), nutritionData: {} }).then(res => console.log(res))
+            const foodItem = new Models.FoodItem(item.name, item.photoURI, count, item.description, new Date(), item.description)
+            await containerService.addFoodItemToContainer(foodItem, containerID ).then(res => console.log(res))
         }
     }
 
