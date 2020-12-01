@@ -21,17 +21,11 @@ const ContainerListView = ({ navigation }) => {
 
     const { state } = useUserContext()
 
+    const [containerNumber, setContainerNumber] = useState(1)
     const { containerService } = withContainerService()
     const { householdService } = withHouseholdService()
     const [containers, setContainers] = useState([])
     const [distributing, setDistributing] = useState(false)
-
-    const [addingContainer, setAddingContainer] = useState(false)
-    const [containerName, setContainerName] = useState('')
-
-    // const { state } = useUserContext();
-
-    console.log(state)
 
     async function fetchExistingContainers() {
         try {
@@ -57,14 +51,17 @@ const ContainerListView = ({ navigation }) => {
             // Create a container
 
             //TODO: Do sometype of name validation
-            if (containerName !== '' && state.household) {
-                const newContainer = await containerService.createContainer(containerName, icon)
+            if (state.household) {
+                const newContainerId = await containerService.createContainer(`Container ${containerNumber}`, icon)
 
                 // Add the created container to the household
-                await householdService.addContainerToHousehold(newContainer.id, state.household.id)
+                await householdService.addContainerToHousehold(newContainerId, state.household.id)
+
+                const newContainer = await containerService.getContainerById(newContainerId)
                 setContainers((prevContainers) => {
                     return [...prevContainers, newContainer]
                 })
+                setContainerNumber(containerNumber + 1)
             }
         } catch (err) {
             console.error(err)
@@ -78,30 +75,6 @@ const ContainerListView = ({ navigation }) => {
 
     return (
         <Box style={styles.container}>
-            <Box flex={1} position='absolute' top={0} bottom={0} left={0} right={0}>
-                <Modal
-                    animationType="slide"
-                    transparent
-                    visible={addingContainer}
-                >
-                    <Box>
-                        <ScrollView horizontal>
-                            {/* Colors */}
-                        </ScrollView>
-                        <ScrollView horizontal>
-                            {/* Icons */}
-                        </ScrollView>
-                        <Input
-                            placeholder={'Container Name'}
-                            style={{ marginVertical: 15 }}
-                            value={containerName}
-                            onChangeText={(newContainerName) => setContainerName(newContainerName)}
-                            keyboardType={'default'}
-                            maxLength={25}
-                        />
-                    </Box>
-                </Modal>
-            </Box>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Box marginTop="xl" alignItems="center">
                     {
@@ -114,7 +87,7 @@ const ContainerListView = ({ navigation }) => {
                         )
                     }
                     <Button
-                        onPress={() => setAddingContainer(true)}
+                        onPress={handleAddContainer}
                         label="Add Container"
                         variant="button"
                     />
