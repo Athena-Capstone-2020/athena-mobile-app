@@ -91,7 +91,15 @@ const BarcodeScanner = ({ navigation }) => {
 
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
+    const [searchedItem, setSearchedItem] = useState()
+    const [gotoItemDescription, setGotoItemDescription] = useState(false)
     const { barcodeService } = withBarcodeService()
+
+    useEffect(() => {
+        if (gotoItemDescription) {
+            navigation.navigate("ItemDescription", { searchedItem })
+        }
+    }, [gotoItemDescription])
 
     useEffect(() => {
         (async () => {
@@ -102,8 +110,8 @@ const BarcodeScanner = ({ navigation }) => {
 
     const handleBarCodeScanned = async ({ data }) => {
         setScanned(true)
-        const response = await barcodeService.getDataFromBarcode(data)
-        console.log(response)
+        await barcodeService.mockGetDataFromBarcodeUPC(data).then(res => setSearchedItem(res))
+        setGotoItemDescription(true)
     };
 
 
