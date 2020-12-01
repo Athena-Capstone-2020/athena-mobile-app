@@ -6,7 +6,9 @@ import { Box } from "../../components/Theme"
 
 const styles = StyleSheet.create({
     container: {},
-    nameBox: {},
+    nameBox: {
+        marginTop: 30
+    },
     foodItems: {
         padding: '5%'
     }
