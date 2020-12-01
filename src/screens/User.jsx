@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         marginTop: 60
     },
     profileName: {
-        width: 130,
+        width: "100%",
         height: 30,
         marginTop: 15,
     },
