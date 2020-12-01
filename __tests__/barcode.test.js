@@ -54,7 +54,7 @@ test('should get all mock foods from db', async () => {
     const barcodeService = setup()
 
     const res = await barcodeService.mockGetAllFoods()
-    expect(res.length).toBe(10)
+    expect(res.length).toBe(11)
 })
 
 /**
