@@ -1,54 +1,64 @@
-import React from 'react'
-import { StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, ScrollView } from 'react-native'
 
-import { Text, useTheme, Icon, Button, FoodItem } from "../../components/index"
+import { Text, useTheme, Button, FoodItem } from "../../components/index"
 import { Box } from "../../components/Theme"
 
 const styles = StyleSheet.create({
     container: {},
-    topButtons: {},
-    name: {},
-    foodItems: {}
+    nameBox: {},
+    foodItems: {
+        padding: '5%'
+    }
 })
 
 const Container = ({ route }) => {
 
-    const theme = useTheme()
+    var d = new Date()
+    d.setMonth(d.getMonth() + 8)
+    var d2 = new Date()
+    d2.setMonth(d2.getMonth() - 1)
 
-    const background = theme.textVariants[variant].background
-    const backgroundColor = theme.colors[background]
-
-    const fontColor = theme.textVariants[variant].text
-    const color = theme.colors[fontColor]
+    const foodItems2 = [
+        {
+            id: "1",
+            name: "Bananas",
+            photoURI: "https://cdn1.sph.harvard.edu/wp-content/uploads/sites/30/2018/08/bananas-1354785_1920.jpg",
+            quantity: "6",
+            expires: d
+        },
+        {
+            id: "2",
+            name: "Sugar",
+            photoURI: "https://cdn1.sph.harvard.edu/wp-content/uploads/sites/30/2018/08/bananas-1354785_1920.jpg",
+            quantity: "1lb",
+            expires: d2
+        },
+    ]
 
     const { name, icon, foodItems } = route.params.container
 
     return (
-        <Box style={styles.container}> 
-            <Box style={styles.topButtons}>
-                <Button
-                    label='<'
-                    onPress={() => navigation.navigate("ContainerListView")}
-                />
-                <Button
-                    label='+'
-                    onPress={() => { /* navigate to addItem passing containerId along as props */ }}
-                />
+        <ScrollView showsVerticalScrollIndicator={false}>
+            <Box style={styles.container}> 
+                <Box style={styles.nameBox}>
+                    <Text
+                        style={{ marginVertical: 40, marginLeft: '5%', fontSize: 36, fontWeight: '500'}}
+                    >{name}</Text>
+                </Box>
+                <Box style={styles.foodItems}>
+                    {foodItems.map(item => 
+                        <FoodItem
+                            key={item.id}
+                            name={item.name}
+                            photoURI={item.photoURI}
+                            quantity={item.quantity}
+                            expires={item.expires}
+                        />
+                    )}
+                </Box>
             </Box>
-            <Box style={styles.name}>
-                <Text>{name}</Text>
-            </Box>
-            <Box style={styles.foodItems}>
-                {foodItems.map(item => {
-                    <FoodItem
-                        key={item.id}
-                        name={item.name}
-                        photoURI={item.photoURI}
-                        quantity={item.quantity}
-                    />
-                })}
-            </Box>
-        </Box>
+        </ScrollView>
     )
 }
 

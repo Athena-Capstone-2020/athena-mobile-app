@@ -27,7 +27,7 @@ export function Card(props) {
     <Box style={[style.container, props.cardStyle]} {...props}>
       <Image
         source={{ uri: props.imageUri }}
-        style={{ width: "100%", minHeight: 100 }}
+        style={{ width: "100%", minHeight: 100, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}
         resizeMode={"center"}
       />
       <Box style={style.bottomContainer}>{props.bottomContent}</Box>
