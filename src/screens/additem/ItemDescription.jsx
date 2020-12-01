@@ -163,8 +163,10 @@ const ItemDescription = ({ route, navigation }) => {
         }
     }
 
-    async function addItemToContainer(item) {
-        await containerService.addFoodItemToContainer(state.household.id, item)
+    async function addItemToContainer(containerID, item) {
+        if (containerID) {
+            await containerService.addFoodItemToContainer(containerID, new FoodItem(item.name, item.photoURI, count, item.description, new Date(), item.nutritionData)).then(res => console.log(res))
+        }
     }
 
     return (
@@ -230,7 +232,7 @@ const ItemDescription = ({ route, navigation }) => {
                                 </TouchableHighlight>)
                         })}
                         {
-                            selected ? <Button label="Add To Container" style={styles.pushToContainer} onPress={() => { setModalVisible(!modalVisible), addItemToContainer(searchedItem), navigation.goBack() }} /> :
+                            selected ? <Button label="Add To Container" style={styles.pushToContainer} onPress={() => { setModalVisible(!modalVisible), addItemToContainer(selected, searchedItem), navigation.goBack() }} /> :
                                 <Button label="Add To Container" style={styles.pushToContainerNotSelected} onPress={() => { setModalVisible(!modalVisible), navigation.goBack() }} />
                         }
                         <Button style={{ width: 50, height: 30, borderRadius: 15, marginTop: 23 }} label="Close " onPress={() => { setModalVisible(false) }} />
