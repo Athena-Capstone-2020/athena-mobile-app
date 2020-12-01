@@ -82,7 +82,7 @@ export const Home = () => {
           />
         </View>
         <Text variant="header" style={{ marginTop: 30, marginLeft: 20 }}>
-          Recipies
+          Recipes
         </Text>
       </Box>
       <FlatList
