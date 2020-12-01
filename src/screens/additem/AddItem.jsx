@@ -89,6 +89,7 @@ const AddItemSearch = ({ navigation }) => {
 
     const [searches, setSearches] = useState([])
     const [text, setText] = useState('')
+    const [searched, setSearched] = useState(false)
     const [searchedItem, setSearchedItem] = useState(null)
     const [showRecents, setShowRecents] = useState(true)
     const [recents, setRecents] = useState(false)
@@ -109,10 +110,12 @@ const AddItemSearch = ({ navigation }) => {
 
     const submitHandler = async (text) => {
         const response = await barcodeService.mockGetAllFoods();
+        console.log(response)
         if (text.length === 0) return;
 
         var item = search(response, text)
         setSearchedItem(item)
+        setSearched(true)
         console.log('searchedItem', searchedItem)
 
         const key = Math.random().toString();
@@ -243,11 +246,13 @@ const AddItemSearch = ({ navigation }) => {
                                 </RectButton>
                             </Box>
                         </Box> :
-                        <Box>
-                            <Box flexDirection="row" justifyContent="space-between" style={{ width: windowWidth - 64 }}>
-                                <Text variant="recentSearchesTitle" style={styles.recentSearchesTitle}>No results Found</Text>
-                            </Box>
-                        </Box>
+                        (searched ?
+                            <Box>
+                                <Box flexDirection="row" justifyContent="space-between" style={{ width: windowWidth - 64 }}>
+                                    <Text variant="recentSearchesTitle" style={styles.recentSearchesTitle}>No results Found</Text>
+                                </Box>
+                            </Box> : null
+                        )
                     )}
             </Box>
         </SafeAreaView >

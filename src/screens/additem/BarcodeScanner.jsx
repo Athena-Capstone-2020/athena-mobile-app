@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     manualButton: {
         alignContent: "center",
         marginLeft: 54,
-        marginTop: 260
+        marginTop: 240
     }
 })
 

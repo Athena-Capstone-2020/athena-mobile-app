@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet, Image } from 'react-native';
 import { Box, Text } from '../../components/index';
 import Svg, { G, Circle } from "react-native-svg"
 
@@ -48,10 +48,16 @@ const GreenCircle = () => {
 }
 
 
-const Slide = ({ mainPhoto, miniPhotos, title, description }) => {
+const Slide = ({ mainPhoto, title, description }) => {
     return (
         <Box flex={1} style={styles.container}>
             <Box>
+                <Box style={{ marginBottom: mainPhoto.marginBottom, marginLeft: mainPhoto.marginLeft, zIndex: 1 }}>
+                    <Image
+                        style={{ width: mainPhoto.width, height: mainPhoto.height, position: 'absolute' }}
+                        source={mainPhoto.src}
+                    />
+                </Box>
                 <GreenCircle />
             </Box>
             <Text variant="onboardingTitle" style={styles.title}>{title}</Text>
