@@ -29,7 +29,7 @@ test('should return an error with an invalid barcode', async () => {
 test('should get fooditem with mock barcode scan', async () =>  {
     const barcodeService = setup()
 
-    const barcode = '0380001817191'
+    const barcode = '038000181719'
     const foodObj = await barcodeService.mockGetDataFromBarcodeUPC(barcode)
     expect(foodObj).toBeDefined()
 })
