@@ -84,9 +84,7 @@ const GoogleAuth = () => {
     const handleGoogleSignIn = async () => {
         await googleAuth
             .SignInWithGoogle()
-            // .then(res => console.log('res', res))
-            .then(res => actions.setUser(res.user.id, { name: res.user.name, email: res.user.email, photoUrl: res.user.photoUrl, accessToken: res.accessToken }))
-            .then(() => console.log('Logged in user', state))
+            .then(res => actions.setUser(res.user.id, { name: res.user.name, email: res.user.email, photoUrl: res.user.photoUrl }))
     }
 
     return (

@@ -77,11 +77,11 @@ export class BarcodeService extends BaseService{
     async mockGetDataFromBarcodeUPC(barcodeUPC){
         try{
             this.__UseCollection(this.FOOD_COLLECTION)
-            const foodObj = this.__GetById(barcodeUPC)
+            const foodObj = await this.__GetById(barcodeUPC)
             if(foodObj == undefined)
                 return null
 
-            const res = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, null, foodObj.nutritionData)
+            const res = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, new Date(), foodObj.nutritionData)
             return res 
         }
         catch(err){
@@ -103,7 +103,7 @@ export class BarcodeService extends BaseService{
             const res = []
 
             foodObjs.forEach( (foodObj) => {
-                const foodToAdd = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, null, foodObj.nutritionData)
+                const foodToAdd = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, new Date(), foodObj.nutritionData)
                 res.push(foodToAdd)
             })
 
@@ -127,7 +127,7 @@ export class BarcodeService extends BaseService{
             const res = []
 
             foodObjs.forEach( (foodObj) => {
-                const foodToAdd = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, null, foodObj.nutritionData)
+                const foodToAdd = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, new Date(), foodObj.nutritionData)
                 res.push(foodToAdd)
             })
 

@@ -15,6 +15,7 @@ const palette = {
   greyBlue1: "#9DA4BB",
   greyBlue2: "#8387A7",
   greyBlue3: "#30384F",
+  greyBlue4: "#9796A1",
   monochrome1: "#F3F3F3",
   monochrome2: "#E7E7E7",
   white: "#FFFFFF",
@@ -29,6 +30,7 @@ const theme = createTheme({
     greyBlue1: palette.greyBlue1,
     greyBlue2: palette.greyBlue2,
     greyBlue3: palette.greyBlue3,
+    greyBlue4: palette.greyBlue4,
     monochrome1: palette.monochrome1,
     monochrome2: palette.monochrome2,
     onboardingGrey: palette.onboardingGrey,
@@ -180,6 +182,21 @@ const theme = createTheme({
       fontSize: 15,
       fontFamily: "SFProDisplay-Regular",
       opacity: 0.6
+    },
+    profileName: {
+      fontSize: 24,
+      fontFamily: "SFProDisplay-Semibold",
+      color: 'black'
+    },
+    householdName: {
+      fontSize: 18,
+      fontFamily: "SFProDisplay-Semibold",
+      color: 'greyBlue4'
+    },
+    profileButtonText: {
+      fontSize: 18,
+      fontFamily: "SFProDisplay-Regular",
+      color: 'black'
     }
   },
   breakpoints: {
