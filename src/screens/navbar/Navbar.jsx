@@ -32,10 +32,10 @@ const Navbar = () => {
                     }
                 }}
             >
-                <Tab.Screen name="Home" component={Home} />
-                <Tab.Screen name="ContainerList" component={ContainerList} />
-                <Tab.Screen name="AddItem" component={AddItem} />
-                <Tab.Screen name="GroceryList" component={GroceryList} />
+                <Tab.Screen name="Home" component={Home} options={{ unmountOnBlur: true }} />
+                <Tab.Screen name="ContainerList" component={ContainerList} options={{ unmountOnBlur: true }}/>
+                <Tab.Screen name="AddItem" component={AddItem} options={{ unmountOnBlur: true }}/>
+                <Tab.Screen name="GroceryList" component={GroceryList} options={{ unmountOnBlur: true }}/>
                 <Tab.Screen name="User" component={User} />
             </Tab.Navigator>
         </NavigationContainer>
