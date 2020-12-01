@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, FlatList } from 'react-native';
 import { Box, Text } from '../../components/index';
 import IconButton from '../../components/IconButton';
 import GroceryItem from "./GroceryItem";
@@ -39,12 +39,15 @@ const GroceryList = () => {
 
     const [todos, setTodos] = useState([]);
     const [grocList, setGrocList] = useState([]);
+    const [refreshing, setRefreshing] = useState(false)
 
     async function fetchGroceryList() {
+        setRefreshing(true)
         let gList = await groceryListService.getGroceryListById("ReyesGroceryList");
         setGrocList(gList);
         const foodItemArr = await groceryListService.getFoodItemArrayFromGroceryList("ReyesGroceryList");
         setTodos(foodItemArr);
+        setRefreshing(false)
     }
 
     async function addTodo(text) {
@@ -95,19 +98,21 @@ const GroceryList = () => {
                 <Text variant="groceryListName">Grocery List</Text>
             </Box>
             <Box style={styles.groceryList}>
-                <ScrollView showsVerticalScrollIndicator={false} height={575}>
-                    {todos.map((todo, index) => {
-                        return (
-                            <GroceryItem 
+                <FlatList
+                    data={todos}
+                    renderItem={({ item, index }) => (
+                        <GroceryItem 
                             key={index}
                             index={index}
-                            todo={todo.name}
+                            todo={item.name}
                             removeTodo={removeTodo}
                             updateTodo={updateTodo}
                             />
-                        )
-                    })}
-                </ScrollView>
+                    )}
+                    showsHorizontalScrollIndicator={false}
+                    onRefresh={fetchGroceryList}
+                    refreshing={refreshing}
+                />
             </Box>
             <IconButton variant="addItem" style={styles.addItem} onPress={() => addTodo("")}></IconButton>
         </Box>
