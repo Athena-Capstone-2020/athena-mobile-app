@@ -1,20 +1,26 @@
 import React, { useState } from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
 
-import { Text, useTheme, Button, FoodItem } from "../../components/index"
+import { Text, useTheme, Button, IconButton, FoodItem } from "../../components/index"
 import { Box } from "../../components/Theme"
 
 const styles = StyleSheet.create({
     container: {},
     nameBox: {
-        marginTop: 30
+        marginTop: 30,
+        flexDirection: 'row'
     },
     foodItems: {
         padding: '5%'
-    }
+    },
+    backButton: {
+        marginLeft: -250,
+        marginTop: 28,
+        position: "absolute"
+    },
 })
 
-const Container = ({ route }) => {
+const Container = ({ route, navigation }) => {
 
     var d = new Date()
     d.setMonth(d.getMonth() + 8)
@@ -42,14 +48,15 @@ const Container = ({ route }) => {
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
-            <Box style={styles.container}> 
+            <Box style={styles.container}>
                 <Box style={styles.nameBox}>
+                    <IconButton style={styles.backButton} variant="backButton" onPress={() => navigation.goBack()} />
                     <Text
-                        style={{ marginVertical: 40, marginLeft: '5%', fontSize: 36, fontWeight: '500'}}
+                        style={{ marginVertical: 40, marginLeft: '20%', fontSize: 36, fontWeight: '500' }}
                     >{name}</Text>
                 </Box>
                 <Box style={styles.foodItems}>
-                    {foodItems.map(item => 
+                    {foodItems.map(item =>
                         <FoodItem
                             key={item.id}
                             name={item.name}
