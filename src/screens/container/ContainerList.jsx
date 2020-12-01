@@ -14,8 +14,7 @@ const ContainerStack = createStackNavigator()
 const ContainerListView = () => {
 
     const { state } = useUserContext()
-    console.log("UC:", state)
-
+    
     const { containerService } = withContainerService()
     const { householdService } = withHouseholdService()
     const [containers, setContainers] = useState([])
