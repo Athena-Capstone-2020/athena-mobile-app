@@ -1,5 +1,8 @@
 {
   "expo": {
+    "splash": {
+      "image": "./assets/splash.png"
+    },
     "ios": {
       "bundleIdentifier": "example.expo.googlesignin",
       "config": {

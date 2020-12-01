@@ -35,10 +35,11 @@ const styles = StyleSheet.create({
         position: "absolute"
     },
     imageContainer: {
-        width: windowWidth - 64,
-        height: 206,
+        width: 200,
+        height: 200,
         alignSelf: "center",
-        marginTop: 25
+        marginTop: 25,
+        // backgroundColor: "blue"
     },
     image: {
         width: 200,
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     },
     name: {
         width: windowWidth - 64,
-        height: 110
+        marginTop: 15
     },
     countContainer: {
         flexDirection: "row",
@@ -142,7 +143,12 @@ const picture = {
     src: require('../../../assets/pancakes.png')
 }
 
-const ItemDescription = ({ navigation }) => {
+const ItemDescription = ({ route, navigation }) => {
+
+    const { searchedItem } = route.params;
+
+    console.log(searchedItem.photoURI)
+
 
     const [count, setcount] = useState(1)
     const [modalVisible, setModalVisible] = useState(false)
@@ -172,15 +178,13 @@ const ItemDescription = ({ navigation }) => {
                 </Box>
                 <Box style={styles.imageContainer}>
                     <Image
-                        source={picture.src}
+                        source={{ uri: searchedItem.photoURI }}
                         style={styles.image}
                     />
                 </Box>
                 <Box style={styles.descriptionContainer}>
                     <Box style={styles.name}>
-                        <Text variant="itemDescriptionTitle">Aunt Jemima </Text>
-                        <Text variant="itemDescriptionTitle">Complete Pancake </Text>
-                        <Text variant="itemDescriptionTitle">Mix Buttermilk</Text>
+                        <Text variant="itemDescriptionTitle">{searchedItem.name}</Text>
                     </Box>
                     <Box style={styles.countContainer}>
                         <ButtonMinus style={styles.minusButton} onPress={() => setcount(count - 1)} />
@@ -189,7 +193,7 @@ const ItemDescription = ({ navigation }) => {
                         </Box>
                         <ButtonPlus style={styles.plusButton} onPress={() => setcount(count + 1)} />
                     </Box>
-                    <Text style={{ marginTop: 10 }} variant="barcodeInstructions">Complete Pancake Mix Buttermilk Complete Pancake Mix Buttermilk.</Text>
+                    <Text style={{ marginTop: 20 }} variant="barcodeInstructions">{searchedItem.description}</Text>
                 </Box>
                 <ButtonAddToContainer style={styles.addToContainer} onPress={() => {
                     setModalVisible(true), getContainers("CONTAINER_DEMO"), setSelected('')
@@ -221,9 +225,10 @@ const ItemDescription = ({ navigation }) => {
                             <Text variant="recentSearchesTitle">{container ? container.name : ""}</Text>
                         </TouchableHighlight>
                         {
-                            selected ? <Button label="Add To Container" style={styles.pushToContainer} onPress={() => { setModalVisible(!modalVisible), navigation.goBack()}}/> : 
+                            selected ? <Button label="Add To Container" style={styles.pushToContainer} onPress={() => { setModalVisible(!modalVisible), navigation.goBack() }} /> :
                                 <Button label="Add To Container" style={styles.pushToContainerNotSelected} onPress={() => { setModalVisible(!modalVisible), navigation.goBack() }} />
                         }
+                        <Button style={{ width: 50, height: 30, borderRadius: 15, marginTop: 23 }} label="Close " onPress={() => { setModalVisible(false) }} />
                     </Box>
                 </Box>
             </Modal>

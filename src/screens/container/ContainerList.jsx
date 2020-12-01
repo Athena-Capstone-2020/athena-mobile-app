@@ -5,7 +5,8 @@ import { Button, Text, Box, Input } from '../../components/index'
 import ContainerButton from './ContainerButton'
 import Container from './Container'
 import { withContainerService, withHouseholdService } from '../../services'
-import {logError} from '../../logger/Logger'
+import { logError } from '../../logger/Logger'
+import { useUserContext } from '../../global/user-context/useUserContext'
 
 const ContainerStack = createStackNavigator()
 
@@ -16,10 +17,16 @@ const ContainerListView = () => {
     const [distributing, setDistributing] = useState(false)
     const [containerName, setContainerName] = useState('')
 
+    const { state } = useUserContext();
+
+    console.log(state)
+
     async function fetchExistingContainers() {
         try {
-            const results = await householdService.getContainersForHousehold('ReyesHousehold')
-            setContainers(results)
+            if (state.household) {
+                const results = await householdService.getContainersForHousehold(state.household.id)
+                setContainers(results)
+            }
         } catch (err) {
             console.error(err)
             logError(err)
@@ -37,10 +44,10 @@ const ContainerListView = () => {
 
             // Create a container
             //TODO: Do sometype of name validation
-            if(containerName !== ''){
+            if (containerName !== '') {
                 const newContainer = await containerService.createContainer(containerName, icon)
-            
-            // Add the created container to the household
+
+                // Add the created container to the household
                 await householdService.addContainerToHousehold(newContainer.id, 'ReyesHousehold')
 
                 setContainers((prevContainers) => {
@@ -63,7 +70,7 @@ const ContainerListView = () => {
     return (
         <Box marginTop="xl" alignItems="center">
             {
-                containers.map(c => 
+                containers.map(c =>
                     <ContainerButton
                         key={c.id}
                         container={c}
@@ -88,10 +95,10 @@ const ContainerListView = () => {
     )
 }
 
-const ContainerList = () => 
+const ContainerList = () =>
     <ContainerStack.Navigator>
         <ContainerStack.Screen name="ContainerListView" component={ContainerListView} options={{ headerShown: false }} />
-        <ContainerStack.Screen name="Container" component={Container} options={{ headerShown: false }}/>
+        <ContainerStack.Screen name="Container" component={Container} options={{ headerShown: false }} />
     </ContainerStack.Navigator>
 
 export default ContainerList;
