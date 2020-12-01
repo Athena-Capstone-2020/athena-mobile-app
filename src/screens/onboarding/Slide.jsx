@@ -67,19 +67,19 @@ const Slide = ({ mainPhoto, minipics, title, description }) => {
                         source={minipics.src1}
                     />
                 </Box>
-                <Box style={{ height: 40, width: 30, alignSelf: 'flex-end', position: 'absolute', top: 200 }}>
+                <Box style={{ height: 40, width: 30, alignSelf: 'flex-end', position: 'absolute', top: 200, right: 20 }}>
                     <Image
                         style={{ position: 'absolute' }}
                         source={minipics.src2}
                     />
                 </Box>
-                <Box style={{ height: 40, width: 30, alignSelf: 'center', position: 'absolute', zIndex: 1, marginTop: -40, right: 70, top: 30 }}>
+                <Box style={{ height: 40, width: 30, alignSelf: 'center', position: 'absolute', zIndex: 1, marginTop: -60, right: 70, top: 30 }}>
                     <Image
                         style={{ position: 'absolute' }}
                         source={minipics.src3}
                     />
                 </Box>
-                <Box style={{ height: 40, width: 30, position: 'absolute', zIndex: 0, bottom: 0, top: 250 }}>
+                <Box style={{ height: 40, width: 30, position: 'absolute', zIndex: 0, bottom: 0, top: 240 }}>
                     <Image
                         style={{ position: 'absolute' }}
                         source={minipics.src4}

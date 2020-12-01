@@ -44,6 +44,12 @@ const assets = [
             marginBottom: 23,
             marginLeft: -25
         },
+        minipics: {
+            src1: require('../../../assets/Onboarding/sandwich.png'),
+            src2: require('../../../assets/Onboarding/padthai.png'),
+            src3: require('../../../assets/Onboarding/apple.png'),
+            src4: require('../../../assets/Onboarding/Cheesecake.png'),
+        },
         description: "connect with housemates and family members to always have an up to date inventory of food "
     },
     {
@@ -54,6 +60,12 @@ const assets = [
             height: 250,
             marginBottom: -28,
             marginLeft: 30
+        },
+        minipics: {
+            src1: require('../../../assets/Onboarding/melon.png'),
+            src2: require('../../../assets/Onboarding/citrus.png'),
+            src3: require('../../../assets/Onboarding/veggies.png'),
+            src4: require('../../../assets/Onboarding/chickensomething.png'),
         },
         description: "Save time and money by letting Athena keep track of food for you "
     },
