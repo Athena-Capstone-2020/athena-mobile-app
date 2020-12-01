@@ -77,7 +77,7 @@ export class BarcodeService extends BaseService{
     async mockGetDataFromBarcodeUPC(barcodeUPC){
         try{
             this.__UseCollection(this.FOOD_COLLECTION)
-            const foodObj = this.__GetById(barcodeUPC)
+            const foodObj = await this.__GetById(barcodeUPC)
             if(foodObj == undefined)
                 return null
 
