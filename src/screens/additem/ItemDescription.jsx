@@ -165,7 +165,7 @@ const ItemDescription = ({ route, navigation }) => {
 
     async function addItemToContainer(containerID, item) {
         if (containerID) {
-            await containerService.addFoodItemToContainer(containerID, new FoodItem(item.name, item.photoURI, count, item.description, new Date(), item.nutritionData)).then(res => console.log(res))
+            await containerService.addFoodItemToContainer(containerID, { name: item.name, photoURI: item.photoURI, description: item.description, quantity: count, expireDate: new Date(), nutritionData: {} }).then(res => console.log(res))
         }
     }
 
