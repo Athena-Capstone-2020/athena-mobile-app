@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Modal, ScrollView, StyleSheet } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { Button, Text, Box, Input } from '../../components/index'
+import { Button, Text, Box, Input, IconButton } from '../../components/index'
 import ContainerButton from './ContainerButton'
 import Container from './Container'
 import { withContainerService, withHouseholdService } from '../../services'
@@ -17,10 +17,10 @@ const styles = StyleSheet.create({
 
 const ContainerStack = createStackNavigator()
 
-const ContainerListView = () => {
+const ContainerListView = ({ navigation }) => {
 
     const { state } = useUserContext()
-    
+
     const { containerService } = withContainerService()
     const { householdService } = withHouseholdService()
     const [containers, setContainers] = useState([])
