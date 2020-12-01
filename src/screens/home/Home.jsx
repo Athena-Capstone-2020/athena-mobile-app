@@ -45,17 +45,17 @@ export const Home = () => {
 
   const expireItems = [
     {
-      title: "Banana",
-      image: "https://i.redd.it/febxrcjqpeb41.jpg",
+      title: "Bananas",
+      image: "https://cdn1.sph.harvard.edu/wp-content/uploads/sites/30/2018/08/bananas-1354785_1920.jpg",
     },
     {
       title: "Chicken",
       image:
-        "https://media.discordapp.net/attachments/764602206556389398/780206221839433738/fat-chicken-2.png",
+        "https://hips.hearstapps.com/hmg-prod/images/delish-190808-baked-drumsticks-0217-landscape-pf-1567089281.jpg",
     },
     {
-      title: "Beef",
-      image: "https://i.ebayimg.com/images/g/WccAAOSwnDZT3jSG/s-l300.jpg",
+      title: "Steak",
+      image: "https://www.thespruceeats.com/thmb/hl4lkmdLO7tj1eDCsGbakfk97Co=/3088x2055/filters:fill(auto,1)/marinated-top-round-steak-3060302-hero-02-ed071d5d7e584bea82857112aa734a94.jpg",
     },
   ];
 
@@ -82,7 +82,7 @@ export const Home = () => {
           />
         </View>
         <Text variant="header" style={{ marginTop: 30, marginLeft: 20 }}>
-          Recipies
+          Recipes
         </Text>
       </Box>
       <FlatList

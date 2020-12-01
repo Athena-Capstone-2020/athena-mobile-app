@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, FlatList, SafeAreaView, StyleSheet, TouchableHighlight, View } from 'react-native';
+import { Dimensions, FlatList, SafeAreaView, StyleSheet } from 'react-native';
 import Svg, { G, Path } from "react-native-svg";
 import { Box, Button, IconButton, Search, Text } from '../../components/index';
 import BarcodeManual from './BarcodeManual';
@@ -91,6 +91,7 @@ const AddItemSearch = ({ navigation }) => {
     const [text, setText] = useState('')
     const [searchedItem, setSearchedItem] = useState(null)
     const [showRecents, setShowRecents] = useState(true)
+    const [recents, setRecents] = useState(false)
 
     const { barcodeService } = withBarcodeService()
 
