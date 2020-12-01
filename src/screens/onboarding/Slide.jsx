@@ -48,7 +48,7 @@ const GreenCircle = () => {
 }
 
 
-const Slide = ({ mainPhoto, title, description }) => {
+const Slide = ({ mainPhoto, minipics, title, description }) => {
     return (
         <Box flex={1} style={styles.container}>
             <Box>
@@ -58,7 +58,33 @@ const Slide = ({ mainPhoto, title, description }) => {
                         source={mainPhoto.src}
                     />
                 </Box>
+                {/* <Box style={{ marginBottom: 90 }}> */}
                 <GreenCircle />
+                {/* </Box> */}
+                <Box style={{ height: 40, width: 30, zIndex: 1, position: 'absolute', top: 20 }}>
+                    <Image
+                        style={{ position: 'absolute' }}
+                        source={minipics.src1}
+                    />
+                </Box>
+                <Box style={{ height: 40, width: 30, alignSelf: 'flex-end', position: 'absolute', top: 200, right: 20 }}>
+                    <Image
+                        style={{ position: 'absolute' }}
+                        source={minipics.src2}
+                    />
+                </Box>
+                <Box style={{ height: 40, width: 30, alignSelf: 'center', position: 'absolute', zIndex: 1, marginTop: -60, right: 70, top: 30 }}>
+                    <Image
+                        style={{ position: 'absolute' }}
+                        source={minipics.src3}
+                    />
+                </Box>
+                <Box style={{ height: 40, width: 30, position: 'absolute', zIndex: 0, bottom: 0, top: 240 }}>
+                    <Image
+                        style={{ position: 'absolute' }}
+                        source={minipics.src4}
+                    />
+                </Box>
             </Box>
             <Text variant="onboardingTitle" style={styles.title}>{title}</Text>
             <Box style={styles.descriptionContainer}>
