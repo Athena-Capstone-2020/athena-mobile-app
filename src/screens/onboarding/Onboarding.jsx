@@ -27,6 +27,12 @@ const assets = [
             marginBottom: 23,
             marginLeft: 36
         },
+        minipics: {
+            src1: require('../../../assets/Onboarding/salad.png'),
+            src2: require('../../../assets/Onboarding/ladel.png'),
+            src3: require('../../../assets/Onboarding/avocado.png'),
+            src4: require('../../../assets/Onboarding/frenchToast.png'),
+        },
         description: "Athena is your new kitchen organizational tool"
     },
     {
@@ -75,6 +81,7 @@ const Onboarding = () => {
                                 title={slide.title}
                                 mainPhoto={slide.picture}
                                 description={slide.description}
+                                minipics={slide.minipics ? slide.minipics : ""}
                             />
                         )
                     })}

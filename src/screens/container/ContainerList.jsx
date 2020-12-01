@@ -24,7 +24,7 @@ const ContainerListView = () => {
     const [addingContainer, setAddingContainer] = useState(false)
     const [containerName, setContainerName] = useState('')
 
-    const { state } = useUserContext();
+    // const { state } = useUserContext();
 
     console.log(state)
 
@@ -100,7 +100,7 @@ const ContainerListView = () => {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Box marginTop="xl" alignItems="center">
                     {
-                        containers.map(c => 
+                        containers.map(c =>
                             <ContainerButton
                                 key={c.id}
                                 container={c}
