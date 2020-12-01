@@ -7,10 +7,11 @@ import {
     TouchableOpacity
 } from 'react-native'
 import { Box, ButtonAddToContainer, Button, ButtonMinus, ButtonPlus, IconButton, Text } from '../../components/index';
-import { withContainerService } from '../../services';
+import { withContainerService, withHouseholdService } from '../../services';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+import { useUserContext } from '../../global/user-context/useUserContext'
 
 const styles = StyleSheet.create({
     screen: {
@@ -131,10 +132,10 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     pushToContainer: {
-        marginTop: 100
+        marginTop: 10
     },
     pushToContainerNotSelected: {
-        marginTop: 100,
+        marginTop: 20,
         opacity: .3
     }
 })
@@ -147,24 +148,23 @@ const ItemDescription = ({ route, navigation }) => {
 
     const { searchedItem } = route.params;
 
-    console.log(searchedItem.photoURI)
-
+    const { state } = useUserContext()
 
     const [count, setcount] = useState(1)
     const [modalVisible, setModalVisible] = useState(false)
-    const [container, setContainer] = useState()
+    const [containers, setContainers] = useState()
     const [selected, setSelected] = useState('')
     const { containerService } = withContainerService();
+    const { householdService } = withHouseholdService()
 
-    async function getContainers(id) {
-        const response = await containerService.getContainerById(id)
-        setContainer(response)
-        console.log(container)
+    async function getContainers() {
+        if (state.household) {
+            await householdService.getContainersForHousehold(state.household.id).then(res => setContainers(res))
+        }
     }
 
-    async function addItemToContainer(ID, item) {
-        const response = await containerService.addFoodItemToContainer(id, item)
-        console.log(response)
+    async function addItemToContainer(item) {
+        await containerService.addFoodItemToContainer(state.household.id, item)
     }
 
     return (
@@ -196,7 +196,7 @@ const ItemDescription = ({ route, navigation }) => {
                     <Text style={{ marginTop: 20 }} variant="barcodeInstructions">{searchedItem.description}</Text>
                 </Box>
                 <ButtonAddToContainer style={styles.addToContainer} onPress={() => {
-                    setModalVisible(true), getContainers("CONTAINER_DEMO"), setSelected('')
+                    getContainers(), setModalVisible(true), setSelected('')
                 }} />
             </Box>
             <Modal
@@ -211,21 +211,26 @@ const ItemDescription = ({ route, navigation }) => {
                 <Box style={styles.centeredBox}>
                     <Box style={styles.modalBox}>
                         <Text style={styles.modalText} variant="itemDescriptionTitle">Pick a Container</Text>
-                        <TouchableHighlight
-                            style={selected ? styles.selected : styles.notSelected}
-                            onPress={() => {
-                                if (selected) {
-                                    setSelected('')
-                                } else {
-                                    setSelected(container)
-                                }
-                            }
-                            }
-                        >
-                            <Text variant="recentSearchesTitle">{container ? container.name : ""}</Text>
-                        </TouchableHighlight>
+                        {containers && containers.map((container, key) => {
+                            return (
+
+                                <TouchableHighlight
+                                    key={key}
+                                    style={selected == container.id ? styles.selected : styles.notSelected}
+                                    onPress={() => {
+                                        if (selected) {
+                                            setSelected('')
+                                        } else {
+                                            setSelected(container.id)
+                                        }
+                                    }
+                                    }
+                                >
+                                    <Text variant="recentSearchesTitle">{container ? container.name : ""}</Text>
+                                </TouchableHighlight>)
+                        })}
                         {
-                            selected ? <Button label="Add To Container" style={styles.pushToContainer} onPress={() => { setModalVisible(!modalVisible), navigation.goBack() }} /> :
+                            selected ? <Button label="Add To Container" style={styles.pushToContainer} onPress={() => { setModalVisible(!modalVisible), addItemToContainer(searchedItem), navigation.goBack() }} /> :
                                 <Button label="Add To Container" style={styles.pushToContainerNotSelected} onPress={() => { setModalVisible(!modalVisible), navigation.goBack() }} />
                         }
                         <Button style={{ width: 50, height: 30, borderRadius: 15, marginTop: 23 }} label="Close " onPress={() => { setModalVisible(false) }} />
