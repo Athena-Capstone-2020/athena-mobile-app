@@ -92,7 +92,7 @@ const BarcodeScanner = ({ navigation }) => {
 
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
-    const [searchedItem, setSearchedItem] = useState()
+    const [searchedItem, setSearchedItem] = useState(null)
     const [gotoItemDescription, setGotoItemDescription] = useState(false)
     const { barcodeService } = withBarcodeService()
 
@@ -111,7 +111,7 @@ const BarcodeScanner = ({ navigation }) => {
 
     const handleBarCodeScanned = async ({ data }) => {
         setScanned(true)
-        await barcodeService.mockGetDataFromBarcodeUPC(data).then(res => setSearchedItem(res))
+        await barcodeService.mockGetDataFromBarcodeUPC(data.slice(1)).then(res => setSearchedItem(res))
         setGotoItemDescription(true)
     };
 
