@@ -80,7 +80,7 @@ test('should be able to add a container to a household', async () => {
     const [_, householdService, containerService] = setup()
 
     const householdId = await householdService.createHousehold('Household 1')
-    const { id: containerId } = await containerService.createContainer('Fridge')
+    const containerId = await containerService.createContainer('Fridge')
 
     await householdService.addContainerToHousehold(containerId, householdId)
 
