@@ -2,6 +2,7 @@ const { Person } = require("../src/models/Person")
 const { PersonService, HouseholdService, ContainerService, GroceryListService } = require("../src/services")
 const { initFirebase } = require('../src/firebase/config')
 const uuid = require('uuid')
+require('dotenv').config()
 
 test('should pass health check without errors', async () => {
     const services = setup()
@@ -112,7 +113,17 @@ test('should be able to add and remove a grocery list to a household', async () 
  * @returns {[PersonService, HouseholdService, ContainerService, GroceryListService]}
  */
 function setup() {
-    initFirebase()
+    const firebaseConfig = {
+        apiKey: process.env.FIREBASE_API_KEY,
+        authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+        databaseURL: process.env.FIREBASE_DATABASE_URL,
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+        appId: process.env.FIREBASE_APP_ID,
+        measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+    }
+    initFirebase(firebaseConfig)
     const personService = new PersonService()
     const containerService = new ContainerService()
     const groceryListService = new GroceryListService()
