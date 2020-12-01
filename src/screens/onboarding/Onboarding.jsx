@@ -17,6 +17,42 @@ const styles = StyleSheet.create({
     }
 })
 
+const assets = [
+    {
+        title: 'Welcome!',
+        picture: {
+            src: require('../../../assets/Onboarding/welcome.png'),
+            width: 240,
+            height: 300,
+            marginBottom: 23,
+            marginLeft: 36
+        },
+        description: "Athena is your new kitchen organizational tool"
+    },
+    {
+        title: 'Connect',
+        picture: {
+            src: require('../../../assets/Onboarding/bowl.png'),
+            width: 350,
+            height: 350,
+            marginBottom: 23,
+            marginLeft: -25
+        },
+        description: "connect with housemates and family members to always have an up to date inventory of food "
+    },
+    {
+        title: 'Save',
+        picture: {
+            src: require('../../../assets/Onboarding/fruit.png'),
+            width: 250,
+            height: 250,
+            marginBottom: -28,
+            marginLeft: 30
+        },
+        description: "Save time and money by letting Athena keep track of food for you "
+    },
+]
+
 const Onboarding = () => {
 
     const { scrollHandler, x } = useScrollHandler();
@@ -32,18 +68,16 @@ const Onboarding = () => {
                     bounces={false}
                     {...{ scrollHandler }}
                 >
-                    <Slide
-                        title="Welcome!"
-                        description="Athena is your new kitchen organizational tool"
-                    />
-                    <Slide
-                        title="Connect"
-                        description="connect with housemates and family members to always have an up to date inventory of food "
-                    />
-                    <Slide
-                        title="Save"
-                        description="Save time and money by letting Athena keep track of food for you "
-                    />
+                    {assets.map((slide, key) => {
+                        return (
+                            <Slide
+                                key={key}
+                                title={slide.title}
+                                mainPhoto={slide.picture}
+                                description={slide.description}
+                            />
+                        )
+                    })}
                     <GoogleAuth />
                 </Animated.ScrollView>
             </Box>

@@ -81,7 +81,7 @@ export class BarcodeService extends BaseService{
             if(foodObj == undefined)
                 return null
 
-            const res = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, null, foodObj.nutritionData)
+            const res = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, new Date(), foodObj.nutritionData)
             return res 
         }
         catch(err){
@@ -103,7 +103,7 @@ export class BarcodeService extends BaseService{
             const res = []
 
             foodObjs.forEach( (foodObj) => {
-                const foodToAdd = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, null, foodObj.nutritionData)
+                const foodToAdd = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, new Date(), foodObj.nutritionData)
                 res.push(foodToAdd)
             })
 
@@ -127,7 +127,7 @@ export class BarcodeService extends BaseService{
             const res = []
 
             foodObjs.forEach( (foodObj) => {
-                const foodToAdd = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, null, foodObj.nutritionData)
+                const foodToAdd = new FoodItem(foodObj.name, foodObj.photoURI, "", foodObj.description, new Date(), foodObj.nutritionData)
                 res.push(foodToAdd)
             })
 

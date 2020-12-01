@@ -8,6 +8,7 @@ import BarcodeManual from './BarcodeManual';
 import { default as BarcodeScanner, default as BarcodeScannerStack } from './BarcodeScanner';
 import ItemDescription from './ItemDescription';
 import { withBarcodeService } from '../../services';
+import { RectButton } from "react-native-gesture-handler";
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -43,6 +44,11 @@ const styles = StyleSheet.create({
     item: {
         marginLeft: 16,
         marginBottom: 20
+    },
+    push: {
+        // backgroundColor: "#DDDDDD",
+        width: 300,
+        borderRadius: 10
     }
 });
 
@@ -83,6 +89,9 @@ const AddItemSearch = ({ navigation }) => {
 
     const [searches, setSearches] = useState([])
     const [text, setText] = useState('')
+    const [searched, setSearched] = useState(false)
+    const [searchedItem, setSearchedItem] = useState(null)
+    const [showRecents, setShowRecents] = useState(true)
     const [recents, setRecents] = useState(false)
 
     const { barcodeService } = withBarcodeService()
@@ -91,21 +100,32 @@ const AddItemSearch = ({ navigation }) => {
         restoreSearchesAsync();
     }, []);
 
+    const search = (array, nameKey) => {
+        setShowRecents(false)
+        for (let item of array) {
+            if (item.name === nameKey) return item
+        }
+        return null
+    }
+
     const submitHandler = async (text) => {
-        const response = await barcodeService.getDataFromBarcode(text);
+        const response = await barcodeService.mockGetAllFoods();
+        console.log(response)
         if (text.length === 0) return;
 
-        console.log(response);
+        var item = search(response, text)
+        setSearchedItem(item)
+        setSearched(true)
+        console.log('searchedItem', searchedItem)
 
         const key = Math.random().toString();
 
         const newSearches = [{ text, key }, ...searches];
 
-        console.log('newSearches', newSearches)
 
         setSearches(newSearches);
         storeSearchesAsync(newSearches);
-        setRecents(true)
+        // setRecents(true)
     };
 
     const asyncStorageKey = '@searches';
@@ -123,23 +143,45 @@ const AddItemSearch = ({ navigation }) => {
         try {
             await AsyncStorage.clear()
             setSearches([])
-            console.log('searches after clear:', searches)
-            setRecents(false)
+            // console.log('searches after clear:', searches)
+            // setRecents(false)
         } catch (err) {
             console.log(err)
         }
     }
 
+    const BackArrowIcon = () => {
+        return (
+            <Svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={7.031}
+                height={12.041}
+                viewBox="0 0 7.031 12.041"
+            >
+                <Path
+                    data-name="Path 3391"
+                    d="M1.06 10.981L6.281 6.09 1.252 1.06"
+                    fill="none"
+                    stroke="#111719"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    strokeDasharray="0 0"
+                />
+            </Svg>
+        )
+    }
+
     const restoreSearchesAsync = () => {
         AsyncStorage.getItem(asyncStorageKey)
             .then(stringifiedSearches => {
-                console.log('Restored Searches:');
-                console.log(stringifiedSearches);
+                // console.log('Restored Searches:');
+                // console.log(stringifiedSearches);
                 const parsedSearches = JSON.parse(stringifiedSearches);
-                console.log('parsedSearches', parsedSearches);
+                // console.log('parsedSearches', parsedSearches);
                 if (!parsedSearches || typeof parsedSearches !== 'object') return;
                 setSearches(parsedSearches);
-                setRecents(true)
+                // setRecents(true)
             })
             .catch(err => {
                 console.warn('Error restoring searches from async');
@@ -165,7 +207,8 @@ const AddItemSearch = ({ navigation }) => {
                         onPress={() => navigation.navigate('BarcodeScannerStack')}
                     />
                 </Box>
-                {recents ?
+
+                {searches.length > 0 & showRecents ?
                     <Box>
                         <Box flexDirection="row" justifyContent="space-between" style={{ width: windowWidth - 64 }}>
                             <Text variant="recentSearchesTitle" style={styles.recentSearchesTitle}>Recent Searches</Text>
@@ -183,11 +226,36 @@ const AddItemSearch = ({ navigation }) => {
                                 }}
                             />
                         </Box>
-                    </Box>
-                    : null}
-
+                    </Box> :
+                    (searchedItem !== null ?
+                        <Box>
+                            <Box flexDirection="row" justifyContent="space-between" style={{ width: windowWidth - 64 }}>
+                                <Text variant="recentSearchesTitle" style={styles.recentSearchesTitle}>Search Results:</Text>
+                            </Box>
+                            <Box style={styles.recentSearches}>
+                                <RectButton
+                                    style={styles.push}
+                                    onPress={() => navigation.navigate("ItemDescription", { searchedItem })}
+                                >
+                                    <Box flexDirection="row" marginTop="s" style={{ width: 340, justifyContent: "space-between" }}>
+                                        <Text variant="recentSearches" style={[styles.item, { marginTop: 3 }]}>{searchedItem.name}</Text>
+                                        <Box style={{ width: 20, height: 20, marginTop: 10, marginRight: 60 }}>
+                                            <BackArrowIcon />
+                                        </Box>
+                                    </Box>
+                                </RectButton>
+                            </Box>
+                        </Box> :
+                        (searched ?
+                            <Box>
+                                <Box flexDirection="row" justifyContent="space-between" style={{ width: windowWidth - 64 }}>
+                                    <Text variant="recentSearchesTitle" style={styles.recentSearchesTitle}>No results Found</Text>
+                                </Box>
+                            </Box> : null
+                        )
+                    )}
             </Box>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 

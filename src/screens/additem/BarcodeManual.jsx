@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 import { Box, Button, IconButton, Input, Text } from '../../components/index';
 import { withBarcodeService } from '../../services';
@@ -50,13 +50,20 @@ const BarcodeManual = ({ navigation }) => {
 
     const [data, setData] = useState('')
     const [entered, setEntered] = useState(false);
+    const [searchedItem, setSearchedItem] = useState()
+    const [gotoItemDescription, setGotoItemDescription] = useState(false)
     const { barcodeService } = withBarcodeService()
 
+    useEffect(() => {
+        if (gotoItemDescription) {
+            navigation.navigate("ItemDescription", { searchedItem })
+        }
+    }, [gotoItemDescription])
+
     const handleBarCodeEntered = async (data) => {
-        console.log(data)
         setEntered(true);
-        const response = await barcodeService.getDataFromBarcode(data)
-        console.log(response)
+        await barcodeService.mockGetDataFromBarcodeUPC(data).then(res => setSearchedItem(res))
+        setGotoItemDescription(true)
     };
 
     return (
@@ -72,10 +79,13 @@ const BarcodeManual = ({ navigation }) => {
                 <Text variant="barcodeInstructions" style={styles.instructions}>Enter the 12-digit UPC on the back of </Text>
                 <Text variant="barcodeInstructions">the food item</Text>
                 <Input style={styles.input} placeholder="12-digit UPC" value={data} onChangeText={text => setData(text)} />
-                <Button style={styles.enterButton} label='Enter' onPress={() => { entered ? undefined : handleBarCodeEntered, navigation.navigate('ItemDescription') }} />
+                <Button style={styles.enterButton} label='Enter' onPress={() => { entered ? undefined : handleBarCodeEntered(data) }} />
             </Box>
         </Box>
     )
 }
 
 export default BarcodeManual;
+
+
+//038000181719
