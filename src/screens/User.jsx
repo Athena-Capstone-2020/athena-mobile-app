@@ -144,7 +144,7 @@ const RenameIcon = () => {
 const User = () => {
 
     const { state } = useUserContext()
-    console.log(state)
+    // console.log(state)
 
     return (
         <SafeAreaView>
