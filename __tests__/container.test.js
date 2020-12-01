@@ -14,10 +14,19 @@ test('should pass health check without errors', async () => {
 test('should create container without errors', async () => {
     const [containerService] = setup()
 
-    const createdContainer = await containerService.createContainer('createByParams')
-    expect(createdContainer.id).toBeDefined()
-    expect(createdContainer.toDocument()).toMatchObject({
-        name: 'createByParams',
+    const createdContainerId = await containerService.createContainer('createContainer')
+    expect(createdContainerId).toBeDefined()
+})
+
+//GetContainer
+test('should get a container that has been created already without errors', async () => {
+    const [containerService] = setup()
+
+    const newContainerId = await containerService.createContainer('getContainerTest1')
+    const retrievedContainer = await containerService.getContainerById(newContainerId);
+
+    expect(retrievedContainer).toMatchObject({
+        name: "getContainerTest1",
         foodItems: [],
         icon: {
             name: "DefaultName",
@@ -25,16 +34,6 @@ test('should create container without errors', async () => {
             type: "DefaultType"
         }
     })
-})
-
-//GetContainer
-test('should get a container that has been created already without errors', async () => {
-    const [containerService] = setup()
-
-    const containerCreated = await containerService.createContainer('getContainerTest1')
-    const retrievedContainer = await containerService.getContainerById(containerCreated.id);
-
-    expect(retrievedContainer).toMatchObject(containerCreated)
     
 })
 
@@ -52,37 +51,41 @@ test('should try to get a container that does not exist and return null without 
 test('should create and delete a container by id without error', async () => {
     const [containerService] = setup()
 
-    const newContainer = await containerService.createContainer('toBeDeleted')
-    const containerCreated = await containerService.getContainerById(newContainer.id)
-    expect(containerCreated).toMatchObject(newContainer)
+    const newContainerId = await containerService.createContainer('toBeDeleted')
 
-    const deletedContainer = await containerService.deleteContainerById(newContainer.id)
-    expect(deletedContainer).toMatchObject(newContainer)
+    const deletedContainer = await containerService.deleteContainerById(newContainerId)
+    expect(deletedContainer).toMatchObject({
+        name: "toBeDeleted",
+        foodItems: [],
+        icon: {
+            name: "DefaultName",
+            color: "DefaultColor",
+            type: "DefaultType"
+        }
+    })
 
-    const containerAfterDeletion = await containerService.getContainerById(newContainer.id)
+    const containerAfterDeletion = await containerService.getContainerById(newContainerId)
     expect(containerAfterDeletion).toBe(null)
 })
 
-test('should try to delete container by id that does not exist and returns null', async () => {
+test('should try to delete container by id that does not exist', async () => {
     const [containerService] = setup()
 
     const containerId = 'I_Do_Not_Exist'
     const deletedContainer = await containerService.deleteContainerById(containerId)
     expect(deletedContainer).toBe(null)
-
 })
 
 test('should create and delete a container by object without error', async () => {
     const [containerService] = setup()
 
-    const newContainer = await containerService.createContainer('toBeDeleted')
-    const containerCreated = await containerService.getContainerById(newContainer.id)
-    expect(containerCreated).toMatchObject(newContainer)
+    const newContainerId = await containerService.createContainer('toBeDeleted')
+    const containerCreated = await containerService.getContainerById(newContainerId)
 
-    const deletedContainer = await containerService.deleteContainerByObject(newContainer)
-    expect(deletedContainer).toMatchObject(newContainer)
+    const deletedContainer = await containerService.deleteContainerByObject(containerCreated)
+    expect(deletedContainer).toMatchObject(containerCreated)
 
-    const containerAfterDeletion = await containerService.getContainerById(newContainer.id)
+    const containerAfterDeletion = await containerService.getContainerById(newContainerId)
     expect(containerAfterDeletion).toBe(null)
 
 })
@@ -112,15 +115,14 @@ test('attempts to delete a container by object that has a null id and errors', a
 test('should create and update a container without error', async () => {
     const [containerService] = setup()
 
-    const newContainer = await containerService.createContainer('nameToBeUpdated')
-    const containerCreated = await containerService.getContainerById(newContainer.id)
-    expect(containerCreated).toMatchObject(newContainer)
+    const newContainerId = await containerService.createContainer('nameToBeUpdated')
+    const containerCreated = await containerService.getContainerById(newContainerId)
 
     containerCreated.name = 'updateContainer'
     const updatedContainer = await containerService.updateContainer(containerCreated)
     expect(updatedContainer).toMatchObject(containerCreated)
 
-    const containerAfterUpdate = await containerService.getContainerById(newContainer.id)
+    const containerAfterUpdate = await containerService.getContainerById(newContainerId)
     expect(containerAfterUpdate).toMatchObject(updatedContainer)
 
 })
@@ -171,29 +173,25 @@ test('attempts to update a container with an id that does not exist and errors',
 test('should add a food item to a container without errors', async () => {
     const [containerService] = setup()
 
-    const newContainer = await containerService.createContainer('addItemToContainer1')
-    const containerCreated = await containerService.getContainerById(newContainer.id)
-    expect(containerCreated).toMatchObject(newContainer)
+    const newContainerId = await containerService.createContainer('addItemToContainer1')
 
     const expireDate = new Date()
     const foodItemToAdd = new FoodItem('someFoodItemName', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
-    const updatedContainer = await containerService.addFoodItemToContainer(containerCreated, foodItemToAdd)
-    const containerAfterUpdate = await containerService.getContainerById(newContainer.id)
+    const updatedContainer = await containerService.addFoodItemToContainer(foodItemToAdd, newContainerId)
+    const containerAfterUpdate = await containerService.getContainerById(newContainerId)
     expect(containerAfterUpdate).toMatchObject(updatedContainer)
 })
 
 test('attempts to add something other than food item to container and errors', async () => {
     const [containerService] = setup()
 
-    const newContainer = await containerService.createContainer('addItemToContainer2')
-    const containerCreated = await containerService.getContainerById(newContainer.id)
-    expect(containerCreated).toMatchObject(newContainer)
+    const newContainerId = await containerService.createContainer('addItemToContainer2')
 
     const foodItemToAdd = new Object()
 
     let errorCaught = null
     try{
-        const updatedContainer = await containerService.addFoodItemToContainer(containerCreated, foodItemToAdd)
+        const updatedContainer = await containerService.addFoodItemToContainer(foodItemToAdd, newContainerId)
     }
     catch(err){
         errorCaught = err
@@ -216,7 +214,7 @@ test('attempts to add FoodItem to container that does not exist and errors', asy
     
     let errorCaught = null
     try{
-        const updatedContainer = await containerService.addFoodItemToContainer(container, foodItem)
+        const updatedContainer = await containerService.addFoodItemToContainer(foodItem, container.id)
     }
     catch(err){
         errorCaught = err
@@ -228,25 +226,23 @@ test('attempts to add FoodItem to container that does not exist and errors', asy
 test('should update a food item in a container without error', async () => {
     const [containerService] = setup()
 
-    const newContainer = await containerService.createContainer('updateFoodItemInContainer1')
-    const containerCreated = await containerService.getContainerById(newContainer.id)
-    expect(containerCreated).toMatchObject(newContainer)
+    const newContainerId = await containerService.createContainer('updateFoodItemInContainer1')
 
     const expireDate = new Date()
     const foodItemOne = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
     const foodItemTwo = new FoodItem('secondFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
     const foodItemThree = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
 
-    await containerService.addFoodItemToContainer(containerCreated, foodItemOne)
-    await containerService.addFoodItemToContainer(containerCreated, foodItemTwo)
-    await containerService.addFoodItemToContainer(containerCreated, foodItemThree)
-    const updatedContainer = await containerService.getContainerById(containerCreated.id)
-    expect(updatedContainer).toMatchObject(containerCreated)
+    await containerService.addFoodItemToContainer(foodItemOne, newContainerId)
+    await containerService.addFoodItemToContainer(foodItemTwo, newContainerId)
+    const finalAdd = await containerService.addFoodItemToContainer(foodItemThree, newContainerId)
+    const updatedContainer = await containerService.getContainerById(newContainerId)
+    expect(updatedContainer).toMatchObject(finalAdd)
 
     const changedExpireDate = new Date()
     const updatedFoodItem = new FoodItem('iChanged', 'iChanged', 'iChanged', 'iChanged', changedExpireDate, {something: 'iAmAdded'})
-    const updatedFoodItemContainer = await containerService.updateFoodItemInContainer(updatedContainer, 0, updatedFoodItem)
-    const finalDBContainer = await containerService.getContainerById(updatedContainer.id)
+    const updatedFoodItemContainer = await containerService.updateFoodItemInContainer(newContainerId, 0, updatedFoodItem)
+    const finalDBContainer = await containerService.getContainerById(newContainerId)
     expect(finalDBContainer).toMatchObject(updatedFoodItemContainer)
     
 })
@@ -265,7 +261,7 @@ test('attempts to update an item in a nonexistent container and errors', async (
 
     let errorCaught = null
     try{
-        const updatedContainer = await containerService.updateFoodItemInContainer(container, 0, foodItem)
+        const updatedContainer = await containerService.updateFoodItemInContainer(container.id, 0, foodItem)
     }
     catch(err){
         errorCaught = err
@@ -277,27 +273,24 @@ test('attempts to update an item in a nonexistent container and errors', async (
 test('attempts to update an item at an index that is out of bounds and errors', async () => {
     const [containerService] = setup()
 
-    const newContainer = await containerService.createContainer('updateFoodItemInContainer2')
-    const containerCreated = await containerService.getContainerById(newContainer.id)
-    expect(containerCreated).toMatchObject(newContainer)
+    const newContainerId = await containerService.createContainer('updateFoodItemInContainer2')
+    const containerCreated = await containerService.getContainerById(newContainerId)
 
     const expireDate = new Date()
     const foodItemOne = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
     const foodItemTwo = new FoodItem('secondFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
     const foodItemThree = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
 
-    await containerService.addFoodItemToContainer(containerCreated, foodItemOne)
-    await containerService.addFoodItemToContainer(containerCreated, foodItemTwo)
-    await containerService.addFoodItemToContainer(containerCreated, foodItemThree)
-    const updatedContainer = await containerService.getContainerById(containerCreated.id)
-    expect(updatedContainer).toMatchObject(containerCreated)
+    await containerService.addFoodItemToContainer(foodItemOne, newContainerId)
+    await containerService.addFoodItemToContainer(foodItemTwo, newContainerId)
+    await containerService.addFoodItemToContainer(foodItemThree, newContainerId)
 
     const changedExpireDate = new Date()
     const updatedFoodItem = new FoodItem('iChanged', 'iChanged', 'iChanged', 'iChanged', changedExpireDate, {something: 'iAmAdded'})
 
     let errorCaught = null
     try{
-        const updatedFoodItemContainer = await containerService.updateFoodItemInContainer(updatedContainer, -1, updatedFoodItem)
+        const updatedFoodItemContainer = await containerService.updateFoodItemInContainer(newContainerId, -1, updatedFoodItem)
     }
     catch(err){
         errorCaught = err
@@ -318,7 +311,7 @@ test('attempts to update an item that is not a FoodItem type and errors', async 
     
     let errorCaught = null
     try{
-        const updatedFoodItemContainer = await containerService.updateFoodItemInContainer(container, 0, foodItem)
+        const updatedFoodItemContainer = await containerService.updateFoodItemInContainer(container.id, 0, foodItem)
     }
     catch(err){
         errorCaught = err
@@ -330,36 +323,30 @@ test('attempts to update an item that is not a FoodItem type and errors', async 
 test('should delete the food item from container without error', async () => {
     const [containerService] = setup()
 
-    const newContainer = await containerService.createContainer('removeFoodItemFromContainer1')
-    const containerCreated = await containerService.getContainerById(newContainer.id)
-    expect(containerCreated).toMatchObject(newContainer)
+    const newContainerId = await containerService.createContainer('removeFoodItemFromContainer1')
 
     const expireDate = new Date()
     const foodItemOne = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
     const foodItemTwo = new FoodItem('secondFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
     const foodItemThree = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
 
-    await containerService.addFoodItemToContainer(containerCreated, foodItemOne)
-    await containerService.addFoodItemToContainer(containerCreated, foodItemTwo)
-    await containerService.addFoodItemToContainer(containerCreated, foodItemThree)
-    const updatedContainer = await containerService.getContainerById(containerCreated.id)
-    expect(updatedContainer).toMatchObject(containerCreated)
+    await containerService.addFoodItemToContainer(foodItemOne, newContainerId)
+    await containerService.addFoodItemToContainer(foodItemTwo, newContainerId)
+    await containerService.addFoodItemToContainer(foodItemThree, newContainerId)
 
-    const deleteContainer = await containerService.removeFoodItemFromContainer(updatedContainer, 1)
-    const containerAfterDelete = await containerService.getContainerById(deleteContainer.id)
+    const deleteContainer = await containerService.removeFoodItemFromContainer(newContainerId, 1)
+    const containerAfterDelete = await containerService.getContainerById(newContainerId)
     expect(containerAfterDelete).toMatchObject(deleteContainer)
 })
 
 test('attempts to delete a food item from index out of bounds and errors', async () => {
     const [containerService] = setup()
 
-    const newContainer = await containerService.createContainer('removeFoodItemFromContainer2')
-    const containerCreated = await containerService.getContainerById(newContainer.id)
-    expect(containerCreated).toMatchObject(newContainer)
+    const newContainerId = await containerService.createContainer('removeFoodItemFromContainer2')
 
     let errorCaught = null
     try{
-    const deleteContainer = await containerService.removeFoodItemFromContainer(containerCreated, 0)
+    const deleteContainer = await containerService.removeFoodItemFromContainer(newContainerId, 0)
     }
     catch(err){
         errorCaught = err
@@ -380,7 +367,7 @@ test('attempts to delete from a container that does not exist and errors', async
 
     let errorCaught = null
     try{
-        const updatedContainer = await containerService.removeFoodItemFromContainer(container, 0)
+        const updatedContainer = await containerService.removeFoodItemFromContainer(container.id, 0)
     }
     catch(err){
         errorCaught = err
@@ -393,27 +380,23 @@ test('attempts to delete from a container that does not exist and errors', async
 test('should create a container, add a food item to it, check to see if its there', async () => {
     const [containerService] = setup()
 
-    const newContainer = await containerService.createContainer('doesFoodItemExist')
-    const containerCreated = await containerService.getContainerById(newContainer.id)
-    expect(containerCreated).toMatchObject(newContainer)
+    const newContainerId = await containerService.createContainer('doesFoodItemExist')
 
     const expireDate = new Date()
     const foodItemOne = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
     const foodItemTwo = new FoodItem('secondFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
     const foodItemThree = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
 
-    await containerService.addFoodItemToContainer(containerCreated, foodItemOne)
-    await containerService.addFoodItemToContainer(containerCreated, foodItemTwo)
-    await containerService.addFoodItemToContainer(containerCreated, foodItemThree)
-    const updatedContainer = await containerService.getContainerById(containerCreated.id)
-    expect(updatedContainer).toMatchObject(containerCreated)
+    await containerService.addFoodItemToContainer(foodItemOne, newContainerId)
+    await containerService.addFoodItemToContainer(foodItemTwo, newContainerId)
+    await containerService.addFoodItemToContainer(foodItemThree, newContainerId)
 
     const existingFoodItem = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
-    const doesExist = await containerService.doesFoodItemExistInContainer(updatedContainer, existingFoodItem)
+    const doesExist = await containerService.doesFoodItemExistInContainer(newContainerId, existingFoodItem)
     expect(doesExist).toBe(true)
 
     const foodItemNonExistant = new FoodItem('fourthFood', 'somePhotoURI', 'someQuantity', 'someDescripion', null, {})
-    const doesExistTwo = await containerService.doesFoodItemExistInContainer(updatedContainer, foodItemNonExistant)
+    const doesExistTwo = await containerService.doesFoodItemExistInContainer(newContainerId, foodItemNonExistant)
     expect(doesExistTwo).toBe(false)
 })
 
@@ -421,24 +404,20 @@ test('should create a container, add a food item to it, check to see if its ther
 test('should create a container, add food items, and get the items an array', async () => {
     const [containerService] = setup()
 
-    const newContainer = await containerService.createContainer('doesFoodItemExist')
-    const containerCreated = await containerService.getContainerById(newContainer.id)
-    expect(containerCreated).toMatchObject(newContainer)
+    const newContainerId = await containerService.createContainer('doesFoodItemExist')
 
     const expireDate = new Date()
     const foodItemOne = new FoodItem('firstFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
     const foodItemTwo = new FoodItem('secondFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
     const foodItemThree = new FoodItem('thirdFood', 'somePhotoURI', 'someQuantity', 'someDescription', expireDate, {})
 
-    await containerService.addFoodItemToContainer(containerCreated, foodItemOne)
-    await containerService.addFoodItemToContainer(containerCreated, foodItemTwo)
-    await containerService.addFoodItemToContainer(containerCreated, foodItemThree)
-    const updatedContainer = await containerService.getContainerById(containerCreated.id)
-    expect(updatedContainer).toMatchObject(containerCreated)
+    await containerService.addFoodItemToContainer(foodItemOne, newContainerId)
+    await containerService.addFoodItemToContainer(foodItemTwo, newContainerId)
+    await containerService.addFoodItemToContainer(foodItemThree, newContainerId)
 
     const arrayExpect = [foodItemOne, foodItemTwo, foodItemThree]
 
-    const foodItemArray = await containerService.getFoodItemArrayFromContainer(containerCreated.id);
+    const foodItemArray = await containerService.getFoodItemArrayFromContainer(newContainerId);
     expect(arrayExpect).toStrictEqual(foodItemArray)
 })
 
