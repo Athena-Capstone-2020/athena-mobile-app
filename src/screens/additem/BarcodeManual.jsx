@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 import { Box, Button, IconButton, Input, Text } from '../../components/index';
 import { withBarcodeService } from '../../services';
@@ -51,11 +51,19 @@ const BarcodeManual = ({ navigation }) => {
     const [data, setData] = useState('')
     const [entered, setEntered] = useState(false);
     const [searchedItem, setSearchedItem] = useState()
+    const [gotoItemDescription, setGotoItemDescription] = useState(false)
     const { barcodeService } = withBarcodeService()
+
+    useEffect(() => {
+        if (gotoItemDescription) {
+            navigation.navigate("ItemDescription", { searchedItem })
+        }
+    }, [gotoItemDescription])
 
     const handleBarCodeEntered = async (data) => {
         setEntered(true);
-        await barcodeService.mockGetDataFromBarcodeUPC(data).then(res => console.log('barcode manual', res))
+        await barcodeService.mockGetDataFromBarcodeUPC(data).then(res => setSearchedItem(res))
+        setGotoItemDescription(true)
     };
 
     return (
@@ -80,4 +88,4 @@ const BarcodeManual = ({ navigation }) => {
 export default BarcodeManual;
 
 
-// navigation.navigate('ItemDescription', { searchedItem })
+//038000181719

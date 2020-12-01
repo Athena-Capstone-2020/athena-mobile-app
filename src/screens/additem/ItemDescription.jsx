@@ -167,7 +167,7 @@ const ItemDescription = ({ route, navigation }) => {
     async function addItemToContainer(containerID, item) {
         if (containerID) {
             const foodItem = new Models.FoodItem(item.name, item.photoURI, count, item.description, new Date(), item.description)
-            await containerService.addFoodItemToContainer(foodItem, containerID ).then(res => console.log(res))
+            await containerService.addFoodItemToContainer(foodItem, containerID).then(res => console.log(res))
         }
     }
 
@@ -234,8 +234,8 @@ const ItemDescription = ({ route, navigation }) => {
                                 </TouchableHighlight>)
                         })}
                         {
-                            selected ? <Button label="Add To Container" style={styles.pushToContainer} onPress={() => { setModalVisible(!modalVisible), addItemToContainer(selected, searchedItem), navigation.goBack() }} /> :
-                                <Button label="Add To Container" style={styles.pushToContainerNotSelected} onPress={() => { setModalVisible(!modalVisible), navigation.goBack() }} />
+                            selected ? <Button label="Add To Container" style={styles.pushToContainer} onPress={() => { setModalVisible(!modalVisible), addItemToContainer(selected, searchedItem), navigation.navigate('AddItemSearch') }} /> :
+                                <Button label="Add To Container" style={styles.pushToContainerNotSelected} onPress={() => { setModalVisible(!modalVisible), navigation.navigate('AddItemSearch') }} />
                         }
                         <Button style={{ width: 50, height: 30, borderRadius: 15, marginTop: 23 }} label="Close " onPress={() => { setModalVisible(false) }} />
                     </Box>
