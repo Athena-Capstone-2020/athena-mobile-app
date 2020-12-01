@@ -20,7 +20,7 @@ export class ContainerService extends BaseService{
      * Creates a new container and returns the container object with an id
      * @param {string} name name of the new container
      * @param {Object} icon object with attributes name, color, type as strings
-     * @returns {string} the id of the container created
+     * @returns the container object that was created
      * @throws errors if a container was not able to be made in DB
      */
     async createContainer(name, icon = this.defaultIcon){
@@ -29,7 +29,8 @@ export class ContainerService extends BaseService{
             const container = new Container(name, [], icon)
 
             const newDocId = await this.__CreateEntity( container.toDocument() )
-            return newDocId
+            container.id = newDocId
+            return container
         }
         catch(err){
             logError(err)
@@ -138,24 +139,24 @@ export class ContainerService extends BaseService{
 
     /**
      * Adds a food item to the specified container and updates the DB
+     * @param {Container} container the container the item is being added to
      * @param {FoodItem} item the food item being added to the container
-     * @param {string} id the id of the container the food item is being added to
      * @returns updated container if successful, otherwise returns null
      * @throw error if item is not FoodItem or if container is not in the DB
      */
-    async addFoodItemToContainer(item, id){
+    async addFoodItemToContainer(container, item){
         try{
             this.__UseCollection(this.CONTAINER_COLLECTION)
 
             if( !(item instanceof FoodItem) )
                 throw new Error('item is not of type FoodItem')
 
-            const containerToAddTo = await this.getContainerById(id)
+            const containerToAddTo = await this.getContainerById(container.id)
             if(containerToAddTo == null)
                 throw new Error('the container is not in the database')
 
-            containerToAddTo.foodItems.push(item.toDocument())
-            return await this.updateContainer(containerToAddTo)
+            container.foodItems.push(item.toDocument())
+            return await this.updateContainer(container)
         }
         catch(err){
             logError(err)
@@ -165,28 +166,28 @@ export class ContainerService extends BaseService{
 
     /**
      * Update the food item in the container at the specified index
-     * @param {string} id the id of the  container the item is being retrieved from
+     * @param {Container} container the container the item is being retrieved from
      * @param {Number} index the location where the food item is located
      * @param {FoodItem} updatedItem
      * @returns updated container if successful, otherwise returns null
      * @throws error if item is not FoodItem, if the container is not in the DB, or if the index is out of bounds
      */
-    async updateFoodItemInContainer(id, index, updatedItem){
+    async updateFoodItemInContainer(container, index, updatedItem){
         try{
             this.__UseCollection(this.CONTAINER_COLLECTION)
 
             if( !(updatedItem instanceof FoodItem) )
                 throw new Error('updatedItem is not of type FoodItem')
             
-            const containerToAddTo = await this.getContainerById(id)
+            const containerToAddTo = await this.getContainerById(container.id)
             if(containerToAddTo == null)
                 throw new Error('the container is not in the database')
 
-            if(index < 0 || containerToAddTo.foodItems.length <= index)
+            if(index < 0 || container.foodItems.length <= index)
                  throw new Error('the index is out of bounds')
 
-            containerToAddTo.foodItems.splice(index, 1, updatedItem.toDocument())
-            return await this.updateContainer(containerToAddTo)
+            container.foodItems.splice(index, 1, updatedItem.toDocument())
+            return await this.updateContainer(container)
         }
         catch(err){
             logError(err)
@@ -196,24 +197,24 @@ export class ContainerService extends BaseService{
 
     /**
      * Removes the food item at the index in the specified container
-     * @param {string} id the id container a food item is being removed from 
+     * @param {Container} container the container a food item is being removed from 
      * @param {Number} index the index at which the food item is located
      * @returns updated container if successful, otherwise returns null
      * @throw error if the container is not in the DB or if the index is out of bounds 
      */
-    async removeFoodItemFromContainer(id, index){
+    async removeFoodItemFromContainer(container, index){
         try{
             this.__UseCollection(this.CONTAINER_COLLECTION)
 
-            const containerToRemoveFrom = await this.getContainerById(id)
+            const containerToRemoveFrom = await this.getContainerById(container.id)
             if(containerToRemoveFrom == null)
                 throw new Error('the container is not in the database')
 
-            if( index < 0 || containerToRemoveFrom.foodItems.length <= index )
+            if( index < 0 || container.foodItems.length <= index )
                 throw new Error('the index is out of bounds')
 
-            containerToRemoveFrom.foodItems.splice(index, 1)
-            return await this.updateContainer(containerToRemoveFrom)
+            container.foodItems.splice(index, 1)
+            return await this.updateContainer(container)
         }
         catch(err){
             logError(err)
@@ -223,20 +224,20 @@ export class ContainerService extends BaseService{
 
     /**
      * Check if an item exist in the container
-     * @param {string} id the id of the container that is being checked for item
+     * @param {Container} container the container that is being checked for item
      * @param {FoodItem} item the FoodItem that the container is being checked for
      * @returns true if the item is in the container, otherwise false if the item is not in the container, 
      *   the food item is invalid, or the container does not exist
      * @throws error if item is not of type FoodItem
      */
-    async doesFoodItemExistInContainer(id, item){
+    async doesFoodItemExistInContainer(container, item){
         try{
             this.__UseCollection(this.CONTAINER_COLLECTION)
 
             if( !(item instanceof FoodItem) )
                 throw new Error('item is not of type FoodItem')
 
-            const foodItemAry = await this.getFoodItemArrayFromContainer(id)
+            const foodItemAry = await this.getFoodItemArrayFromContainer(container.id)
             const itemJSONString = JSON.stringify(item)
 
             let result = false
