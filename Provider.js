@@ -8,8 +8,8 @@ import { UserContextProvider } from './src/global/user-context'
 import Constants from 'expo-constants'
 
 export function Provider(props) {
-    initFirebase()
-    initSentry()
+    initFirebase(Constants.manifest.extra.FIREBASE_CONFIG)
+    initSentry(Constants.manifest.extra.SENTRY_CONFIG)
 
     const groceryListService = new GroceryListService()
     const containerService = new ContainerService()
