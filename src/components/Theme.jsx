@@ -1,7 +1,7 @@
 import {
-  createBox, 
+  createBox,
   createText,
-  createTheme, 
+  createTheme,
   ThemeProvider as ReStyleThemeProvider,
   useTheme as useReTheme
 } from "@shopify/restyle";
@@ -10,8 +10,11 @@ import React from "react";
 const palette = {
   orange: "#FE724C",
   grey: "#D0CED5",
+  onboardingGrey: "#616772",
+  onboardingBlack: "#131A38",
   greyBlue1: "#9DA4BB",
   greyBlue2: "#8387A7",
+  greyBlue3: "#30384F",
   monochrome1: "#F3F3F3",
   monochrome2: "#E7E7E7",
   white: "#FFFFFF",
@@ -25,8 +28,11 @@ const theme = createTheme({
     grey: palette.grey,
     greyBlue1: palette.greyBlue1,
     greyBlue2: palette.greyBlue2,
+    greyBlue3: palette.greyBlue3,
     monochrome1: palette.monochrome1,
     monochrome2: palette.monochrome2,
+    onboardingGrey: palette.onboardingGrey,
+    onboardingBlack: palette.onboardingBlack,
     white: palette.white,
     black: palette.black
   },
@@ -134,6 +140,41 @@ const theme = createTheme({
       fontSize: 20,
       fontFamily: "SFProDisplay-Regular",
       color: "grey"
+    },
+    onboardingDesc: {
+      fontSize: 17,
+      fontFamily: "SFProDisplay-Regular",
+      color: "onboardingGrey"
+    },
+    onboardingTitle: {
+      fontSize: 36,
+      fontFamily: "SFProDisplay-Medium",
+      color: "onboardingBlack"
+    },
+    signIn: {
+      fontSize: 16,
+      fontFamily: "SFProDisplay-Medium",
+      color: "white"
+    },
+    Google: {
+      fontSize: 13,
+      fontFamily: "SFProDisplay-Medium",
+      color: "black"
+    },
+    WelcomeTo: {
+      fontSize: 57,
+      fontFamily: "SFProDisplay-Bold",
+      color: "black"
+    },
+    Athena: {
+      fontSize: 48,
+      fontFamily: "SFProDisplay-Regular",
+      color: "primary"
+    },
+    AthenaDesc: {
+      fontSize: 21,
+      fontFamily: "SFProDisplay-Regular",
+      color: "greyBlue3"
     },
     bottomCardContentBody: {
       fontSize: 15,

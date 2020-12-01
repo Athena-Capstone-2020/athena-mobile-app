@@ -8,7 +8,6 @@ import ContainerList from '../container/ContainerList';
 import GroceryList from '../grocerylist/GroceryList';
 import { Home } from '../home';
 import User from '../User';
-import { useUserContext } from '../../global/user-context'
 
 const Navbar = () => {
 
@@ -17,7 +16,7 @@ const Navbar = () => {
     const { primary, grey } = theme.colors;
 
     return (
-        <NavigationContainer 
+        <NavigationContainer
             independent={true}
         >
             <Tab.Navigator
