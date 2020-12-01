@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, ScrollView } from 'react-native'
+import { Modal, ScrollView, StyleSheet } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { Button, Text, Box, Input } from '../../components/index'
@@ -8,6 +8,12 @@ import Container from './Container'
 import { withContainerService, withHouseholdService } from '../../services'
 import { logError } from '../../logger/Logger'
 import { useUserContext } from '../../global/user-context/useUserContext'
+
+const styles = StyleSheet.create({
+    container: {
+        marginTop: 30
+    }
+});
 
 const ContainerStack = createStackNavigator()
 
@@ -71,7 +77,7 @@ const ContainerListView = () => {
     }, [])
 
     return (
-        <>
+        <Box style={styles.container}>
             <Box flex={1} position='absolute' top={0} bottom={0} left={0} right={0}>
                 <Modal
                     animationType="slide"
@@ -114,7 +120,7 @@ const ContainerListView = () => {
                     />
                 </Box>
             </ScrollView>
-        </>
+        </Box>
     )
 }
 
