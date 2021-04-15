@@ -41,17 +41,15 @@ Household:
 
 Adding an item to a container:
 
+<div>
 <img src="https://github.com/Athena-Capstone-2020/athena-mobile-app/blob/master/assets/Screens/readme/addItem.png?raw=true" width="200" height="380" />
 <img src="https://github.com/Athena-Capstone-2020/athena-mobile-app/blob/master/assets/Screens/readme/enterbarcode.png?raw=true" width="200" height="380" />
 <img src="https://github.com/Athena-Capstone-2020/athena-mobile-app/blob/master/assets/Screens/readme/scanbarcode.png?raw=true" width="200" height="380" />
+</div>
 
 Containers:
 
+<div>
 <img src="https://github.com/Athena-Capstone-2020/athena-mobile-app/blob/master/assets/Screens/readme/containers.png?raw=true" width="200" height="380" />
 <img src="https://github.com/Athena-Capstone-2020/athena-mobile-app/blob/master/assets/Screens/readme/fridge.png?raw=true" width="200" height="380" />
-
-
-
-<p>
-    Athena is a app.
-</p>
+</div>
